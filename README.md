@@ -200,3 +200,12 @@ https://github.com/oboikanyego
 ⭐ Support
 
 If you find this project useful, please consider giving it a ⭐ on GitHub.
+
+<img width="1900" height="865" alt="image" src="https://github.com/user-attachments/assets/839c2254-4ada-4e08-8df5-6ededfd20812" />
+<img width="1031" height="836" alt="image" src="https://github.com/user-attachments/assets/64c332c2-9afd-4aaf-ac75-96b206b68f9d" />
+<img width="914" height="770" alt="image" src="https://github.com/user-attachments/assets/5ef003e7-e0a7-4f1d-8e95-5c73b05debd1" />
+<img width="1163" height="711" alt="image" src="https://github.com/user-attachments/assets/0896f569-fe84-42cd-845f-7fb47fb3f306" />
+
+
+
+
