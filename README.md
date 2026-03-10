@@ -1,210 +1,202 @@
-################################################################################
-# DentaCare - Git Ignore Configuration
-#
-# This file defines which files and folders Git should ignore.
-# The goal is to prevent committing:
-#   • Generated files
-#   • Dependencies
-#   • Environment secrets
-#   • System-specific files
-#   • Logs and build artifacts
-#
-# Tech Stack Used:
-#   • Angular (Frontend)
-#   • Angular Material (UI)
-#   • Node.js + Express (Backend)
-#   • MongoDB (Database)
-#   • JWT Authentication
-#   • Cloudinary (File storage)
-#
-# Design & Development Principles:
-#   • Environment-based configuration
-#   • Secure secret management
-#   • Clean repository history
-#   • No compiled or generated code committed
-################################################################################
+🦷 DentaCare Client
+<p align="center"> <img src="https://img.shields.io/badge/Angular-17+-DD0031?style=for-the-badge&logo=angular&logoColor=white"/> <img src="https://img.shields.io/badge/Angular%20Material-UI-673AB7?style=for-the-badge&logo=angular"/> <img src="https://img.shields.io/badge/TypeScript-Frontend-3178C6?style=for-the-badge&logo=typescript"/> <img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge"/> </p> <p align="center"> A modern Angular application for managing dental clinic appointments and patient interactions. </p>
+📌 Overview
 
+DentaCare Client is the frontend application of the DentaCare platform, designed to provide an intuitive interface for patients, clinic staff, and administrators.
 
+The application enables users to book dental appointments, manage schedules, view clinic data, and interact with the system through a clean and responsive Angular Material interface.
 
-################################################################################
-# NODE.JS DEPENDENCIES
-#
-# These folders are automatically generated when running `npm install`
-# They should never be committed because they are large and reproducible.
-################################################################################
+This client communicates with the DentaCare Node.js REST API backend.
 
-node_modules/
+✨ Features
+👤 Patient Features
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+Register and login securely
 
-pnpm-debug.log*
+Book dental appointments
 
+Select dentist and treatment type
 
+View appointment history
 
-################################################################################
-# ANGULAR BUILD OUTPUT
-#
-# Angular generates these folders when running:
-#   ng build
-#   ng serve
-################################################################################
+Reschedule or cancel appointments
 
-.angular/
-.angular/cache/
+Forgot password with OTP verification
 
-dist/
-tmp/
-out-tsc/
+🧑‍⚕️ Staff Features
 
-coverage/
+View and manage clinic appointments
 
-build/
+Edit appointment details
 
+Update appointment status
 
+Add internal notes
 
-################################################################################
-# TYPESCRIPT CACHE FILES
-################################################################################
+Monitor daily bookings
 
-*.tsbuildinfo
+🛠 Admin Features
 
+Manage system users
 
+Activate or deactivate accounts
 
-################################################################################
-# LOG FILES
-#
-# Logs generated during development or production runs
-################################################################################
+View appointment dashboards
 
-logs/
-*.log
+Track clinic operations
 
+🎨 UI Features
 
+The application uses Angular Material to provide a modern user experience.
 
-################################################################################
-# ENVIRONMENT VARIABLES (IMPORTANT)
-#
-# Environment files contain secrets such as:
-#   • database credentials
-#   • JWT secrets
-#   • API keys
-#   • email credentials
-#
-# Never commit these files to Git.
-################################################################################
+UI capabilities include:
 
-.env
-.env.*
-!.env.example
+Material dialogs for editing appointments
 
+Snackbar notifications for success and error states
 
+Loading spinners and animations
 
-################################################################################
-# ANGULAR ENVIRONMENT FILES (OPTIONAL)
-#
-# If you are storing sensitive values in Angular env files.
-################################################################################
+Responsive layout for desktop and mobile
 
-src/environments/environment.local.ts
+Table-based appointment views
 
+Status badges for appointment states
 
+Hover validation tooltips for form errors
 
-################################################################################
-# DATABASE FILES / DUMPS
-#
-# These can contain production data and should not be committed.
-################################################################################
+📅 Appointment Management
 
-*.sql
-*.sqlite
-*.db
-*.dump
-*.bak
+Appointments support:
 
+Dentist selection
 
+Appointment type
 
-################################################################################
-# FILE UPLOADS / LOCAL STORAGE
-#
-# Uploaded user files should not be stored in Git repositories.
-################################################################################
+Date and time selection
 
-uploads/
-storage/
-temp/
-tmp/
+Duration handling
 
+Patient notes
 
+Internal staff notes
 
-################################################################################
-# TEST OUTPUT
-################################################################################
+Appointment status tracking
 
-.nyc_output/
-coverage/
+Supported statuses
 
+Pending
 
+Confirmed
 
-################################################################################
-# OS-SPECIFIC FILES
-################################################################################
+Cancelled
 
-# Mac
-.DS_Store
+Completed
 
-# Windows
-Thumbs.db
-desktop.ini
+🔐 Authentication
 
+The client integrates secure authentication features including:
 
+JWT-based login
 
-################################################################################
-# EDITOR / IDE SETTINGS
-#
-# These files are local to each developer's environment.
-################################################################################
+Role-based access control
 
-.vscode/
-.idea/
+Route guards
 
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
+Password reset with OTP verification
 
+Session state management
 
+🧰 Tech Stack
+Technology	Purpose
+Angular	Frontend framework
+Angular Material	UI components
+TypeScript	Application logic
+RxJS	Reactive state management
+Angular Router	Navigation
+REST API	Backend communication
+📂 Project Structure
+client/
+│
+├── src/
+│   ├── app/
+│   │   ├── core/          # services, models, guards
+│   │   ├── shared/        # reusable components
+│   │   ├── auth/          # login/register/forgot password
+│   │   ├── admin/         # admin dashboards
+│   │   ├── staff/         # clinic staff features
+│   │   └── patient/       # patient appointment management
+│   │
+│   ├── assets/
+│   ├── environments/
+│   └── styles/
+│
+├── angular.json
+├── package.json
+└── tsconfig.json
+🚀 Running the Application
+Install dependencies
+npm install
+Run development server
+ng serve
 
-################################################################################
-# CACHE FILES
-################################################################################
+Open:
 
-.cache/
-.parcel-cache/
+http://localhost:4200
+⚙ Environment Configuration
 
+Environment configuration is stored in:
 
+src/environments
 
-################################################################################
-# OPTIONAL ARCHIVE FILES
-#
-# Prevent accidentally committing packaged builds.
-################################################################################
+Example:
 
-*.zip
-*.tar
-*.gz
-*.tgz
+export const environment = {
+  production: false,
+  apiBaseUrl: 'http://localhost:3000/api'
+};
+📊 Application Roles
+Role	Capabilities
+Patient	Book and manage appointments
+Staff	Manage daily clinic bookings
+Admin	Manage users and system data
+🧩 Design Principles
 
+The client follows modern frontend architecture:
 
+Component-based UI
 
-################################################################################
-# SECURITY NOTE
-#
-# Do NOT commit secrets to this repository.
-#
-# Instead, use:
-#   .env.example
-#
-# Developers should create their own `.env` locally based on the example.
-################################################################################
+Separation of concerns
+
+Reusable shared modules
+
+Reactive forms with validation
+
+Centralized API services
+
+Role-based routing
+
+📌 Future Improvements
+
+Email appointment reminders
+
+Real-time booking availability
+
+Dentist availability calendars
+
+Patient dental records
+
+Reporting and analytics dashboard
+
+👨‍💻 Author
+
+Developed by:
+
+BK Oboikanyego Radipabe
+
+GitHub
+https://github.com/oboikanyego
+
+⭐ Support
+
+If you find this project useful, please consider giving it a ⭐ on GitHub.
