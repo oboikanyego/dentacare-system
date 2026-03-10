@@ -1,0 +1,39 @@
+<section class="page-width intro-section">
+  <span class="eyebrow">Contact page</span>
+  <h1>Make the clinic easy to find, call, and visit.</h1>
+  <p>Surface the address, phone number, email, opening hours, and emergency help in one place for quick action on mobile or desktop.</p>
+</section>
+
+<section class="page-width contact-grid">
+  <article class="contact-card">
+    <h2>Contact summary</h2>
+    <ul class="contact-list">
+      <li><strong>Address:</strong> {{ data.contact.address }}</li>
+      <li><strong>Phone:</strong> {{ data.contact.phone }}</li>
+      <li><strong>Email:</strong> {{ data.contact.email }}</li>
+      <li><strong>Hours:</strong> {{ data.contact.hours }}</li>
+      <li><strong>Emergency:</strong> {{ data.contact.emergencyPhone }}</li>
+    </ul>
+  </article>
+
+  <article class="map-card">
+    <span>Google Maps integration area</span>
+    <strong>Map preview placeholder</strong>
+    <p>Ready for &#64;angular/google-maps once you add your API key.</p>
+  </article>
+</section>
+
+<section class="page-width faq-section">
+  <div class="section-heading">
+    <span class="eyebrow">FAQ</span>
+    <h2>Answer common patient questions early.</h2>
+  </div>
+  <div class="faq-list">
+    @for (faq of data.faqs; track faq.question) {
+      <details>
+        <summary>{{ faq.question }}</summary>
+        <p>{{ faq.answer }}</p>
+      </details>
+    }
+  </div>
+</section>

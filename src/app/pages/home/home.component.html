@@ -1,0 +1,101 @@
+<section class="hero page-width">
+  <div class="hero-copy">
+    <span class="eyebrow">{{ data.tagline }}</span>
+    <h1>Trusted dental care with easy booking and clear service information.</h1>
+    <p>{{ data.intro }}</p>
+
+    <div class="hero-actions">
+      <a class="cta-button" routerLink="/appointment">Book Appointment</a>
+      <a class="ghost-button" routerLink="/services">Explore Services</a>
+    </div>
+
+    <div class="hero-metrics">
+      <div>
+        <strong>4.9/5</strong>
+        <span>Average patient rating</span>
+      </div>
+      <div>
+        <strong>15+</strong>
+        <span>Years of trusted care</span>
+      </div>
+      <div>
+        <strong>Mon–Sat</strong>
+        <span>Flexible appointment hours</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-card hero-card-top">
+      <span>Emergency dental care</span>
+      <strong>Same-day support available</strong>
+    </div>
+
+    <div class="hero-image-wrap">
+      <img src="https://images.unsplash.com/photo-1629909615184-74f495363b67?auto=format&fit=crop&w=1200&q=80" alt="Dentist consulting a patient">
+    </div>
+
+    <div class="hero-card hero-card-bottom">
+      <strong>Featured services</strong>
+      <ul>
+        @for (item of data.featuredServices; track item) {
+          <li>{{ item }}</li>
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="contact-strip page-width">
+  <article>
+    <span class="label">Address</span>
+    <strong>{{ data.contact.address }}</strong>
+  </article>
+  <article>
+    <span class="label">Call</span>
+    <strong><a href="tel:+27111234567">{{ data.contact.phone }}</a></strong>
+  </article>
+  <article>
+    <span class="label">Hours</span>
+    <strong>{{ data.contact.hours }}</strong>
+  </article>
+</section>
+
+<section class="services-section page-width">
+  <div class="section-heading split-heading">
+    <div>
+      <span class="eyebrow">Quick services overview</span>
+      <h2>Patients can quickly understand what you offer before they book.</h2>
+    </div>
+    <p>Focus on clear categories, simple descriptions, and pricing cues that reduce uncertainty.</p>
+  </div>
+
+  <div class="service-grid">
+    @for (service of data.services.slice(0, 3); track service.title) {
+      <article class="service-card">
+        <span class="service-category">{{ service.category }}</span>
+        <h3>{{ service.title }}</h3>
+        <p>{{ service.description }}</p>
+        <strong>{{ service.price }}</strong>
+      </article>
+    }
+  </div>
+</section>
+
+<section class="testimonial-section page-width">
+  <div class="section-heading">
+    <span class="eyebrow">Patient reviews</span>
+    <h2>Testimonials that build confidence and trust.</h2>
+  </div>
+
+  <div class="testimonial-grid">
+    @for (review of data.reviews; track review.name) {
+      <article class="testimonial-card">
+        <span class="stars">★★★★★</span>
+        <p>“{{ review.quote }}”</p>
+        <strong>{{ review.name }}</strong>
+        <small>{{ review.service }}</small>
+      </article>
+    }
+  </div>
+</section>

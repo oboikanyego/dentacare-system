@@ -1,0 +1,112 @@
+<section class="page-width admin-grid">
+  <div class="card">
+    <span class="eyebrow">Admin only</span>
+    <h1>User management</h1>
+    <p>Create staff accounts and activate or deactivate users when needed.</p>
+
+    @if (successMessage) {
+      <div class="alert success">{{ successMessage }}</div>
+    }
+    @if (errorMessage) {
+      <div class="alert error">{{ errorMessage }}</div>
+    }
+
+    <form class="form-grid" [formGroup]="staffForm" (ngSubmit)="createStaffUser()">
+      <label>
+        <span>Name</span>
+        <input type="text" formControlName="name">
+      </label>
+
+      <label>
+        <span>Email</span>
+        <input type="email" formControlName="email">
+      </label>
+
+      <label>
+        <span>Phone</span>
+        <input type="tel" formControlName="phone">
+      </label>
+
+      <label>
+        <span>ID number</span>
+        <input type="text" formControlName="idNumber">
+      </label>
+
+      <label>
+        <span>Role</span>
+        <select formControlName="role">
+          @for (role of roles; track role.value) {
+            <option [value]="role.value">{{ role.label }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="full-width">
+        <span>Password</span>
+        <input type="password" formControlName="password">
+      </label>
+
+      <button class="primary-button full-width" type="submit">Create staff user</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Existing users</h2>
+    <div class="toolbar compact toolbar-3">
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Search name, email, ID number or role">
+      <select [(ngModel)]="roleFilter" (ngModelChange)="applyFilters()">
+        <option value="ALL">All roles</option>
+        @for (role of roles; track role.value) {
+          <option [value]="role.value">{{ role.label }}</option>
+        }
+        <option value="PATIENT">Patient</option>
+      </select>
+      <select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+        <option value="ALL">All statuses</option>
+        <option value="true">Active</option>
+        <option value="false">Inactive</option>
+      </select>
+      <select [(ngModel)]="sortKey" (ngModelChange)="applyFilters()">
+        <option value="name">Sort by name</option>
+        <option value="email">Sort by email</option>
+        <option value="role">Sort by role</option>
+      </select>
+    </div>
+    @if (isLoading) {
+      <p>Loading users...</p>
+    } @else {
+      <div class="table-wrap">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>ID number</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of filteredUsers; track user._id) {
+              <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phone || '—' }}</td>
+                <td>{{ user.idNumber || '—' }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                  <span class="pill" [class.inactive]="!user.isActive">{{ user.isActive ? 'Active' : 'Inactive' }}</span>
+                </td>
+                <td>
+                  <button type="button" class="ghost-button" (click)="toggleUserStatus(user)">{{ user.isActive ? 'Deactivate' : 'Activate' }}</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</section>

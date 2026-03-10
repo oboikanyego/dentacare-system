@@ -1,0 +1,103 @@
+<section class="page-width">
+  <div class="section-header">
+    <span class="eyebrow">Staff</span>
+    <h1>Bookings</h1>
+    <p>Search, filter, sort, and review all bookings in a paged table.</p>
+  </div>
+
+  @if (successMessage) { <div class="alert success">{{ successMessage }}</div> }
+  @if (errorMessage) { <div class="alert error">{{ errorMessage }}</div> }
+
+  @if (isLoading) {
+    <div class="card skeleton-table"></div>
+  } @else if (!appointments.length) {
+    <div class="card">No bookings found.</div>
+  } @else {
+    <div class="toolbar toolbar-3">
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Search patient, ID number, email, service, branch or dentist">
+      <select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+        <option value="ALL">All statuses</option>
+        <option value="PENDING">Pending</option>
+        <option value="CONFIRMED">Confirmed</option>
+        <option value="CANCELLED">Cancelled</option>
+        <option value="COMPLETED">Completed</option>
+        <option value="NO_SHOW">No show</option>
+      </select>
+      <select [(ngModel)]="sortKey" (ngModelChange)="applyFilters()">
+        <option value="date">Sort by date</option>
+        <option value="patientName">Sort by patient</option>
+        <option value="status">Sort by status</option>
+      </select>
+    </div>
+
+    <div class="table-card">
+      <div class="table-wrap">
+        <table class="appointments-table">
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <!-- <th>ID number</th> -->
+              <th>Type</th>
+              <th>Branch</th>
+              <th>Dentist</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Status</th>
+              <th>Contact</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (appointment of pagedAppointments; track appointment._id) {
+              <tr>
+                <td>{{ appointment.patientName }}</td>
+                <!-- <td>{{ appointment.idNumber || '—' }}</td> -->
+                <td>{{ appointment.serviceName }}</td>
+                <td>{{ appointment.branchName || '—' }}</td>
+                <td>{{ appointment.dentistName }}</td>
+                <td>{{ appointment.date }}</td>
+                <td>{{ appointment.time }}</td>
+                <td><span class="pill" [ngClass]="statusClass(appointment.status)">{{ appointment.status }}</span></td>
+                <td>{{ appointment.email }}<br>{{ appointment.phone }}</td>
+                <td class="action-row-cell">
+                  <button type="button" class="ghost-button" (click)="openDetails(appointment)">View</button>
+                  <button type="button" class="ghost-button" (click)="reschedule(appointment)">Edit / Reschedule</button>
+                  @if (canCancel(appointment.status)) {
+                    <button type="button" class="ghost-button danger" (click)="cancel(appointment)">Cancel</button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="pagination-row">
+      <button type="button" class="ghost-button" (click)="previousPage()" [disabled]="page === 1">Previous</button>
+      <span>Page {{ page }} of {{ totalPages }}</span>
+      <button type="button" class="ghost-button" (click)="nextPage()" [disabled]="page === totalPages">Next</button>
+    </div>
+  }
+
+  @if (selectedAppointment) {
+    <div class="details-card card">
+      <div class="details-header">
+        <h2>Appointment details</h2>
+        <button class="ghost-button" type="button" (click)="closeDetails()">Close</button>
+      </div>
+      <p><strong>Patient:</strong> {{ selectedAppointment.patientName }}</p>
+      <p><strong>Type:</strong> {{ selectedAppointment.serviceName }}</p>
+      <p><strong>Branch:</strong> {{ selectedAppointment.branchName || '—' }}</p>
+      <p><strong>Dentist:</strong> {{ selectedAppointment.dentistName }}</p>
+      <p><strong>Status:</strong> {{ selectedAppointment.status }}</p>
+      <p><strong>Notes:</strong> {{ selectedAppointment.notes || '—' }}</p>
+      <div class="audit-box">
+        <strong>Audit trail</strong>
+        @for (entry of selectedAppointment.auditTrail || []; track $index) {
+          <p>{{ entry.action }} · {{ entry.byRole }} · {{ entry.note }}</p>
+        }
+      </div>
+    </div>
+  }
+</section>

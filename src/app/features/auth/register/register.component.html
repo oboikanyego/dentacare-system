@@ -1,0 +1,101 @@
+<section class="register-page">
+  <mat-card class="register-card" appearance="outlined">
+    <div class="register-header">
+      <p class="section-label">Patient registration</p>
+      <h1>Create your account</h1>
+      <p class="muted">Register once, then log in to track, reschedule, and cancel your appointments.</p>
+    </div>
+
+    @if (errorMessage) {
+      <div class="banner banner--error">{{ errorMessage }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="register-form">
+      <div class="grid two-up">
+        <mat-form-field appearance="outline">
+          <mat-label>Full name</mat-label>
+          <input matInput type="text" formControlName="name" [matTooltip]="getErrorMessage('name')" [matTooltipDisabled]="!getErrorMessage('name')" matTooltipPosition="above" placeholder="Your full name">
+          @if (f['name'].touched && f['name'].invalid) {
+            <mat-error>Full name is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" [matTooltip]="getErrorMessage('email')" [matTooltipDisabled]="!getErrorMessage('email')" matTooltipPosition="above" placeholder="name@example.com">
+          @if (f['email'].touched && f['email'].invalid) {
+            <mat-error>Enter a valid email address.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="grid two-up">
+        <mat-form-field appearance="outline">
+          <mat-label>Phone</mat-label>
+          <input matInput type="tel" formControlName="phone" [matTooltip]="getErrorMessage('phone')" [matTooltipDisabled]="!getErrorMessage('phone')" matTooltipPosition="above" placeholder="0712345678">
+          @if (f['phone'].touched && f['phone'].invalid) {
+            <mat-error>Use a valid South African mobile number.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>ID number</mat-label>
+          <input matInput type="text" formControlName="idNumber" [matTooltip]="getErrorMessage('idNumber')" [matTooltipDisabled]="!getErrorMessage('idNumber')" matTooltipPosition="above" placeholder="13-digit South African ID">
+          @if (f['idNumber'].touched && f['idNumber'].invalid) {
+            <mat-error>Enter a valid 13-digit ID number.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="grid two-up">
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" [matTooltip]="getErrorMessage('password')" [matTooltipDisabled]="!getErrorMessage('password')" matTooltipPosition="above" placeholder="Create a password">
+          <button mat-button matSuffix type="button" class="suffix-button" (click)="togglePassword()">
+            {{ hidePassword ? 'Show' : 'Hide' }}
+          </button>
+          @if (f['password'].touched && f['password'].invalid) {
+            <mat-error>Password must be at least 8 characters.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm password</mat-label>
+          <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" [matTooltip]="getErrorMessage('confirmPassword')" [matTooltipDisabled]="!getErrorMessage('confirmPassword')" matTooltipPosition="above" placeholder="Re-enter password">
+          <button mat-button matSuffix type="button" class="suffix-button" (click)="toggleConfirmPassword()">
+            {{ hideConfirmPassword ? 'Show' : 'Hide' }}
+          </button>
+          @if (f['confirmPassword'].touched && f['confirmPassword'].invalid) {
+            <mat-error>Please confirm your password.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="strength-wrap">
+        <div class="strength-meta">
+          <span>Password strength</span>
+          <strong [class.weak]="passwordStrength === 'Weak'" [class.medium]="passwordStrength === 'Medium'" [class.strong]="passwordStrength === 'Strong'">
+            {{ passwordStrength }}
+          </strong>
+        </div>
+        <mat-progress-bar mode="determinate" [value]="passwordScore"></mat-progress-bar>
+        <p class="muted helper-text">Use 8+ characters with upper, lower, number, and symbol.</p>
+      </div>
+
+      @if (form.touched && form.errors?.['passwordMismatch']) {
+        <div class="banner banner--error compact">Passwords do not match.</div>
+      }
+
+      <button mat-flat-button color="primary" type="submit" class="submit-button" [disabled]="isSubmitting">
+        @if (isSubmitting) {
+          <mat-spinner diameter="20"></mat-spinner>
+          <span>Creating account...</span>
+        } @else {
+          <span>Create account</span>
+        }
+      </button>
+    </form>
+
+    <p class="footer-text">Already registered? <a routerLink="/login">Login here</a>.</p>
+  </mat-card>
+</section>

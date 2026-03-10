@@ -1,0 +1,122 @@
+.topbar {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: inline-flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 14px;
+  align-items: center;
+  justify-content: center;
+  background: #e2f3f1;
+  color: #0f766e;
+}
+
+.desktop-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.desktop-nav a,
+.mobile-menu a {
+  text-decoration: none;
+  color: #0f172a;
+}
+
+.desktop-nav a.active {
+  color: #0f766e;
+  font-weight: 700;
+}
+
+.action-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.user-chip {
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.cta-button,
+.ghost-button,
+.profile-button {
+  border-radius: 999px;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  border: 1px solid #cbd5e1;
+  background: white;
+}
+
+.cta-button {
+  background: #0f766e;
+  color: white;
+  border-color: #0f766e;
+}
+
+.profile-menu { position: relative; }
+.profile-button { display:flex; align-items:center; gap:.75rem; }
+.avatar { width:2rem; height:2rem; display:inline-flex; align-items:center; justify-content:center; border-radius:999px; background:#d1fae5; color:#065f46; font-weight:800; }
+.profile-dropdown { position:absolute; right:0; top:calc(100% + 10px); min-width:240px; display:grid; gap:.5rem; padding:1rem; border-radius:20px; background:#fff; box-shadow:0 20px 45px rgba(15,23,42,.15); border:1px solid #e2e8f0; z-index:10; }
+.profile-dropdown strong { color:#0f172a; }
+.profile-dropdown span, .profile-dropdown small { color:#64748b; }
+.mobile-user-card { padding:1rem; border-radius:16px; background:#f8fafc; display:grid; gap:.25rem; }
+
+.menu-toggle {
+  display: none;
+  border: none;
+  background: transparent;
+  font-size: 1.25rem;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .topbar {
+    grid-template-columns: auto auto;
+  }
+
+  .desktop-nav,
+  .desktop-only {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: inline-block;
+    justify-self: end;
+  }
+
+  .mobile-menu {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0 1rem 1rem;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .full-width {
+    width: 100%;
+    text-align: center;
+  }
+}

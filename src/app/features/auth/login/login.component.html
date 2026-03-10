@@ -1,0 +1,74 @@
+<section class="auth-page auth-page--split">
+  <div class="auth-panel auth-panel--brand">
+    <div class="brand-block">
+      <div class="brand-badge">🦷</div>
+      <p class="eyebrow">Dental practice platform</p>
+      <h1>DentaCare</h1>
+      <p class="brand-copy">One web app for patients and clinic staff.</p>
+    </div>
+
+    <div class="brand-feature">
+      <h2>Sign in faster</h2>
+      <p>
+        Patients can track appointments, while reception, dentists, and admins can manage bookings and users from one place.
+      </p>
+      <div class="brand-pills">
+        <span>Role-based access</span>
+        <span>Appointment tracking</span>
+        <span>Secure access</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-panel auth-panel--form">
+    <mat-card class="auth-card" appearance="outlined">
+      <p class="section-label">Welcome back</p>
+      <h2>Login</h2>
+      <p class="muted">Use your email and password to continue.</p>
+
+      @if (errorMessage) {
+        <div class="banner banner--error">{{ errorMessage }}</div>
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="name@example.com" [matTooltip]="getErrorMessage('email')" [matTooltipDisabled]="!getErrorMessage('email')" matTooltipPosition="above">
+          @if (f['email'].touched && f['email'].invalid) {
+            <mat-error>A valid email is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Enter password" [matTooltip]="getErrorMessage('password')" [matTooltipDisabled]="!getErrorMessage('password')" matTooltipPosition="above">
+          <button mat-button matSuffix type="button" class="suffix-button" (click)="togglePassword()">
+            {{ hidePassword ? 'Show' : 'Hide' }}
+          </button>
+          @if (f['password'].touched && f['password'].invalid) {
+            <mat-error>Password is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="form-actions-row">
+          <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
+          <a routerLink="/forgot-password" class="inline-link">Forgot password?</a>
+        </div>
+
+        <button mat-flat-button color="primary" type="submit" class="submit-button" [disabled]="isSubmitting">
+          @if (isSubmitting) {
+            <mat-spinner diameter="20"></mat-spinner>
+            <span>Signing in...</span>
+          } @else {
+            <span>Sign in</span>
+          }
+        </button>
+      </form>
+
+      <p class="footer-text">
+        Don't have an account?
+        <a routerLink="/register">Create your account</a>
+      </p>
+    </mat-card>
+  </div>
+</section>

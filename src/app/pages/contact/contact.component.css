@@ -1,0 +1,13 @@
+.page-width { width:min(1180px, calc(100% - 32px)); margin:0 auto; }
+.intro-section, .contact-grid, .faq-section { margin-bottom:32px; }
+.eyebrow { display:inline-block; margin-bottom:14px; padding:8px 14px; border-radius:999px; background:rgba(18,63,82,.08); color:#0e6c84; font-weight:700; }
+h1,h2 { margin:0; line-height:1.05; letter-spacing:-.04em; color:#12313d; }
+h1 { font-size:clamp(2.4rem, 4vw, 4rem); max-width:12ch; }
+p, li, summary { color:#52717c; line-height:1.75; }
+.contact-grid { display:grid; grid-template-columns: 1fr 1fr; gap:20px; }
+.contact-card, .map-card, details { border-radius:28px; background:rgba(255,255,255,.86); border:1px solid rgba(18,63,82,.08); box-shadow:0 20px 45px rgba(18,63,82,.08); padding:24px; }
+.contact-list { padding-left: 18px; }
+.map-card { display:grid; place-items:center; min-height:320px; text-align:center; }
+.faq-list { display:grid; gap:16px; }
+summary { font-weight:700; color:#12313d; }
+@media (max-width:960px){ .contact-grid { grid-template-columns:1fr; } }

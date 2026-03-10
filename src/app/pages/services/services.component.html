@@ -1,0 +1,40 @@
+<section class="page-width intro-section">
+  <span class="eyebrow">Services page</span>
+  <h1>Clear treatment information helps patients decide faster.</h1>
+  <p>Each service includes a summary, treatment flow, and pricing cue so visitors can compare options without confusion.</p>
+</section>
+
+<section class="page-width service-grid">
+  @for (service of data.services; track service.title) {
+    <article class="service-card">
+      <span class="service-category">{{ service.category }}</span>
+      <h2>{{ service.title }}</h2>
+      <p>{{ service.description }}</p>
+      <h3>Procedure steps</h3>
+      <ul>
+        @for (step of service.steps; track step) {
+          <li>{{ step }}</li>
+        }
+      </ul>
+      <strong>{{ service.price }}</strong>
+    </article>
+  }
+</section>
+
+<section class="page-width gallery-section">
+  <div class="section-heading">
+    <span class="eyebrow">Before & after gallery</span>
+    <h2>Visual proof helps reinforce treatment outcomes.</h2>
+  </div>
+  <div class="gallery-grid">
+    @for (item of data.gallery; track item.title) {
+      <article class="gallery-card">
+        <img [src]="item.image" [alt]="item.title">
+        <div>
+          <strong>{{ item.title }}</strong>
+          <span>{{ item.label }}</span>
+        </div>
+      </article>
+    }
+  </div>
+</section>

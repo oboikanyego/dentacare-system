@@ -1,0 +1,25 @@
+<section class="page-width admin-section">
+  <span class="eyebrow">Admin / Dashboard</span>
+  <h1>Clinic overview</h1>
+  <p class="lead">Real-time counters for bookings and users.</p>
+
+  @if (errorMessage) {
+    <div class="alert error">{{ errorMessage }}</div>
+  }
+
+  @if (isLoading) {
+    <div class="stats-grid">
+      @for (item of [1,2,3,4,5]; track item) {
+        <article class="card skeleton-card"></article>
+      }
+    </div>
+  } @else {
+    <div class="stats-grid">
+      <article class="card"><strong>{{ bookingsToday }}</strong><span>Bookings today</span></article>
+      <article class="card"><strong>{{ pendingCount }}</strong><span>Pending bookings</span></article>
+      <article class="card"><strong>{{ cancelledCount }}</strong><span>Cancelled bookings</span></article>
+      <article class="card"><strong>{{ completedCount }}</strong><span>Completed bookings</span></article>
+      <article class="card"><strong>{{ activeUsers }}</strong><span>Active users</span></article>
+    </div>
+  }
+</section>

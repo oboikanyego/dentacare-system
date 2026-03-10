@@ -1,0 +1,47 @@
+<section class="page-width intro-section">
+  <span class="eyebrow">About the dentist / practice</span>
+  <h1>A practice built around trust, comfort, and clear communication.</h1>
+  <p>Patients want to know who will treat them, what qualifications they hold, and how the clinic approach supports long-term oral health.</p>
+</section>
+
+<section class="page-width about-grid">
+  <article class="about-card">
+    <h2>Why patients choose SmileCraft</h2>
+    <ul class="check-list">
+      <li>Qualified dentists with family, cosmetic, orthodontic, and restorative expertise</li>
+      <li>Warm staff introductions and a welcoming clinic experience</li>
+      <li>Modern equipment and a comfort-first treatment philosophy</li>
+      <li>Clear explanations for procedures, pricing, and aftercare</li>
+    </ul>
+  </article>
+
+  <article class="about-card clinic-card">
+    <img src="https://images.unsplash.com/photo-1588776814546-daab30f310ce?auto=format&fit=crop&w=1200&q=80" alt="Modern dental clinic interior">
+    <div>
+      <h2>Clinic atmosphere</h2>
+      <p>Bright treatment rooms, digital tools, and a calm waiting area designed to help patients feel at ease from the moment they arrive.</p>
+    </div>
+  </article>
+</section>
+
+<section class="page-width team-section">
+  <div class="section-heading">
+    <span class="eyebrow">Meet the team</span>
+    <h2>Experienced dentists patients can trust before they even walk in.</h2>
+  </div>
+
+  <div class="doctor-grid">
+    @for (dentist of data.dentists; track dentist.name) {
+      <article class="doctor-card">
+        <img [src]="dentist.image" [alt]="dentist.name">
+        <div class="doctor-info">
+          <h3>{{ dentist.name }}</h3>
+          <p class="doctor-role">{{ dentist.role }}</p>
+          <p>{{ dentist.qualifications }}</p>
+          <p>{{ dentist.experience }}</p>
+          <p>{{ dentist.philosophy }}</p>
+        </div>
+      </article>
+    }
+  </div>
+</section>

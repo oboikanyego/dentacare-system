@@ -1,0 +1,125 @@
+.page-width {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+.admin-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1.2fr;
+}
+
+.card {
+  background: white;
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+}
+
+.form-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+label span {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+input,
+select {
+  width: 100%;
+  border: 1px solid #dbe2ea;
+  border-radius: 12px;
+  padding: 0.8rem 0.95rem;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.primary-button,
+.ghost-button {
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  font-weight: 700;
+  border: 1px solid #cbd5e1;
+  background: white;
+}
+
+.primary-button {
+  background: #0f766e;
+  color: white;
+  border-color: #0f766e;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.users-table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+  text-align: left;
+  padding: 0.95rem 0.8rem;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: top;
+}
+
+.users-table th {
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.users-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.pill {
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.pill.inactive {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.muted-cell {
+  color: #94a3b8;
+}
+
+.alert {
+  margin-bottom: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+}
+.alert.success { background: #ecfdf5; color: #047857; }
+.alert.error { background: #fef2f2; color: #b91c1c; }
+
+@media (max-width: 900px) {
+  .admin-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.toolbar { display: grid; grid-template-columns: 1.5fr 220px; gap: 12px; margin: 16px 0; }
+.toolbar input, .toolbar select { border: 1px solid #dbe2ea; border-radius: 12px; padding: 0.85rem 1rem; }
+@media (max-width: 768px) { .toolbar { grid-template-columns: 1fr; } }
+
+.toolbar-3 { grid-template-columns: 1.5fr 220px 180px 180px; }
+.users-table thead th { position: sticky; top: 0; background: white; z-index: 1; }
+@media (max-width: 900px) { .toolbar-3 { grid-template-columns: 1fr; } }

@@ -1,0 +1,13 @@
+.page-width { width:min(1180px, calc(100% - 32px)); margin:0 auto; }
+.intro-section, .gallery-section { margin-bottom:32px; }
+.eyebrow { display:inline-block; margin-bottom:14px; padding:8px 14px; border-radius:999px; background:rgba(18,63,82,.08); color:#0e6c84; font-weight:700; }
+h1,h2 { margin:0; line-height:1.05; letter-spacing:-.04em; color:#12313d; }
+h1 { font-size:clamp(2.4rem, 4vw, 4rem); max-width:12ch; }
+p, li, span { color:#52717c; line-height:1.75; }
+.service-grid, .gallery-grid { display:grid; gap:20px; }
+.service-grid { grid-template-columns: repeat(2, minmax(0,1fr)); margin-bottom:32px; }
+.gallery-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+.service-card, .gallery-card { border-radius:28px; background:rgba(255,255,255,.86); border:1px solid rgba(18,63,82,.08); box-shadow:0 20px 45px rgba(18,63,82,.08); padding:24px; }
+.service-category { color:#0e6c84; font-weight:700; }
+.gallery-card img { width:100%; height:220px; object-fit:cover; border-radius:20px; margin-bottom:14px; }
+@media (max-width:960px){ .service-grid, .gallery-grid { grid-template-columns:1fr; } }

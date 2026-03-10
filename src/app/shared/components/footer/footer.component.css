@@ -1,0 +1,24 @@
+.footer {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 24px 0 48px;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  color: #52717c;
+}
+
+.footer strong {
+  color: #12313d;
+}
+
+.footer p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+  }
+}

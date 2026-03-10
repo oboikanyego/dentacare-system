@@ -1,0 +1,167 @@
+<section class="page-width intro-section">
+  <span class="eyebrow">Online appointment booking</span>
+  <h1>Book your dental visit online.</h1>
+  <p>
+    Pick your branch, service, dentist, time, and notes. Signed-in patients have bookings linked to their account automatically using their stored ID number.
+  </p>
+</section>
+
+<section class="page-width booking-section material-booking-layout">
+  <mat-card class="booking-copy card" appearance="outlined">
+    <h2>Booking flow</h2>
+    <div class="booking-points">
+      <article><strong>Step 1</strong><span>Select branch, service, and dentist</span></article>
+      <article><strong>Step 2</strong><span>Choose date, time, and duration</span></article>
+      <article><strong>Step 3</strong><span>Receive confirmation</span></article>
+    </div>
+    <ul>
+      <li>Patients can create an account to track and cancel bookings</li>
+      <li>Each booking stores the patient's ID number for easier association</li>
+      <li>Overlapping bookings and out-of-hours bookings are blocked</li>
+    </ul>
+  </mat-card>
+
+  <mat-card class="booking-card material-booking-card" appearance="outlined">
+    <h2>Book an appointment</h2>
+    @if (isSignedIn()) {
+      <p class="signed-in-banner">Signed in patients will have this booking linked to their account automatically.</p>
+    }
+
+    @if (errorMessage) {
+      <div class="alert error">{{ errorMessage }}</div>
+    }
+
+    <form class="booking-form material-booking-form" [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
+      <div class="grid two-up">
+        <mat-form-field appearance="outline">
+          <mat-label>Branch</mat-label>
+          <mat-select formControlName="branchId" [matTooltip]="getFieldError('branchId')" [matTooltipDisabled]="!getFieldError('branchId')">
+            <mat-option value="">Select a branch</mat-option>
+            @for (branch of branches; track branch.value) {
+              <mat-option [value]="branch.value">{{ branch.label }}</mat-option>
+            }
+          </mat-select>
+          @if (isFieldInvalid('branchId')) { <mat-error>{{ getFieldError('branchId') }}</mat-error> }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Appointment type</mat-label>
+          <mat-select formControlName="serviceId" [matTooltip]="getFieldError('serviceId')" [matTooltipDisabled]="!getFieldError('serviceId')">
+            <mat-option value="">Select a service</mat-option>
+            @for (service of services; track service.value) {
+              <mat-option [value]="service.value">{{ service.label }}</mat-option>
+            }
+          </mat-select>
+          @if (isFieldInvalid('serviceId')) { <mat-error>{{ getFieldError('serviceId') }}</mat-error> }
+        </mat-form-field>
+      </div>
+
+      <div class="grid two-up">
+        <mat-form-field appearance="outline">
+          <mat-label>Dentist</mat-label>
+          <mat-select formControlName="dentistId" [matTooltip]="getFieldError('dentistId')" [matTooltipDisabled]="!getFieldError('dentistId')">
+            <mat-option value="">Select a dentist</mat-option>
+            @for (dentist of dentists; track dentist._id) {
+              <mat-option [value]="dentist._id">{{ dentist.name }} {{ dentist.specialization ? '· ' + dentist.specialization : '' }}</mat-option>
+            }
+          </mat-select>
+          @if (isFieldInvalid('dentistId')) { <mat-error>{{ getFieldError('dentistId') }}</mat-error> }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Date</mat-label>
+          <input matInput type="date" formControlName="date" [min]="minDate" [matTooltip]="getFieldError('date')" [matTooltipDisabled]="!getFieldError('date')">
+          @if (isFieldInvalid('date')) { <mat-error>{{ getFieldError('date') }}</mat-error> }
+        </mat-form-field>
+      </div>
+
+      <div class="grid two-up">
+        <mat-form-field appearance="outline">
+          <mat-label>Time</mat-label>
+          <mat-select formControlName="slotId" [matTooltip]="getFieldError('slotId')" [matTooltipDisabled]="!getFieldError('slotId')">
+            <mat-option value="">Select a time</mat-option>
+            @for (slot of timeSlots; track slot.value) {
+              <mat-option [value]="slot.value">{{ slot.label }}</mat-option>
+            }
+          </mat-select>
+          @if (isFieldInvalid('slotId')) { <mat-error>{{ getFieldError('slotId') }}</mat-error> }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Duration</mat-label>
+          <mat-select formControlName="durationMinutes">
+            <mat-option [value]="30">30 minutes</mat-option>
+            <mat-option [value]="45">45 minutes</mat-option>
+            <mat-option [value]="60">60 minutes</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      @if (isStaff()) {
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            @for (status of statuses; track status.value) {
+              <mat-option [value]="status.value">{{ status.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+
+      <div class="grid two-up">
+        <mat-form-field appearance="outline">
+          <mat-label>Full name</mat-label>
+          <input matInput type="text" formControlName="patientName" placeholder="Your full name" [matTooltip]="getFieldError('patientName')" [matTooltipDisabled]="!getFieldError('patientName')">
+          @if (isFieldInvalid('patientName')) { <mat-error>{{ getFieldError('patientName') }}</mat-error> }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>ID number</mat-label>
+          <input matInput type="text" formControlName="idNumber" placeholder="Your South African ID number" [matTooltip]="getFieldError('idNumber')" [matTooltipDisabled]="!getFieldError('idNumber')">
+          @if (isFieldInvalid('idNumber')) { <mat-error>{{ getFieldError('idNumber') }}</mat-error> }
+        </mat-form-field>
+      </div>
+
+      <div class="grid two-up">
+        <mat-form-field appearance="outline">
+          <mat-label>Phone number</mat-label>
+          <input matInput type="tel" formControlName="phone" placeholder="0712345678" [matTooltip]="getFieldError('phone')" [matTooltipDisabled]="!getFieldError('phone')">
+          @if (isFieldInvalid('phone')) { <mat-error>{{ getFieldError('phone') }}</mat-error> }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="name@example.com" [matTooltip]="getFieldError('email')" [matTooltipDisabled]="!getFieldError('email')">
+          @if (isFieldInvalid('email')) { <mat-error>{{ getFieldError('email') }}</mat-error> }
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Reason for visit</mat-label>
+        <textarea matInput rows="3" formControlName="reason" placeholder="What would you like help with?" [matTooltip]="getFieldError('reason')" [matTooltipDisabled]="!getFieldError('reason')"></textarea>
+        @if (isFieldInvalid('reason')) { <mat-error>{{ getFieldError('reason') }}</mat-error> }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Additional notes</mat-label>
+        <textarea matInput rows="4" formControlName="notes" placeholder="Tell us anything important before your visit"></textarea>
+      </mat-form-field>
+
+      @if (isStaff()) {
+        <mat-form-field appearance="outline">
+          <mat-label>Internal notes</mat-label>
+          <textarea matInput rows="3" formControlName="internalNotes" placeholder="Visible to clinic staff only"></textarea>
+        </mat-form-field>
+      }
+
+      <button mat-flat-button color="primary" type="submit" class="submit-button" [disabled]="loading">
+        @if (loading) {
+          <mat-spinner diameter="20"></mat-spinner>
+          <span>Booking appointment...</span>
+        } @else {
+          <span>Confirm appointment</span>
+        }
+      </button>
+    </form>
+  </mat-card>
+</section>

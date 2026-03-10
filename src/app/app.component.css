@@ -1,0 +1,45 @@
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.32);
+  backdrop-filter: blur(8px);
+}
+
+.welcome-card {
+  position: relative;
+  min-width: min(90vw, 420px);
+  padding: 2rem;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.18);
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  overflow: hidden;
+  animation: welcome-pop 320ms ease-out;
+}
+
+.glow-ring {
+  position: absolute;
+  inset: -35%;
+  background: radial-gradient(circle, rgba(20,184,166,.24) 0%, rgba(20,184,166,0) 62%);
+  animation: pulse-glow 1.8s ease-in-out infinite;
+}
+
+.welcome-card h2,
+.welcome-card p { margin: 0; position: relative; }
+.welcome-card h2 { color: #0f172a; }
+.welcome-card p { color: #64748b; text-align: center; }
+
+@keyframes pulse-glow {
+  0%, 100% { transform: scale(0.92); opacity: 0.7; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+@keyframes welcome-pop {
+  from { transform: translateY(12px) scale(0.98); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}

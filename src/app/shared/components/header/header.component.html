@@ -1,0 +1,91 @@
+<header class="topbar">
+  <a class="brand" routerLink="/">
+    <span class="brand-mark">✦</span>
+    <span>
+      <strong>DentaCare</strong>
+      <small>Johannesburg</small>
+    </span>
+  </a>
+
+  <nav class="desktop-nav" aria-label="Primary navigation">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/about" routerLinkActive="active">About</a>
+    <a routerLink="/services" routerLinkActive="active">Services</a>
+    <a routerLink="/appointment" routerLinkActive="active">Book</a>
+    <a routerLink="/contact" routerLinkActive="active">Contact</a>
+
+    @if (isPatient()) {
+      <a routerLink="/patient/appointments" routerLinkActive="active">My Appointments</a>
+    }
+
+    @if (isStaff()) {
+      <a routerLink="/staff/bookings" routerLinkActive="active">Staff Bookings</a>
+    }
+
+    @if (isAdmin()) {
+      <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/admin/users" routerLinkActive="active">Users</a>
+    }
+  </nav>
+
+  <div class="action-row desktop-only">
+    @if (user()) {
+      <div class="profile-menu" (click)="stopPropagation($event)">
+        <button class="profile-button" type="button" (click)="toggleProfile()">
+          <span class="avatar">{{ user()?.name?.charAt(0) }}</span>
+          <span class="user-chip">{{ user()?.name }} · {{ user()?.role }}</span>
+        </button>
+
+        @if (profileOpen()) {
+          <div class="profile-dropdown">
+            <strong>{{ user()?.name }}</strong>
+            <span>{{ user()?.email }}</span>
+            <small>{{ user()?.role }}</small>
+            <button class="ghost-button" type="button" (click)="goToProfileArea()">Open dashboard</button>
+            <button class="cta-button" type="button" (click)="logout()">Logout</button>
+          </div>
+        }
+      </div>
+    } @else {
+      <a class="ghost-button" routerLink="/register">Register</a>
+      <a class="cta-button" routerLink="/login">Login</a>
+    }
+  </div>
+
+  <button class="menu-toggle mobile-only" type="button" (click)="toggleMenu()" aria-label="Toggle menu">
+    ☰
+  </button>
+</header>
+
+@if (menuOpen()) {
+  <nav class="mobile-menu" aria-label="Mobile navigation">
+    <a routerLink="/" (click)="closeMenu()">Home</a>
+    <a routerLink="/about" (click)="closeMenu()">About</a>
+    <a routerLink="/services" (click)="closeMenu()">Services</a>
+    <a routerLink="/appointment" (click)="closeMenu()">Book</a>
+    <a routerLink="/contact" (click)="closeMenu()">Contact</a>
+
+    @if (isPatient()) {
+      <a routerLink="/patient/appointments" (click)="closeMenu()">My Appointments</a>
+    }
+
+    @if (isStaff()) {
+      <a routerLink="/staff/bookings" (click)="closeMenu()">Staff Bookings</a>
+    }
+
+    @if (isAdmin()) {
+      <a routerLink="/admin/dashboard" (click)="closeMenu()">Dashboard</a>
+      <a routerLink="/admin/users" (click)="closeMenu()">Users</a>
+    }
+
+    @if (user()) {
+      <div class="mobile-user-card">
+        <strong>{{ user()?.name }}</strong>
+        <span>{{ user()?.role }}</span>
+      </div>
+      <button class="cta-button full-width" type="button" (click)="logout()">Logout</button>
+    } @else {
+      <a class="cta-button full-width" routerLink="/login" (click)="closeMenu()">Login</a>
+    }
+  </nav>
+}

@@ -1,0 +1,18 @@
+<div class="page-shell">
+  <app-header></app-header>
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+  <app-footer></app-footer>
+</div>
+
+@if (uiFeedback.welcomeMessage()) {
+  <div class="welcome-overlay" aria-live="polite">
+    <div class="welcome-card">
+      <div class="glow-ring"></div>
+      <mat-spinner diameter="54"></mat-spinner>
+      <h2>{{ uiFeedback.welcomeMessage() }}</h2>
+      <p>Loading your dashboard and latest appointments…</p>
+    </div>
+  </div>
+}

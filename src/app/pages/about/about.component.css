@@ -1,0 +1,16 @@
+.page-width { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+.intro-section, .about-grid, .team-section { margin-bottom: 32px; }
+.eyebrow { display:inline-block; margin-bottom:14px; padding:8px 14px; border-radius:999px; background:rgba(18,63,82,.08); color:#0e6c84; font-weight:700; }
+h1,h2 { margin:0; line-height:1.05; letter-spacing:-.04em; color:#12313d; }
+h1 { font-size: clamp(2.4rem, 4vw, 4rem); max-width: 12ch; }
+p, li { color:#52717c; line-height:1.75; }
+.about-grid, .doctor-grid { display:grid; gap:20px; }
+.about-grid { grid-template-columns: 1fr 1fr; }
+.doctor-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+.about-card, .doctor-card { border-radius:28px; background:rgba(255,255,255,.86); border:1px solid rgba(18,63,82,.08); box-shadow:0 20px 45px rgba(18,63,82,.08); padding:24px; }
+.clinic-card img, .doctor-card img { width:100%; border-radius:24px; object-fit:cover; }
+.clinic-card img { margin-bottom:18px; height:280px; }
+.doctor-card img { height:260px; margin-bottom:18px; }
+.check-list { padding-left: 18px; }
+.doctor-role { color:#0e6c84; font-weight:700; }
+@media (max-width:960px){ .about-grid, .doctor-grid { grid-template-columns:1fr; } }

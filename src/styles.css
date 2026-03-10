@@ -1,0 +1,40 @@
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  color: #12313d;
+  background: #f7fbfc;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+}
+
+
+.mdc-text-field--outlined {
+  --mdc-outlined-text-field-container-shape: 14px;
+}
+
+.mat-mdc-card-outlined {
+  --mdc-outlined-card-container-shape: 24px;
+}
+
+
+.app-snackbar-success .mdc-snackbar__surface { background: #065f46 !important; color: #fff !important; }
+.app-snackbar-error .mdc-snackbar__surface { background: #991b1b !important; color: #fff !important; }
+.mat-mdc-snack-bar-container .mat-mdc-button { color: #fff !important; }
+
