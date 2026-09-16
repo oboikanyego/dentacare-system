@@ -1,9 +1,9 @@
 <header class="topbar">
   <a class="brand" routerLink="/">
     <span class="brand-mark">✦</span>
-    <span>
+    <span class="brand-copy">
       <strong>DentaCare</strong>
-      <small>Johannesburg</small>
+      <small>Portfolio demo clinic</small>
     </span>
   </a>
 
@@ -39,8 +39,8 @@
         @if (profileOpen()) {
           <div class="profile-dropdown">
             <strong>{{ user()?.name }}</strong>
-            <span>{{ user()?.email }}</span>
-            <small>{{ user()?.role }}</small>
+            <span><b>Email:</b> {{ user()?.email }}</span>
+            <span><b>Role:</b> {{ user()?.role }}</span>
             <button class="ghost-button" type="button" (click)="goToProfileArea()">Open dashboard</button>
             <button class="cta-button" type="button" (click)="logout()">Logout</button>
           </div>
@@ -81,7 +81,7 @@
     @if (user()) {
       <div class="mobile-user-card">
         <strong>{{ user()?.name }}</strong>
-        <span>{{ user()?.role }}</span>
+        <span><b>Role:</b> {{ user()?.role }}</span>
       </div>
       <button class="cta-button full-width" type="button" (click)="logout()">Logout</button>
     } @else {
