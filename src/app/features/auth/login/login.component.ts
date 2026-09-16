@@ -12,6 +12,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../../core/services/auth.service';
 import { UiFeedbackService } from '../../../core/services/ui-feedback.service';
 
+type SampleRole = 'patient' | 'receptionist' | 'dentist' | 'admin';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -37,6 +39,15 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly uiFeedback = inject(UiFeedbackService);
 
+  readonly sampleAccounts: Record<SampleRole, { label: string; email: string }> = {
+    patient: { label: 'Patient · John Doe', email: 'john.doe@dentacare.example' },
+    receptionist: { label: 'Reception · Riley Brooks', email: 'reception@dentacare.example' },
+    dentist: { label: 'Dentist · Dr. Maya Vale', email: 'dentist@dentacare.example' },
+    admin: { label: 'Admin · Alex Morgan', email: 'admin@dentacare.example' }
+  };
+
+  readonly samplePassword = 'DentaCare123!';
+
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
@@ -49,6 +60,16 @@ export class LoginComponent {
 
   get f() {
     return this.loginForm.controls;
+  }
+
+  useSampleAccount(role: SampleRole): void {
+    const account = this.sampleAccounts[role];
+    this.loginForm.patchValue({
+      email: account.email,
+      password: this.samplePassword,
+      rememberMe: false
+    });
+    this.errorMessage = '';
   }
 
   onSubmit(): void {
@@ -64,7 +85,7 @@ export class LoginComponent {
       next: () => {
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
         this.uiFeedback.success('Login successful.');
-        this.uiFeedback.showWelcome('Demo user');
+        this.uiFeedback.showWelcome('Welcome back');
         this.router.navigateByUrl(returnUrl || this.authService.getLandingRoute());
       },
       error: (error) => {
