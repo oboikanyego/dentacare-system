@@ -7,6 +7,7 @@ import { Appointment } from '../../core/models/appointment.model';
 import { MasterDataService } from '../../core/services/master-data.service';
 import { MasterDataItem } from '../../core/models/master-data.model';
 import { AppointmentEditDialogComponent } from '../../shared/components/appointment-edit-dialog/appointment-edit-dialog.component';
+import { AppointmentDetailsDialogComponent } from '../../shared/components/appointment-details-dialog/appointment-details-dialog.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { UiFeedbackService } from '../../core/services/ui-feedback.service';
 
@@ -34,7 +35,6 @@ export class PatientAppointmentsComponent implements OnInit {
   sortKey: 'date' | 'serviceName' | 'status' = 'date';
   page = 1;
   readonly pageSize = 8;
-  selectedAppointment: Appointment | null = null;
 
   ngOnInit(): void {
     this.masterDataService.getOne('timeSlots').subscribe({ next: (response) => this.timeSlots = response.items || [] });
@@ -82,11 +82,13 @@ export class PatientAppointmentsComponent implements OnInit {
   }
 
   openDetails(appointment: Appointment): void {
-    this.selectedAppointment = appointment;
-  }
-
-  closeDetails(): void {
-    this.selectedAppointment = null;
+    this.dialog.open(AppointmentDetailsDialogComponent, {
+      width: '680px',
+      maxWidth: '94vw',
+      panelClass: 'dentacare-dialog',
+      autoFocus: false,
+      data: { appointment, showPatientDetails: false }
+    });
   }
 
   cancelAppointment(appointment: Appointment): void {
@@ -94,6 +96,8 @@ export class PatientAppointmentsComponent implements OnInit {
 
     this.dialog.open(ConfirmDialogComponent, {
       width: '420px',
+      maxWidth: '92vw',
+      panelClass: 'dentacare-dialog',
       data: {
         title: 'Cancel appointment',
         message: 'Are you sure you want to cancel this appointment?',
@@ -105,7 +109,6 @@ export class PatientAppointmentsComponent implements OnInit {
         next: () => {
           this.message = 'Appointment cancelled successfully';
           this.uiFeedback.success(this.message);
-          this.closeDetails();
           this.loadAppointments();
         },
         error: (error) => {
@@ -119,8 +122,10 @@ export class PatientAppointmentsComponent implements OnInit {
   rescheduleAppointment(appointment: Appointment): void {
     if (!appointment._id) return;
     this.dialog.open(AppointmentEditDialogComponent, {
-      width: '640px',
-      maxWidth: '96vw',
+      width: '680px',
+      maxWidth: '94vw',
+      panelClass: 'dentacare-dialog',
+      autoFocus: false,
       data: {
         title: 'Reschedule appointment',
         appointment,
@@ -133,7 +138,6 @@ export class PatientAppointmentsComponent implements OnInit {
         next: () => {
           this.message = 'Appointment rescheduled successfully';
           this.uiFeedback.success(this.message);
-          this.closeDetails();
           this.loadAppointments();
         },
         error: (error) => {
