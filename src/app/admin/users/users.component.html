@@ -1,89 +1,83 @@
-<section class="page-width admin-grid">
-  <div class="card">
-    <span class="eyebrow">Demo admin only</span>
-    <h1>Demo user management</h1>
-    <p>Create fictional staff accounts and test activation/deactivation workflows. Do not enter real employee, patient, or client information.</p>
+<section class="page-width users-page">
+  <div class="page-heading">
+    <div>
+      <span class="eyebrow">Admin</span>
+      <h1>User management</h1>
+      <p>Manage staff and patient access from one place. Built-in sample accounts are visible in full; other account details are masked in this portfolio environment.</p>
+    </div>
+    <button mat-flat-button color="primary" type="button" class="add-user-button" (click)="openCreateUserDialog()">
+      Add staff user
+    </button>
+  </div>
 
-    @if (successMessage) {
-      <div class="alert success">{{ successMessage }}</div>
-    }
-    @if (errorMessage) {
-      <div class="alert error">{{ errorMessage }}</div>
-    }
+  @if (successMessage) {
+    <div class="alert success">{{ successMessage }}</div>
+  }
+  @if (errorMessage) {
+    <div class="alert error">{{ errorMessage }}</div>
+  }
 
-    <form class="form-grid" [formGroup]="staffForm" (ngSubmit)="createStaffUser()">
-      <label>
-        <span>Demo name:</span>
-        <input type="text" formControlName="name" placeholder="Demo Staff User">
+  <section class="card users-card">
+    <div class="card-heading">
+      <div>
+        <h2>Users</h2>
+        <p>{{ filteredUsers.length }} account{{ filteredUsers.length === 1 ? '' : 's' }} shown</p>
+      </div>
+      <span class="sample-hint">Sample accounts use &#64;dentacare.example</span>
+    </div>
+
+    <div class="toolbar toolbar-3">
+      <label class="search-field">
+        <span class="sr-only">Search users</span>
+        <input type="search" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Search name, email, ID number or role">
       </label>
 
       <label>
-        <span>Demo email:</span>
-        <input type="email" formControlName="email" placeholder="staff@dentacare.example">
-      </label>
-
-      <label>
-        <span>Demo phone:</span>
-        <input type="tel" formControlName="phone" placeholder="0710000000">
-      </label>
-
-      <label>
-        <span>Demo ID number:</span>
-        <input type="text" formControlName="idNumber" placeholder="0000000000000">
-      </label>
-
-      <label>
-        <span>Role:</span>
-        <select formControlName="role">
+        <span class="filter-label">Role</span>
+        <select [(ngModel)]="roleFilter" (ngModelChange)="applyFilters()">
+          <option value="ALL">All roles</option>
           @for (role of roles; track role.value) {
             <option [value]="role.value">{{ role.label }}</option>
           }
+          <option value="PATIENT">Patient</option>
         </select>
       </label>
 
-      <label class="full-width">
-        <span>Demo password:</span>
-        <input type="password" formControlName="password" placeholder="Use a demo-only password">
+      <label>
+        <span class="filter-label">Status</span>
+        <select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+          <option value="ALL">All statuses</option>
+          <option value="true">Active</option>
+          <option value="false">Inactive</option>
+        </select>
       </label>
 
-      <button class="primary-button full-width" type="submit">Create demo staff user</button>
-    </form>
-  </div>
-
-  <div class="card">
-    <h2>Existing demo users</h2>
-    <p class="privacy-note">Personal fields are masked in this portfolio view even if raw values exist in the demo database.</p>
-    <div class="toolbar compact toolbar-3">
-      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Search demo name, email, ID number or role">
-      <select [(ngModel)]="roleFilter" (ngModelChange)="applyFilters()">
-        <option value="ALL">All roles</option>
-        @for (role of roles; track role.value) {
-          <option [value]="role.value">{{ role.label }}</option>
-        }
-        <option value="PATIENT">Patient</option>
-      </select>
-      <select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
-        <option value="ALL">All statuses</option>
-        <option value="true">Active</option>
-        <option value="false">Inactive</option>
-      </select>
-      <select [(ngModel)]="sortKey" (ngModelChange)="applyFilters()">
-        <option value="name">Sort by name</option>
-        <option value="email">Sort by email</option>
-        <option value="role">Sort by role</option>
-      </select>
+      <label>
+        <span class="filter-label">Sort</span>
+        <select [(ngModel)]="sortKey" (ngModelChange)="applyFilters()">
+          <option value="name">Name</option>
+          <option value="email">Email</option>
+          <option value="role">Role</option>
+        </select>
+      </label>
     </div>
+
     @if (isLoading) {
-      <p>Loading demo users...</p>
+      <div class="loading-state">Loading users…</div>
+    } @else if (!filteredUsers.length) {
+      <div class="empty-state">
+        <strong>No users match these filters.</strong>
+        <span>Try clearing your search or selecting a different role/status.</span>
+      </div>
     } @else {
       <div class="table-wrap">
         <table class="users-table">
           <thead>
             <tr>
-              <th>Demo name</th>
-              <th>Masked email</th>
-              <th>Masked phone</th>
-              <th>Masked ID number</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>ID number</th>
               <th>Role</th>
               <th>Status</th>
               <th>Action</th>
@@ -92,11 +86,21 @@
           <tbody>
             @for (user of filteredUsers; track user._id) {
               <tr>
-                <td>{{ maskName(user.name) }}</td>
-                <td>{{ maskEmail(user.email) }}</td>
-                <td>{{ maskPhone(user.phone) }}</td>
-                <td>{{ maskIdNumber(user.idNumber) }}</td>
-                <td>{{ user.role }}</td>
+                <td>
+                  <div class="user-cell">
+                    <span class="initial-avatar">{{ displayName(user).charAt(0) }}</span>
+                    <div>
+                      <strong>{{ displayName(user) }}</strong>
+                      @if (isSampleUser(user)) {
+                        <small>Sample account</small>
+                      }
+                    </div>
+                  </div>
+                </td>
+                <td>{{ displayEmail(user) }}</td>
+                <td>{{ displayPhone(user) }}</td>
+                <td>{{ displayIdNumber(user) }}</td>
+                <td><span class="role-pill">{{ user.role }}</span></td>
                 <td>
                   <span class="pill" [class.inactive]="!user.isActive">{{ user.isActive ? 'Active' : 'Inactive' }}</span>
                 </td>
@@ -109,5 +113,5 @@
         </table>
       </div>
     }
-  </div>
+  </section>
 </section>
