@@ -86,13 +86,13 @@ export class AppointmentComponent implements OnInit {
     });
 
     const currentUser = this.authService.getCurrentUser();
-    if (currentUser) {
+    if (currentUser && this.authService.hasRole(['PATIENT'])) {
       this.bookingForm.patchValue({
         patientName: currentUser.name,
         email: currentUser.email,
         phone: currentUser.phone || '',
         idNumber: currentUser.idNumber || '',
-        status: this.authService.hasRole(['PATIENT']) ? 'CONFIRMED' : 'PENDING'
+        status: 'CONFIRMED'
       });
     }
   }
