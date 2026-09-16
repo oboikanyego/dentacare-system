@@ -1,9 +1,9 @@
 .topbar {
-  max-width: 1120px;
+  width: min(1180px, calc(100% - 24px));
   margin: 0 auto;
-  padding: 1rem;
+  padding: 1rem 0;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto auto 1fr auto;
   gap: 1rem;
   align-items: center;
 }
@@ -12,9 +12,9 @@
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  min-width: 0;
   color: inherit;
   text-decoration: none;
-  min-width: 0;
 }
 
 .brand-copy {
@@ -29,6 +29,11 @@
   display: block;
 }
 
+.brand-copy strong {
+  color: #12313d;
+  font-size: 1.02rem;
+}
+
 .brand-copy small {
   color: #64748b;
   font-size: 0.78rem;
@@ -36,37 +41,62 @@
 
 .brand-mark {
   display: inline-flex;
-  width: 2.5rem;
-  height: 2.5rem;
-  flex: 0 0 2.5rem;
+  width: 2.65rem;
+  height: 2.65rem;
+  flex: 0 0 2.65rem;
   border-radius: 14px;
   align-items: center;
   justify-content: center;
-  background: #e2f3f1;
+  background: linear-gradient(145deg, #dff6f2, #eefcf9);
   color: #0f766e;
+  box-shadow: inset 0 0 0 1px rgba(15, 118, 110, 0.08);
+}
+
+.environment-pill {
+  padding: 0.34rem 0.6rem;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .desktop-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.3rem;
   justify-content: center;
 }
 
 .desktop-nav a,
 .mobile-menu a {
   text-decoration: none;
-  color: #0f172a;
+  color: #334155;
+}
+
+.desktop-nav a {
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.desktop-nav a:hover {
+  background: #f1f8f7;
+  color: #0f766e;
 }
 
 .desktop-nav a.active {
+  background: #e7f7f4;
   color: #0f766e;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .action-row {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.65rem;
   align-items: center;
 }
 
@@ -75,25 +105,58 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: #475569;
 }
 
-.cta-button,
+.register-button,
+.login-button,
 .ghost-button,
+.cta-button,
 .profile-button {
-  border-radius: 999px;
-  padding: 0.75rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
   text-decoration: none;
-  font-weight: 700;
-  border: 1px solid #cbd5e1;
-  background: white;
+  font-weight: 800;
+  border: 1px solid transparent;
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease, border-color 150ms ease;
 }
 
-.cta-button {
-  background: #0f766e;
-  color: white;
+.register-button {
+  background: #fff;
   border-color: #0f766e;
+  color: #0f766e;
+  box-shadow: 0 6px 16px rgba(15, 118, 110, 0.08);
+}
+
+.register-button:hover {
+  background: #f0fdfa;
+  transform: translateY(-1px);
+}
+
+.login-button,
+.cta-button {
+  background: linear-gradient(135deg, #0f766e, #0d8b83);
+  border-color: #0f766e;
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(15, 118, 110, 0.22);
+}
+
+.login-button:hover,
+.cta-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 13px 28px rgba(15, 118, 110, 0.26);
+}
+
+.ghost-button,
+.profile-button {
+  background: #fff;
+  border-color: #d7e0e6;
+  color: #334155;
 }
 
 .profile-menu {
@@ -101,10 +164,13 @@
 }
 
 .profile-button {
-  display: flex;
-  align-items: center;
   gap: 0.75rem;
   min-width: 0;
+}
+
+.profile-button:hover {
+  border-color: #b9c8d1;
+  background: #fbfefe;
 }
 
 .avatar {
@@ -114,8 +180,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
-  background: #d1fae5;
+  border-radius: 10px;
+  background: #dff6f2;
   color: #065f46;
   font-weight: 800;
 }
@@ -123,21 +189,22 @@
 .profile-dropdown {
   position: absolute;
   right: 0;
-  top: calc(100% + 10px);
-  min-width: 260px;
-  max-width: min(360px, calc(100vw - 32px));
+  top: calc(100% + 12px);
+  min-width: 285px;
+  max-width: min(380px, calc(100vw - 32px));
   display: grid;
-  gap: 0.6rem;
+  gap: 0.55rem;
   padding: 1rem;
-  border-radius: 20px;
+  border-radius: 18px;
   background: #fff;
-  box-shadow: 0 20px 45px rgba(15,23,42,.15);
+  box-shadow: 0 24px 55px rgba(15, 23, 42, 0.16);
   border: 1px solid #e2e8f0;
-  z-index: 10;
+  z-index: 30;
 }
 
 .profile-dropdown strong {
   color: #0f172a;
+  font-size: 1rem;
 }
 
 .profile-dropdown span {
@@ -146,9 +213,15 @@
   overflow-wrap: anywhere;
 }
 
-.profile-dropdown b,
-.mobile-user-card b {
+.role-line b {
   color: #334155;
+}
+
+.profile-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 0.35rem;
 }
 
 .mobile-user-card {
@@ -156,18 +229,53 @@
   border-radius: 16px;
   background: #f8fafc;
   display: grid;
-  gap: 0.35rem;
+  gap: 0.3rem;
+}
+
+.mobile-user-card span,
+.mobile-user-card small {
+  color: #64748b;
+  overflow-wrap: anywhere;
 }
 
 .menu-toggle {
   display: none;
-  border: none;
-  background: transparent;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid #d8e2e8;
+  border-radius: 12px;
+  background: #fff;
+  color: #334155;
   font-size: 1.25rem;
 }
 
 .mobile-menu {
   display: none;
+}
+
+.mobile-auth-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.full-width {
+  width: 100%;
+  text-align: center;
+}
+
+@media (max-width: 1080px) {
+  .environment-pill {
+    display: none;
+  }
+
+  .topbar {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .desktop-nav {
+    justify-content: flex-start;
+  }
 }
 
 @media (max-width: 900px) {
@@ -181,20 +289,40 @@
   }
 
   .menu-toggle {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     justify-self: end;
   }
 
   .mobile-menu {
+    width: min(100% - 24px, 1180px);
+    margin: 0 auto 1rem;
     display: grid;
-    gap: 0.75rem;
-    padding: 0 1rem 1rem;
-    max-width: 1120px;
-    margin: 0 auto;
+    gap: 0.4rem;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
   }
 
-  .full-width {
-    width: 100%;
-    text-align: center;
+  .mobile-menu > a:not(.register-button):not(.login-button) {
+    padding: 0.75rem 0.8rem;
+    border-radius: 10px;
+  }
+
+  .mobile-menu > a:hover {
+    background: #f8fafc;
+  }
+}
+
+@media (max-width: 520px) {
+  .brand-copy small {
+    display: none;
+  }
+
+  .mobile-auth-actions {
+    grid-template-columns: 1fr;
   }
 }
