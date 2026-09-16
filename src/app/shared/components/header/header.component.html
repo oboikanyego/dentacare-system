@@ -3,9 +3,11 @@
     <span class="brand-mark">✦</span>
     <span class="brand-copy">
       <strong>DentaCare</strong>
-      <small>Portfolio demo clinic</small>
+      <small>Johannesburg dental care</small>
     </span>
   </a>
+
+  <span class="environment-pill">Sample data</span>
 
   <nav class="desktop-nav" aria-label="Primary navigation">
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
@@ -32,23 +34,25 @@
     @if (user()) {
       <div class="profile-menu" (click)="stopPropagation($event)">
         <button class="profile-button" type="button" (click)="toggleProfile()">
-          <span class="avatar">D</span>
-          <span class="user-chip">Demo account · {{ user()?.role }}</span>
+          <span class="avatar">{{ user()?.name?.charAt(0) || 'U' }}</span>
+          <span class="user-chip">{{ user()?.name }} · {{ user()?.role }}</span>
         </button>
 
         @if (profileOpen()) {
           <div class="profile-dropdown">
-            <strong>Demo account</strong>
-            <span><b>Role:</b> {{ user()?.role }}</span>
-            <span>Personal account details are hidden in this portfolio UI.</span>
-            <button class="ghost-button" type="button" (click)="goToProfileArea()">Open dashboard</button>
-            <button class="cta-button" type="button" (click)="logout()">Logout</button>
+            <strong>{{ user()?.name }}</strong>
+            <span>{{ user()?.email }}</span>
+            <span class="role-line"><b>Role:</b> {{ user()?.role }}</span>
+            <div class="profile-actions">
+              <button class="ghost-button" type="button" (click)="goToProfileArea()">Open dashboard</button>
+              <button class="cta-button" type="button" (click)="logout()">Logout</button>
+            </div>
           </div>
         }
       </div>
     } @else {
-      <a class="ghost-button" routerLink="/register">Register</a>
-      <a class="cta-button" routerLink="/login">Login</a>
+      <a class="register-button" routerLink="/register">Register</a>
+      <a class="login-button" routerLink="/login">Login</a>
     }
   </div>
 
@@ -80,12 +84,16 @@
 
     @if (user()) {
       <div class="mobile-user-card">
-        <strong>Demo account</strong>
-        <span><b>Role:</b> {{ user()?.role }}</span>
+        <strong>{{ user()?.name }}</strong>
+        <span>{{ user()?.email }}</span>
+        <small>{{ user()?.role }}</small>
       </div>
-      <button class="cta-button full-width" type="button" (click)="logout()">Logout</button>
+      <button class="login-button full-width" type="button" (click)="logout()">Logout</button>
     } @else {
-      <a class="cta-button full-width" routerLink="/login" (click)="closeMenu()">Login</a>
+      <div class="mobile-auth-actions">
+        <a class="register-button full-width" routerLink="/register" (click)="closeMenu()">Register</a>
+        <a class="login-button full-width" routerLink="/login" (click)="closeMenu()">Login</a>
+      </div>
     }
   </nav>
 }
