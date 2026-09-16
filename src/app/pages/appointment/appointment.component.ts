@@ -86,13 +86,13 @@ export class AppointmentComponent implements OnInit {
     });
 
     const currentUser = this.authService.getCurrentUser();
-    if (currentUser) {
+    if (currentUser && this.authService.hasRole(['PATIENT'])) {
       this.bookingForm.patchValue({
         patientName: currentUser.name,
         email: currentUser.email,
         phone: currentUser.phone || '',
         idNumber: currentUser.idNumber || '',
-        status: this.authService.hasRole(['PATIENT']) ? 'CONFIRMED' : 'PENDING'
+        status: 'CONFIRMED'
       });
     }
   }
@@ -112,6 +112,8 @@ export class AppointmentComponent implements OnInit {
     const selectedSlot = this.timeSlots.find((item) => item.value === formValue.slotId);
     const selectedDentist = this.dentists.find((item) => item._id === formValue.dentistId);
     const selectedBranch = this.branches.find((item) => item.value === formValue.branchId);
+    const isPatient = this.authService.hasRole(['PATIENT']);
+    const isStaff = this.isStaff();
 
     const payload = {
       patientName: formValue.patientName ?? '',
@@ -131,16 +133,18 @@ export class AppointmentComponent implements OnInit {
       branchName: selectedBranch?.label || '',
       slotId: formValue.slotId ?? '',
       durationMinutes: Number(formValue.durationMinutes ?? 30),
-      status: this.authService.hasRole(['PATIENT']) ? 'CONFIRMED' as const : (formValue.status as any || 'PENDING')
+      status: isPatient ? 'CONFIRMED' as const : isStaff ? (formValue.status as any || 'PENDING') : 'PENDING' as const
     };
 
-    const request$ = this.authService.hasRole(['PATIENT'])
+    const request$ = isPatient
       ? this.appointmentService.createMyAppointment(payload as any)
-      : this.appointmentService.createPublicAppointment(payload as any);
+      : isStaff
+        ? this.appointmentService.createStaffAppointment(payload as any)
+        : this.appointmentService.createPublicAppointment(payload as any);
 
     request$.subscribe({
       next: () => {
-        this.successMessage = this.authService.hasRole(['PATIENT'])
+        this.successMessage = isPatient
           ? 'Your appointment has been linked to your account and booked successfully.'
           : 'Your appointment has been booked successfully.';
         this.uiFeedback.success(this.successMessage);
@@ -155,7 +159,7 @@ export class AppointmentComponent implements OnInit {
           reason: '',
           notes: '',
           internalNotes: '',
-          status: this.authService.hasRole(['PATIENT']) ? 'CONFIRMED' : 'PENDING'
+          status: isPatient ? 'CONFIRMED' : 'PENDING'
         });
         this.loading = false;
       },
