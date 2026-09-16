@@ -1,0 +1,74 @@
+<section class="dialog-shell">
+  <div class="dialog-heading">
+    <div>
+      <p class="eyebrow">Staff access</p>
+      <h2 mat-dialog-title>Add staff user</h2>
+      <p class="subtitle">Create a receptionist, dentist, or admin account without crowding the user-management page.</p>
+    </div>
+    <button class="icon-close" type="button" aria-label="Close dialog" (click)="dialogRef.close()">×</button>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <form class="dialog-form" [formGroup]="form">
+      <div class="two-up">
+        <mat-form-field appearance="outline">
+          <mat-label>Full name</mat-label>
+          <input matInput formControlName="name" placeholder="e.g. Sam Taylor">
+          @if (form.controls.name.touched && form.controls.name.invalid) {
+            <mat-error>Name is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Role</mat-label>
+          <mat-select formControlName="role">
+            @for (role of data.roles; track role.value) {
+              <mat-option [value]="role.value">{{ role.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="two-up">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="staff@dentacare.example">
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <mat-error>Enter a valid email address.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Phone</mat-label>
+          <input matInput type="tel" formControlName="phone" placeholder="0710000000">
+          @if (form.controls.phone.touched && form.controls.phone.invalid) {
+            <mat-error>Use a valid South African mobile number.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="two-up">
+        <mat-form-field appearance="outline">
+          <mat-label>ID number</mat-label>
+          <input matInput formControlName="idNumber" placeholder="13-digit ID number">
+          @if (form.controls.idNumber.touched && form.controls.idNumber.invalid) {
+            <mat-error>Enter 13 digits.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Temporary password</mat-label>
+          <input matInput type="password" formControlName="password" placeholder="At least 8 characters">
+          @if (form.controls.password.touched && form.controls.password.invalid) {
+            <mat-error>Password must be at least 8 characters.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions" align="end">
+    <button mat-stroked-button type="button" (click)="dialogRef.close()">Cancel</button>
+    <button mat-flat-button color="primary" type="button" (click)="save()">Create user</button>
+  </mat-dialog-actions>
+</section>
