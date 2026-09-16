@@ -7,15 +7,30 @@
       <p class="brand-copy">One web app for patients and clinic staff.</p>
     </div>
 
-    <div class="brand-feature">
-      <h2>Sign in faster</h2>
-      <p>
-        Patients can track appointments, while reception, dentists, and admins can manage bookings and users from one place.
-      </p>
-      <div class="brand-pills">
-        <span>Role-based access</span>
-        <span>Appointment tracking</span>
-        <span>Secure access</span>
+    <div class="sample-access">
+      <div class="sample-access-heading">
+        <div>
+          <p class="sample-kicker">Quick access</p>
+          <h2>Try a sample account</h2>
+        </div>
+        <span>Credentials fill automatically</span>
+      </div>
+
+      <div class="sample-account-grid">
+        @for (account of sampleAccounts; track account.email) {
+          <button
+            type="button"
+            class="sample-account"
+            [class.selected]="selectedSampleEmail === account.email"
+            (click)="useSampleAccount(account)">
+            <span class="sample-avatar">{{ account.initials }}</span>
+            <span class="sample-copy">
+              <strong>{{ account.name }}</strong>
+              <small>{{ account.role }}</small>
+            </span>
+            <span class="sample-arrow">→</span>
+          </button>
+        }
       </div>
     </div>
   </div>
@@ -24,7 +39,7 @@
     <mat-card class="auth-card" appearance="outlined">
       <p class="section-label">Welcome back</p>
       <h2>Login</h2>
-      <p class="muted">Use your email and password to continue.</p>
+      <p class="muted">Use your account details or choose a sample account to explore the application.</p>
 
       @if (errorMessage) {
         <div class="banner banner--error">{{ errorMessage }}</div>
@@ -64,6 +79,8 @@
           }
         </button>
       </form>
+
+      <p class="sample-note">Sample data is used throughout this portfolio environment.</p>
 
       <p class="footer-text">
         Don't have an account?
