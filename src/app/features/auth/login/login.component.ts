@@ -12,6 +12,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../../core/services/auth.service';
 import { UiFeedbackService } from '../../../core/services/ui-feedback.service';
 
+interface SampleAccount {
+  name: string;
+  role: string;
+  email: string;
+  initials: string;
+}
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -37,6 +44,14 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly uiFeedback = inject(UiFeedbackService);
 
+  readonly samplePassword = 'DentaCare123!';
+  readonly sampleAccounts: SampleAccount[] = [
+    { name: 'John Doe', role: 'Patient', email: 'john.doe@dentacare.example', initials: 'JD' },
+    { name: 'Riley Brooks', role: 'Reception', email: 'reception@dentacare.example', initials: 'RB' },
+    { name: 'Dr. Maya Vale', role: 'Dentist', email: 'dentist@dentacare.example', initials: 'MV' },
+    { name: 'Alex Morgan', role: 'Admin', email: 'admin@dentacare.example', initials: 'AM' }
+  ];
+
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
@@ -46,9 +61,19 @@ export class LoginComponent {
   hidePassword = true;
   isSubmitting = false;
   errorMessage = '';
+  selectedSampleEmail = '';
 
   get f() {
     return this.loginForm.controls;
+  }
+
+  useSampleAccount(account: SampleAccount): void {
+    this.selectedSampleEmail = account.email;
+    this.errorMessage = '';
+    this.loginForm.patchValue({
+      email: account.email,
+      password: this.samplePassword
+    });
   }
 
   onSubmit(): void {
@@ -63,8 +88,9 @@ export class LoginComponent {
     this.authService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        const currentUser = this.authService.getCurrentUser();
         this.uiFeedback.success('Login successful.');
-        this.uiFeedback.showWelcome('Demo user');
+        this.uiFeedback.showWelcome(currentUser?.name || 'Welcome back');
         this.router.navigateByUrl(returnUrl || this.authService.getLandingRoute());
       },
       error: (error) => {
