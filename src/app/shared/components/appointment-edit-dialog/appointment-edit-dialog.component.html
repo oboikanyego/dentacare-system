@@ -1,50 +1,62 @@
+<section class="appointment-dialog">
+  <div class="dialog-heading">
+    <div>
+      <p class="eyebrow">Appointment</p>
+      <h2 mat-dialog-title class="dialog-title">{{ data.title }}</h2>
+      <p class="dialog-subtitle">Update the schedule and notes without leaving the bookings workspace.</p>
+    </div>
+    <button class="icon-close" type="button" aria-label="Close dialog" (click)="cancel()">×</button>
+  </div>
 
-    <h2 mat-dialog-title>{{ data.title }}</h2>
-    <mat-dialog-content>
-      <form class="dialog-form" [formGroup]="form">
-        <div class="grid two-up">
-          <mat-form-field appearance="outline">
-            <mat-label>Date</mat-label>
-            <input matInput type="date" formControlName="date">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Time</mat-label>
-            <mat-select formControlName="slotId">
-              @for (slot of data.timeSlots; track slot.value) {
-                <mat-option [value]="slot.value">{{ slot.label }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        @if (data.canEditStatus) {
-          <mat-form-field appearance="outline">
-            <mat-label>Status</mat-label>
-            <mat-select formControlName="status">
-              <mat-option value="PENDING">PENDING</mat-option>
-              <mat-option value="CONFIRMED">CONFIRMED</mat-option>
-              <mat-option value="CANCELLED">CANCELLED</mat-option>
-              <mat-option value="COMPLETED">COMPLETED</mat-option>
-              <mat-option value="NO_SHOW">NO_SHOW</mat-option>
-            </mat-select>
-          </mat-form-field>
-        }
-
+  <mat-dialog-content class="dialog-content">
+    <form class="dialog-form" [formGroup]="form">
+      <div class="grid two-up">
         <mat-form-field appearance="outline">
-          <mat-label>Patient notes</mat-label>
-          <textarea matInput rows="4" formControlName="notes"></textarea>
+          <mat-label>Date</mat-label>
+          <input matInput type="date" formControlName="date">
         </mat-form-field>
 
-        @if (data.canEditInternalNotes) {
-          <mat-form-field appearance="outline">
-            <mat-label>Internal notes</mat-label>
-            <textarea matInput rows="4" formControlName="internalNotes"></textarea>
-          </mat-form-field>
-        }
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-stroked-button type="button" (click)="dialogRef.close()">Close</button>
-      <button mat-flat-button color="primary" type="button" (click)="save()">Save changes</button>
-    </mat-dialog-actions>
+        <mat-form-field appearance="outline">
+          <mat-label>Time</mat-label>
+          <mat-select formControlName="slotId">
+            @for (slot of data.timeSlots; track slot.value) {
+              <mat-option [value]="slot.value">{{ slot.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      @if (data.canEditStatus) {
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="PENDING">Pending</mat-option>
+            <mat-option value="CONFIRMED">Confirmed</mat-option>
+            <mat-option value="CANCELLED">Cancelled</mat-option>
+            <mat-option value="COMPLETED">Completed</mat-option>
+            <mat-option value="NO_SHOW">No show</mat-option>
+          </mat-select>
+        </mat-form-field>
+      }
+
+      <div class="section-divider"><span>Notes</span></div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Patient notes</mat-label>
+        <textarea matInput rows="4" formControlName="notes" placeholder="Appointment notes"></textarea>
+      </mat-form-field>
+
+      @if (data.canEditInternalNotes) {
+        <mat-form-field appearance="outline">
+          <mat-label>Internal notes</mat-label>
+          <textarea matInput rows="4" formControlName="internalNotes" placeholder="Visible to clinic staff only"></textarea>
+        </mat-form-field>
+      }
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions" align="end">
+    <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-flat-button color="primary" type="button" (click)="save()">Save changes</button>
+  </mat-dialog-actions>
+</section>
