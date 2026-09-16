@@ -8,14 +8,25 @@
   margin-bottom: 32px;
 }
 
-.eyebrow {
+.intro-section {
+  padding-top: 20px;
+}
+
+.eyebrow,
+.step-kicker {
   display: inline-block;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
+  color: #0e6c84;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
   padding: 8px 14px;
   border-radius: 999px;
   background: rgba(18,63,82,.08);
-  color: #0e6c84;
-  font-weight: 700;
 }
 
 h1,
@@ -35,64 +46,129 @@ p,
 li,
 span {
   color: #52717c;
-  line-height: 1.7;
+  line-height: 1.65;
 }
 
 .intro-section p {
   max-width: 70ch;
+  margin-top: 14px;
 }
 
 .material-booking-layout {
   display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-}
-
-.booking-points {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
-  gap: 16px;
-  margin: 18px 0;
-}
-
-.booking-points article {
-  padding: 16px;
-  border-radius: 18px;
-  background: #f8fafc;
-  display: grid;
-  gap: 5px;
-  min-width: 0;
-}
-
-.booking-points strong,
-.booking-points span {
-  display: block;
-  overflow-wrap: anywhere;
+  grid-template-columns: minmax(300px, 0.78fr) minmax(0, 1.22fr);
+  gap: 24px;
+  align-items: start;
 }
 
 .card,
 .material-booking-card {
   border-radius: 28px;
-  background: rgba(255,255,255,.92);
-  border: 1px solid rgba(18,63,82,.08);
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(18,63,82,.09);
   box-shadow: 0 20px 45px rgba(18,63,82,.08);
 }
 
 .booking-copy,
 .material-booking-card {
-  padding: 24px;
+  padding: 28px;
+}
+
+.booking-copy {
+  position: sticky;
+  top: 18px;
+}
+
+.booking-copy-header p {
+  margin: 12px 0 0;
+}
+
+.booking-points {
+  display: grid;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.booking-points article {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 14px;
+  border-radius: 17px;
+  background: #f8fbfc;
+  border: 1px solid #edf3f5;
+}
+
+.booking-points article > div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.booking-points strong {
+  color: #213f4b;
+}
+
+.step-number {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #dff6f2;
+  color: #0f766e;
+  font-weight: 800;
+}
+
+.booking-benefits {
+  display: grid;
+  gap: 8px;
+  padding-top: 18px;
+  border-top: 1px solid #edf2f5;
+}
+
+.booking-benefits span {
+  color: #526975;
+  font-size: 0.92rem;
+}
+
+.form-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sample-chip {
+  flex: 0 0 auto;
+  padding: 0.38rem 0.65rem;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.sample-input-note {
+  margin: 14px 0 18px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.85rem;
+  line-height: 1.5;
 }
 
 .material-booking-form {
   display: grid;
-  gap: 12px;
-  margin-top: 18px;
+  gap: 6px;
 }
 
 .material-booking-form .grid.two-up {
   display: grid;
   grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 12px;
+  gap: 14px;
 }
 
 mat-form-field {
@@ -100,13 +176,40 @@ mat-form-field {
   min-width: 0;
 }
 
+.form-divider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 10px;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.form-divider::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: #e2e8f0;
+}
+
+.form-divider span {
+  color: inherit;
+}
+
 .submit-button {
   min-height: 52px;
+  margin-top: 6px;
   border-radius: 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  font-weight: 800;
+  box-shadow: 0 12px 28px rgba(15, 118, 110, 0.18);
 }
 
 .submit-button .mat-mdc-progress-spinner {
@@ -114,8 +217,7 @@ mat-form-field {
 }
 
 .alert,
-.signed-in-banner,
-.demo-input-notice {
+.signed-in-banner {
   padding: 12px 16px;
   border-radius: 14px;
   margin-bottom: 16px;
@@ -132,21 +234,34 @@ mat-form-field {
   color: #1d4ed8;
 }
 
-.demo-input-notice {
-  margin-top: 14px;
-  background: #fff7ed;
-  color: #9a3412;
-  border: 1px solid #fed7aa;
-}
-
-.demo-input-notice strong {
-  color: #7c2d12;
-}
-
 @media (max-width: 960px) {
-  .material-booking-layout,
-  .booking-points,
+  .material-booking-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-copy {
+    position: static;
+  }
+}
+
+@media (max-width: 680px) {
+  .page-width {
+    width: min(100% - 20px, 1180px);
+  }
+
+  .booking-copy,
+  .material-booking-card {
+    padding: 20px 16px;
+    border-radius: 22px;
+  }
+
   .material-booking-form .grid.two-up {
     grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .form-heading {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
