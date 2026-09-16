@@ -7,6 +7,7 @@ import { Appointment } from '../../core/models/appointment.model';
 import { MasterDataService } from '../../core/services/master-data.service';
 import { MasterDataItem } from '../../core/models/master-data.model';
 import { AppointmentEditDialogComponent } from '../../shared/components/appointment-edit-dialog/appointment-edit-dialog.component';
+import { AppointmentDetailsDialogComponent } from '../../shared/components/appointment-details-dialog/appointment-details-dialog.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { UiFeedbackService } from '../../core/services/ui-feedback.service';
 
@@ -34,7 +35,6 @@ export class BookingsComponent implements OnInit {
   sortKey: 'date' | 'patientName' | 'status' = 'date';
   page = 1;
   readonly pageSize = 10;
-  selectedAppointment: Appointment | null = null;
 
   ngOnInit(): void {
     this.masterDataService.getOne('timeSlots').subscribe({ next: (response) => this.timeSlots = response.items || [] });
@@ -47,9 +47,10 @@ export class BookingsComponent implements OnInit {
       next: (appointments) => {
         this.appointments = appointments;
         this.applyFilters();
+        this.errorMessage = '';
       },
       error: (error) => {
-        this.errorMessage = error?.error?.message || 'Unable to load demo appointments';
+        this.errorMessage = error?.error?.message || 'Unable to load appointments';
         this.uiFeedback.error(this.errorMessage);
       },
       complete: () => {
@@ -80,11 +81,13 @@ export class BookingsComponent implements OnInit {
   }
 
   openDetails(appointment: Appointment): void {
-    this.selectedAppointment = { ...appointment };
-  }
-
-  closeDetails(): void {
-    this.selectedAppointment = null;
+    this.dialog.open(AppointmentDetailsDialogComponent, {
+      width: '720px',
+      maxWidth: '94vw',
+      panelClass: 'dentacare-dialog',
+      autoFocus: false,
+      data: { appointment, showPatientDetails: true }
+    });
   }
 
   cancel(appointment: Appointment): void {
@@ -92,53 +95,53 @@ export class BookingsComponent implements OnInit {
 
     this.dialog.open(ConfirmDialogComponent, {
       width: '420px',
+      maxWidth: '92vw',
+      panelClass: 'dentacare-dialog',
       data: {
-        title: 'Cancel demo appointment',
-        message: 'Are you sure you want to cancel this demo appointment?',
+        title: 'Cancel appointment',
+        message: `Are you sure you want to cancel the appointment for ${this.displayName(appointment)}?`,
         confirmText: 'Yes, cancel'
       }
     }).afterClosed().subscribe((confirmed) => {
       if (!confirmed) return;
       this.appointmentService.cancelStaffAppointment(appointment._id!).subscribe({
         next: () => {
-          this.successMessage = 'Demo appointment cancelled successfully';
+          this.successMessage = 'Appointment cancelled successfully';
           this.uiFeedback.success(this.successMessage);
-          this.closeDetails();
           this.load();
         },
         error: (error) => {
-          this.errorMessage = error?.error?.message || 'Unable to cancel demo appointment';
+          this.errorMessage = error?.error?.message || 'Unable to cancel appointment';
           this.uiFeedback.error(this.errorMessage);
         }
       });
     });
   }
 
-  saveDetails(): void {}
-
   reschedule(appointment: Appointment): void {
     this.dialog.open(AppointmentEditDialogComponent, {
-      panelClass: 'appointment-dialog-panel',
-      width: '920px',
-      maxWidth: '95vw',
-      height: '88vh',
+      panelClass: 'dentacare-dialog',
+      width: '720px',
+      maxWidth: '94vw',
       autoFocus: false,
       data: {
-        title: 'Edit / reschedule demo booking',
+        title: 'Edit / reschedule booking',
+        appointment,
         timeSlots: this.timeSlots,
         canEditStatus: true,
-        canEditInternalNotes: true
+        canEditInternalNotes: true,
+        auditNote: 'Updated by staff'
       }
     }).afterClosed().subscribe((payload) => {
       if (!payload || !appointment._id) return;
       this.appointmentService.updateAppointment(appointment._id, payload).subscribe({
         next: () => {
-          this.successMessage = 'Demo appointment updated successfully';
+          this.successMessage = 'Appointment updated successfully';
           this.uiFeedback.success(this.successMessage);
           this.load();
         },
         error: (error) => {
-          this.errorMessage = error?.error?.message || 'Unable to update demo appointment';
+          this.errorMessage = error?.error?.message || 'Unable to update appointment';
           this.uiFeedback.error(this.errorMessage);
         }
       });
@@ -153,20 +156,28 @@ export class BookingsComponent implements OnInit {
     return !['CANCELLED', 'COMPLETED', 'NO_SHOW'].includes(status);
   }
 
-  maskName(value?: string | null): string {
-    if (!value?.trim()) return 'Demo patient';
-    return value.trim().split(/\s+/).map((part) => `${part.charAt(0)}•••`).join(' ');
+  isSampleAppointment(appointment: Appointment): boolean {
+    return appointment.email?.toLowerCase().endsWith('@dentacare.example') ?? false;
   }
 
-  maskEmail(value?: string | null): string {
-    if (!value) return '—';
-    const [local] = value.split('@');
+  displayName(appointment: Appointment): string {
+    if (this.isSampleAppointment(appointment)) return appointment.patientName;
+    const value = appointment.patientName?.trim();
+    if (!value) return 'Patient';
+    return value.split(/\s+/).map((part) => `${part.charAt(0)}•••`).join(' ');
+  }
+
+  displayEmail(appointment: Appointment): string {
+    if (this.isSampleAppointment(appointment)) return appointment.email || '—';
+    if (!appointment.email) return '—';
+    const [local] = appointment.email.split('@');
     return `${local?.charAt(0) || '•'}•••@•••`;
   }
 
-  maskPhone(value?: string | null): string {
-    if (!value) return '—';
-    const clean = value.replace(/\s+/g, '');
+  displayPhone(appointment: Appointment): string {
+    if (this.isSampleAppointment(appointment)) return appointment.phone || '—';
+    if (!appointment.phone) return '—';
+    const clean = appointment.phone.replace(/\s+/g, '');
     return clean.length > 4 ? `${clean.slice(0, 3)}•••••${clean.slice(-2)}` : '••••';
   }
 
