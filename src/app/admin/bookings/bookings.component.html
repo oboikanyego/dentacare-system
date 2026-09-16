@@ -1,8 +1,8 @@
 <section class="page-width">
   <div class="section-header">
-    <span class="eyebrow">Staff</span>
-    <h1>Bookings</h1>
-    <p>Search, filter, sort, and review all bookings in a paged table.</p>
+    <span class="eyebrow">Demo staff</span>
+    <h1>Demo bookings</h1>
+    <p>Search, filter, sort, and review fictional portfolio bookings. Personal fields are masked in this demo view.</p>
   </div>
 
   @if (successMessage) { <div class="alert success">{{ successMessage }}</div> }
@@ -11,10 +11,10 @@
   @if (isLoading) {
     <div class="card skeleton-table"></div>
   } @else if (!appointments.length) {
-    <div class="card">No bookings found.</div>
+    <div class="card">No demo bookings found.</div>
   } @else {
     <div class="toolbar toolbar-3">
-      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Search patient, ID number, email, service, branch or dentist">
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Search demo patient, service, branch or dentist">
       <select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
         <option value="ALL">All statuses</option>
         <option value="PENDING">Pending</option>
@@ -35,30 +35,28 @@
         <table class="appointments-table">
           <thead>
             <tr>
-              <th>Patient</th>
-              <!-- <th>ID number</th> -->
+              <th>Masked patient</th>
               <th>Type</th>
               <th>Branch</th>
               <th>Dentist</th>
               <th>Date</th>
               <th>Time</th>
               <th>Status</th>
-              <th>Contact</th>
+              <th>Masked contact</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             @for (appointment of pagedAppointments; track appointment._id) {
               <tr>
-                <td>{{ appointment.patientName }}</td>
-                <!-- <td>{{ appointment.idNumber || '—' }}</td> -->
+                <td>{{ maskName(appointment.patientName) }}</td>
                 <td>{{ appointment.serviceName }}</td>
                 <td>{{ appointment.branchName || '—' }}</td>
                 <td>{{ appointment.dentistName }}</td>
                 <td>{{ appointment.date }}</td>
                 <td>{{ appointment.time }}</td>
                 <td><span class="pill" [ngClass]="statusClass(appointment.status)">{{ appointment.status }}</span></td>
-                <td>{{ appointment.email }}<br>{{ appointment.phone }}</td>
+                <td>{{ maskEmail(appointment.email) }}<br>{{ maskPhone(appointment.phone) }}</td>
                 <td class="action-row-cell">
                   <button type="button" class="ghost-button" (click)="openDetails(appointment)">View</button>
                   <button type="button" class="ghost-button" (click)="reschedule(appointment)">Edit / Reschedule</button>
@@ -83,17 +81,17 @@
   @if (selectedAppointment) {
     <div class="details-card card">
       <div class="details-header">
-        <h2>Appointment details</h2>
+        <h2>Demo appointment details</h2>
         <button class="ghost-button" type="button" (click)="closeDetails()">Close</button>
       </div>
-      <p><strong>Patient:</strong> {{ selectedAppointment.patientName }}</p>
+      <p><strong>Masked patient:</strong> {{ maskName(selectedAppointment.patientName) }}</p>
       <p><strong>Type:</strong> {{ selectedAppointment.serviceName }}</p>
       <p><strong>Branch:</strong> {{ selectedAppointment.branchName || '—' }}</p>
       <p><strong>Dentist:</strong> {{ selectedAppointment.dentistName }}</p>
       <p><strong>Status:</strong> {{ selectedAppointment.status }}</p>
       <p><strong>Notes:</strong> {{ selectedAppointment.notes || '—' }}</p>
       <div class="audit-box">
-        <strong>Audit trail</strong>
+        <strong>Demo audit trail:</strong>
         @for (entry of selectedAppointment.auditTrail || []; track $index) {
           <p>{{ entry.action }} · {{ entry.byRole }} · {{ entry.note }}</p>
         }
