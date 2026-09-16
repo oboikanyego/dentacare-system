@@ -1,42 +1,42 @@
 <section class="hero page-width">
   <div class="hero-copy">
     <span class="eyebrow">{{ data.tagline }}</span>
-    <h1>Explore a polished dental booking experience built as a portfolio demo.</h1>
+    <h1>Dental care that is easy to understand and simple to book.</h1>
     <p>{{ data.intro }}</p>
 
     <div class="hero-actions">
-      <a class="cta-button" routerLink="/appointment">Try Demo Booking</a>
-      <a class="ghost-button" routerLink="/services">Explore Demo Services</a>
+      <a class="cta-button" routerLink="/appointment">Book an appointment</a>
+      <a class="ghost-button" routerLink="/services">Explore services</a>
     </div>
 
     <div class="hero-metrics">
       <div>
         <strong>4.9/5</strong>
-        <span>Demo patient rating</span>
+        <span>Patient rating</span>
       </div>
       <div>
         <strong>3</strong>
-        <span>Fictional demo dentists</span>
+        <span>Dentists available</span>
       </div>
       <div>
         <strong>Mon–Sat</strong>
-        <span>Demo appointment hours</span>
+        <span>Appointment hours</span>
       </div>
     </div>
   </div>
 
   <div class="hero-visual">
     <div class="hero-card hero-card-top">
-      <span>Demo urgent-care workflow:</span>
-      <strong>Same-day booking scenario</strong>
+      <span>Urgent care:</span>
+      <strong>Same-day booking options</strong>
     </div>
 
     <div class="hero-image-wrap">
-      <img src="https://images.unsplash.com/photo-1629909615184-74f495363b67?auto=format&fit=crop&w=1200&q=80" alt="Stock photo used for the DentaCare portfolio demo">
+      <img src="https://images.unsplash.com/photo-1629909615184-74f495363b67?auto=format&fit=crop&w=1200&q=80" alt="Modern dental treatment room">
     </div>
 
     <div class="hero-card hero-card-bottom">
-      <strong>Featured demo services:</strong>
+      <strong>Featured services:</strong>
       <ul>
         @for (item of data.featuredServices; track item) {
           <li>{{ item }}</li>
@@ -46,17 +46,17 @@
   </div>
 </section>
 
-<section class="contact-strip page-width" aria-label="Demo clinic contact information">
+<section class="contact-strip page-width" aria-label="Clinic contact information">
   <article>
-    <span class="label">Demo address:</span>
+    <span class="label">Address:</span>
     <strong>{{ data.contact.address }}</strong>
   </article>
   <article>
-    <span class="label">Demo phone:</span>
+    <span class="label">Phone:</span>
     <strong>{{ data.contact.phone }}</strong>
   </article>
   <article>
-    <span class="label">Demo hours:</span>
+    <span class="label">Hours:</span>
     <strong>{{ data.contact.hours }}</strong>
   </article>
 </section>
@@ -64,10 +64,10 @@
 <section class="services-section page-width">
   <div class="section-heading split-heading">
     <div>
-      <span class="eyebrow">Demo services overview</span>
-      <h2>Browse example treatment cards before trying the booking flow.</h2>
+      <span class="eyebrow">Popular services</span>
+      <h2>Care options for routine, cosmetic, restorative, and urgent needs.</h2>
     </div>
-    <p>Services, descriptions, pricing and availability are fictional and included only to demonstrate the application experience.</p>
+    <p>Browse common treatment options, indicative pricing, and what to expect before booking.</p>
   </div>
 
   <div class="service-grid">
@@ -84,14 +84,14 @@
 
 <section class="testimonial-section page-width">
   <div class="section-heading">
-    <span class="eyebrow">Demo testimonials</span>
-    <h2>Fictional reviews demonstrate how patient feedback could appear.</h2>
+    <span class="eyebrow">Patient experiences</span>
+    <h2>Clear communication and simple appointment journeys.</h2>
   </div>
 
   <div class="testimonial-grid">
     @for (review of data.reviews; track review.name) {
       <article class="testimonial-card">
-        <span class="stars" aria-label="Five-star demo rating">★★★★★</span>
+        <span class="stars" aria-label="Five-star rating">★★★★★</span>
         <p>“{{ review.quote }}”</p>
         <strong>{{ review.name }}</strong>
         <small>{{ review.service }}</small>
