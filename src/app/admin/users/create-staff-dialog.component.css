@@ -1,0 +1,64 @@
+.staff-dialog {
+  min-width: min(720px, calc(100vw - 32px));
+  max-width: 100%;
+}
+
+.dialog-heading {
+  padding: 1.5rem 1.5rem 0.75rem;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.dialog-kicker {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  color: #0f766e;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dialog-heading h2 {
+  margin: 0;
+  padding: 0;
+  color: #0f172a;
+}
+
+.dialog-heading p {
+  margin: 0.45rem 0 0;
+  color: #64748b;
+}
+
+.dialog-content {
+  padding: 1.4rem 1.5rem 0.5rem !important;
+  max-height: 68vh;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+mat-form-field { width: 100%; }
+
+.dialog-actions {
+  padding: 1rem 1.5rem 1.35rem !important;
+  border-top: 1px solid #eef2f7;
+  gap: 0.7rem;
+}
+
+.dialog-actions button {
+  min-height: 44px;
+  min-width: 130px;
+  border-radius: 12px;
+}
+
+@media (max-width: 720px) {
+  .staff-dialog { min-width: 0; width: 100%; }
+  .form-grid { grid-template-columns: 1fr; }
+  .dialog-heading { padding: 1.2rem 1rem 0.65rem; }
+  .dialog-content { padding: 1rem 1rem 0.35rem !important; }
+  .dialog-actions { padding: 0.9rem 1rem 1rem !important; flex-wrap: wrap; }
+  .dialog-actions button { width: 100%; }
+}
