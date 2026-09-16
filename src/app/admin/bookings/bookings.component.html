@@ -1,65 +1,88 @@
-<section class="page-width">
+<section class="page-width bookings-page">
   <div class="section-header">
-    <span class="eyebrow">Demo staff</span>
-    <h1>Demo bookings</h1>
-    <p>Search, filter, sort, and review fictional portfolio bookings. Personal fields are masked in this demo view.</p>
+    <div>
+      <span class="eyebrow">Staff workspace</span>
+      <h1>Bookings</h1>
+      <p>Search, filter, review, and update appointments from one clean workspace.</p>
+    </div>
+    <span class="sample-hint">Sample data</span>
   </div>
 
   @if (successMessage) { <div class="alert success">{{ successMessage }}</div> }
   @if (errorMessage) { <div class="alert error">{{ errorMessage }}</div> }
 
-  @if (isLoading) {
-    <div class="card skeleton-table"></div>
-  } @else if (!appointments.length) {
-    <div class="card">No demo bookings found.</div>
-  } @else {
+  <section class="table-card">
     <div class="toolbar toolbar-3">
-      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Search demo patient, service, branch or dentist">
-      <select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
-        <option value="ALL">All statuses</option>
-        <option value="PENDING">Pending</option>
-        <option value="CONFIRMED">Confirmed</option>
-        <option value="CANCELLED">Cancelled</option>
-        <option value="COMPLETED">Completed</option>
-        <option value="NO_SHOW">No show</option>
-      </select>
-      <select [(ngModel)]="sortKey" (ngModelChange)="applyFilters()">
-        <option value="date">Sort by date</option>
-        <option value="patientName">Sort by patient</option>
-        <option value="status">Sort by status</option>
-      </select>
+      <label class="search-field">
+        <span class="filter-label">Search</span>
+        <input type="search" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Patient, service, branch, dentist…">
+      </label>
+      <label>
+        <span class="filter-label">Status</span>
+        <select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+          <option value="ALL">All statuses</option>
+          <option value="PENDING">Pending</option>
+          <option value="CONFIRMED">Confirmed</option>
+          <option value="CANCELLED">Cancelled</option>
+          <option value="COMPLETED">Completed</option>
+          <option value="NO_SHOW">No show</option>
+        </select>
+      </label>
+      <label>
+        <span class="filter-label">Sort</span>
+        <select [(ngModel)]="sortKey" (ngModelChange)="applyFilters()">
+          <option value="date">Date</option>
+          <option value="patientName">Patient</option>
+          <option value="status">Status</option>
+        </select>
+      </label>
     </div>
 
-    <div class="table-card">
+    @if (isLoading) {
+      <div class="skeleton-table"></div>
+    } @else if (!filteredAppointments.length) {
+      <div class="empty-state">
+        <strong>No bookings found.</strong>
+        <span>Try changing your filters or create an appointment from the booking page.</span>
+      </div>
+    } @else {
       <div class="table-wrap">
         <table class="appointments-table">
           <thead>
             <tr>
-              <th>Masked patient</th>
+              <th>Patient</th>
               <th>Type</th>
               <th>Branch</th>
               <th>Dentist</th>
               <th>Date</th>
               <th>Time</th>
               <th>Status</th>
-              <th>Masked contact</th>
+              <th>Contact</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             @for (appointment of pagedAppointments; track appointment._id) {
               <tr>
-                <td>{{ maskName(appointment.patientName) }}</td>
+                <td>
+                  <div class="patient-cell">
+                    <span class="initial-avatar">{{ displayName(appointment).charAt(0) }}</span>
+                    <div>
+                      <strong>{{ displayName(appointment) }}</strong>
+                      @if (isSampleAppointment(appointment)) { <small>Sample account</small> }
+                    </div>
+                  </div>
+                </td>
                 <td>{{ appointment.serviceName }}</td>
                 <td>{{ appointment.branchName || '—' }}</td>
                 <td>{{ appointment.dentistName }}</td>
                 <td>{{ appointment.date }}</td>
                 <td>{{ appointment.time }}</td>
                 <td><span class="pill" [ngClass]="statusClass(appointment.status)">{{ appointment.status }}</span></td>
-                <td>{{ maskEmail(appointment.email) }}<br>{{ maskPhone(appointment.phone) }}</td>
+                <td><span class="contact-line">{{ displayEmail(appointment) }}</span><span class="contact-line">{{ displayPhone(appointment) }}</span></td>
                 <td class="action-row-cell">
                   <button type="button" class="ghost-button" (click)="openDetails(appointment)">View</button>
-                  <button type="button" class="ghost-button" (click)="reschedule(appointment)">Edit / Reschedule</button>
+                  <button type="button" class="ghost-button" (click)="reschedule(appointment)">Edit</button>
                   @if (canCancel(appointment.status)) {
                     <button type="button" class="ghost-button danger" (click)="cancel(appointment)">Cancel</button>
                   }
@@ -69,33 +92,15 @@
           </tbody>
         </table>
       </div>
-    </div>
 
-    <div class="pagination-row">
-      <button type="button" class="ghost-button" (click)="previousPage()" [disabled]="page === 1">Previous</button>
-      <span>Page {{ page }} of {{ totalPages }}</span>
-      <button type="button" class="ghost-button" (click)="nextPage()" [disabled]="page === totalPages">Next</button>
-    </div>
-  }
-
-  @if (selectedAppointment) {
-    <div class="details-card card">
-      <div class="details-header">
-        <h2>Demo appointment details</h2>
-        <button class="ghost-button" type="button" (click)="closeDetails()">Close</button>
+      <div class="pagination-row">
+        <span>{{ filteredAppointments.length }} booking{{ filteredAppointments.length === 1 ? '' : 's' }}</span>
+        <div>
+          <button type="button" class="ghost-button" (click)="previousPage()" [disabled]="page === 1">Previous</button>
+          <span>Page {{ page }} of {{ totalPages }}</span>
+          <button type="button" class="ghost-button" (click)="nextPage()" [disabled]="page === totalPages">Next</button>
+        </div>
       </div>
-      <p><strong>Masked patient:</strong> {{ maskName(selectedAppointment.patientName) }}</p>
-      <p><strong>Type:</strong> {{ selectedAppointment.serviceName }}</p>
-      <p><strong>Branch:</strong> {{ selectedAppointment.branchName || '—' }}</p>
-      <p><strong>Dentist:</strong> {{ selectedAppointment.dentistName }}</p>
-      <p><strong>Status:</strong> {{ selectedAppointment.status }}</p>
-      <p><strong>Notes:</strong> {{ selectedAppointment.notes || '—' }}</p>
-      <div class="audit-box">
-        <strong>Demo audit trail:</strong>
-        @for (entry of selectedAppointment.auditTrail || []; track $index) {
-          <p>{{ entry.action }} · {{ entry.byRole }} · {{ entry.note }}</p>
-        }
-      </div>
-    </div>
-  }
+    }
+  </section>
 </section>
