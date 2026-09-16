@@ -6,7 +6,9 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:deploy": "node scripts/generate-runtime-config.mjs && ng build",
     "watch": "ng build --watch --configuration development",
+    "e2e:setup": "npm install --no-save --package-lock=false @playwright/test@1.55.0 && npx playwright install chromium",
     "e2e": "playwright test",
     "e2e:headed": "playwright test --headed"
   },
