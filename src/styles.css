@@ -13,6 +13,7 @@ body {
   font-family: 'Inter', sans-serif;
   color: #12313d;
   background: #f7fbfc;
+  line-height: 1.5;
 }
 
 img {
@@ -20,10 +21,42 @@ img {
   display: block;
 }
 
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
 button {
   cursor: pointer;
 }
 
+main {
+  min-width: 0;
+}
+
+p,
+li,
+td,
+th,
+summary,
+label,
+small {
+  overflow-wrap: anywhere;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  text-wrap: pretty;
+}
+
+table {
+  max-width: 100%;
+}
 
 .mdc-text-field--outlined {
   --mdc-outlined-text-field-container-shape: 14px;
@@ -33,8 +66,16 @@ button {
   --mdc-outlined-card-container-shape: 24px;
 }
 
+.app-snackbar-success .mdc-snackbar__surface {
+  background: #065f46 !important;
+  color: #fff !important;
+}
 
-.app-snackbar-success .mdc-snackbar__surface { background: #065f46 !important; color: #fff !important; }
-.app-snackbar-error .mdc-snackbar__surface { background: #991b1b !important; color: #fff !important; }
-.mat-mdc-snack-bar-container .mat-mdc-button { color: #fff !important; }
+.app-snackbar-error .mdc-snackbar__surface {
+  background: #991b1b !important;
+  color: #fff !important;
+}
 
+.mat-mdc-snack-bar-container .mat-mdc-button {
+  color: #fff !important;
+}

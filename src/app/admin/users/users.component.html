@@ -1,8 +1,8 @@
 <section class="page-width admin-grid">
   <div class="card">
-    <span class="eyebrow">Admin only</span>
-    <h1>User management</h1>
-    <p>Create staff accounts and activate or deactivate users when needed.</p>
+    <span class="eyebrow">Demo admin only</span>
+    <h1>Demo user management</h1>
+    <p>Create fictional staff accounts and test activation/deactivation workflows. Do not enter real employee, patient, or client information.</p>
 
     @if (successMessage) {
       <div class="alert success">{{ successMessage }}</div>
@@ -13,27 +13,27 @@
 
     <form class="form-grid" [formGroup]="staffForm" (ngSubmit)="createStaffUser()">
       <label>
-        <span>Name</span>
-        <input type="text" formControlName="name">
+        <span>Demo name:</span>
+        <input type="text" formControlName="name" placeholder="Demo Staff User">
       </label>
 
       <label>
-        <span>Email</span>
-        <input type="email" formControlName="email">
+        <span>Demo email:</span>
+        <input type="email" formControlName="email" placeholder="staff@dentacare.example">
       </label>
 
       <label>
-        <span>Phone</span>
-        <input type="tel" formControlName="phone">
+        <span>Demo phone:</span>
+        <input type="tel" formControlName="phone" placeholder="0710000000">
       </label>
 
       <label>
-        <span>ID number</span>
-        <input type="text" formControlName="idNumber">
+        <span>Demo ID number:</span>
+        <input type="text" formControlName="idNumber" placeholder="0000000000000">
       </label>
 
       <label>
-        <span>Role</span>
+        <span>Role:</span>
         <select formControlName="role">
           @for (role of roles; track role.value) {
             <option [value]="role.value">{{ role.label }}</option>
@@ -42,18 +42,19 @@
       </label>
 
       <label class="full-width">
-        <span>Password</span>
-        <input type="password" formControlName="password">
+        <span>Demo password:</span>
+        <input type="password" formControlName="password" placeholder="Use a demo-only password">
       </label>
 
-      <button class="primary-button full-width" type="submit">Create staff user</button>
+      <button class="primary-button full-width" type="submit">Create demo staff user</button>
     </form>
   </div>
 
   <div class="card">
-    <h2>Existing users</h2>
+    <h2>Existing demo users</h2>
+    <p class="privacy-note">Personal fields are masked in this portfolio view even if raw values exist in the demo database.</p>
     <div class="toolbar compact toolbar-3">
-      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Search name, email, ID number or role">
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Search demo name, email, ID number or role">
       <select [(ngModel)]="roleFilter" (ngModelChange)="applyFilters()">
         <option value="ALL">All roles</option>
         @for (role of roles; track role.value) {
@@ -73,16 +74,16 @@
       </select>
     </div>
     @if (isLoading) {
-      <p>Loading users...</p>
+      <p>Loading demo users...</p>
     } @else {
       <div class="table-wrap">
         <table class="users-table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>ID number</th>
+              <th>Demo name</th>
+              <th>Masked email</th>
+              <th>Masked phone</th>
+              <th>Masked ID number</th>
               <th>Role</th>
               <th>Status</th>
               <th>Action</th>
@@ -91,10 +92,10 @@
           <tbody>
             @for (user of filteredUsers; track user._id) {
               <tr>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.phone || '—' }}</td>
-                <td>{{ user.idNumber || '—' }}</td>
+                <td>{{ maskName(user.name) }}</td>
+                <td>{{ maskEmail(user.email) }}</td>
+                <td>{{ maskPhone(user.phone) }}</td>
+                <td>{{ maskIdNumber(user.idNumber) }}</td>
                 <td>{{ user.role }}</td>
                 <td>
                   <span class="pill" [class.inactive]="!user.isActive">{{ user.isActive ? 'Active' : 'Inactive' }}</span>

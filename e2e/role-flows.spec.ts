@@ -5,10 +5,10 @@ function authResponse(role: 'ADMIN' | 'RECEPTIONIST' | 'PATIENT') {
     token: `${role.toLowerCase()}-token`,
     user: {
       _id: `${role.toLowerCase()}-1`,
-      name: `${role} User`,
-      email: `${role.toLowerCase()}@example.com`,
-      phone: '0712345678',
-      idNumber: '9001015009087',
+      name: `${role} Demo User`,
+      email: `${role.toLowerCase()}@test.invalid`,
+      phone: '0710000000',
+      idNumber: '0000000000000',
       role,
       isActive: true
     }
@@ -25,13 +25,13 @@ async function loginAs(page: any, role: 'ADMIN' | 'RECEPTIONIST' | 'PATIENT') {
   });
 
   await page.goto('/login');
-  await page.locator('input[formcontrolname="email"]').fill(`${role.toLowerCase()}@example.com`);
+  await page.locator('input[formcontrolname="email"]').fill(`${role.toLowerCase()}@test.invalid`);
   await page.locator('input[formcontrolname="password"]').fill('Password123!');
   await page.getByRole('button', { name: 'Sign in' }).click();
 }
 
 test.describe('role based journeys', () => {
-  test('admin lands on user management and can see user data', async ({ page }) => {
+  test('admin lands on demo user management with masked personal fields', async ({ page }) => {
     await page.route('**/api/users', async (route) => {
       await route.fulfill({
         status: 200,
@@ -39,10 +39,10 @@ test.describe('role based journeys', () => {
         body: JSON.stringify([
           {
             _id: 'staff-1',
-            name: 'Reception User',
-            email: 'reception@example.com',
-            phone: '0712345678',
-            idNumber: '9001015009087',
+            name: 'Reception Demo User',
+            email: 'reception@test.invalid',
+            phone: '0710000000',
+            idNumber: '0000000000000',
             role: 'RECEPTIONIST',
             isActive: true
           }
@@ -69,20 +69,24 @@ test.describe('role based journeys', () => {
     await loginAs(page, 'ADMIN');
 
     await expect(page).toHaveURL(/\/admin\/users$/);
-    await expect(page.getByRole('heading', { name: 'User management' })).toBeVisible();
-    await expect(page.getByText('Reception User')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Demo user management' })).toBeVisible();
+    await expect(page.getByText('R••• D••• U•••')).toBeVisible();
+    await expect(page.getByText('reception@test.invalid')).toHaveCount(0);
   });
 
-  test('receptionist lands on staff bookings', async ({ page }) => {
+  test('receptionist lands on demo staff bookings', async ({ page }) => {
     await page.route('**/api/appointments', async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+    });
+    await page.route('**/api/master-data/timeSlots', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ key: 'timeSlots', description: 'Demo slots', items: [] }) });
     });
 
     await loginAs(page, 'RECEPTIONIST');
 
     await expect(page).toHaveURL(/\/staff\/bookings$/);
-    await expect(page.getByRole('heading', { name: 'Bookings' })).toBeVisible();
-    await expect(page.getByText('No bookings found.')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Demo bookings' })).toBeVisible();
+    await expect(page.getByText('No demo bookings found.')).toBeVisible();
   });
 
   test('patient cannot open admin user management', async ({ page }) => {
@@ -97,6 +101,6 @@ test.describe('role based journeys', () => {
     await page.goto('/admin/users');
 
     await expect(page).toHaveURL(/\/patient\/appointments$/);
-    await expect(page.getByRole('heading', { name: 'My appointments' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'My demo appointments' })).toBeVisible();
   });
 });

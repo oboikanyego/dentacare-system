@@ -15,23 +15,51 @@
   border-radius: 24px;
   padding: 1.5rem;
   box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+  min-width: 0;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: .75rem;
+  padding: .45rem .75rem;
+  border-radius: 999px;
+  background: rgba(18, 63, 82, .08);
+  color: #0e6c84;
+  font-weight: 700;
+}
+
+h1,
+h2 {
+  color: #12313d;
+  line-height: 1.15;
+}
+
+h1 {
+  margin: 0 0 .65rem;
+}
+
+h2 {
+  margin-top: 0;
 }
 
 .form-grid {
   display: grid;
   gap: 1rem;
   grid-template-columns: 1fr 1fr;
+  margin-top: 1.25rem;
 }
 
 label span {
   display: block;
   margin-bottom: 0.35rem;
-  font-weight: 600;
+  font-weight: 700;
+  color: #334155;
 }
 
 input,
 select {
   width: 100%;
+  min-width: 0;
   border: 1px solid #dbe2ea;
   border-radius: 12px;
   padding: 0.8rem 0.95rem;
@@ -56,13 +84,22 @@ select {
   border-color: #0f766e;
 }
 
+.privacy-note {
+  margin: .25rem 0 1rem;
+  padding: .75rem .85rem;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #64748b;
+  line-height: 1.5;
+}
+
 .table-wrap {
   overflow-x: auto;
 }
 
 .users-table {
   width: 100%;
-  min-width: 700px;
+  min-width: 760px;
   border-collapse: collapse;
 }
 
@@ -72,6 +109,7 @@ select {
   padding: 0.95rem 0.8rem;
   border-bottom: 1px solid #e2e8f0;
   vertical-align: top;
+  overflow-wrap: anywhere;
 }
 
 .users-table th {
@@ -106,20 +144,38 @@ select {
   padding: 0.9rem 1rem;
   border-radius: 12px;
 }
+
 .alert.success { background: #ecfdf5; color: #047857; }
 .alert.error { background: #fef2f2; color: #b91c1c; }
 
+.toolbar {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.toolbar-3 {
+  grid-template-columns: 1.5fr 220px 180px 180px;
+}
+
+.toolbar input,
+.toolbar select {
+  border: 1px solid #dbe2ea;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+}
+
+.users-table thead th {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+}
+
 @media (max-width: 900px) {
   .admin-grid,
-  .form-grid {
+  .form-grid,
+  .toolbar-3 {
     grid-template-columns: 1fr;
   }
 }
-
-.toolbar { display: grid; grid-template-columns: 1.5fr 220px; gap: 12px; margin: 16px 0; }
-.toolbar input, .toolbar select { border: 1px solid #dbe2ea; border-radius: 12px; padding: 0.85rem 1rem; }
-@media (max-width: 768px) { .toolbar { grid-template-columns: 1fr; } }
-
-.toolbar-3 { grid-template-columns: 1.5fr 220px 180px 180px; }
-.users-table thead th { position: sticky; top: 0; background: white; z-index: 1; }
-@media (max-width: 900px) { .toolbar-3 { grid-template-columns: 1fr; } }

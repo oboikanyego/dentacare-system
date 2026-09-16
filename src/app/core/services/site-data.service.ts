@@ -47,41 +47,41 @@ export interface FaqItem {
 
 @Injectable({ providedIn: 'root' })
 export class SiteDataService {
-  readonly clinicName = 'SmileCraft Dental';
-  readonly city = 'Johannesburg';
-  readonly tagline = 'Gentle family dentistry in Johannesburg';
-  readonly intro = 'Trusted dental care with easy booking, transparent pricing, and a friendly team focused on comfort and long-term oral health.';
+  readonly clinicName = 'DentaCare Demo Clinic';
+  readonly city = 'Johannesburg Demo';
+  readonly tagline = 'Portfolio demo for a modern dental practice';
+  readonly intro = 'A fictional dental-practice experience created to demonstrate online booking, role-based workflows, responsive UI, and clear patient communication.';
 
   readonly featuredServices = [
-    'Same-day checkups',
-    'Teeth cleaning',
-    'Whitening',
-    'Emergency dental care'
+    'Demo same-day checkups',
+    'Demo teeth cleaning',
+    'Demo whitening',
+    'Demo emergency care'
   ];
 
   readonly dentists: DentistItem[] = [
     {
-      name: 'Dr. John Smith',
-      role: 'Lead Family & Cosmetic Dentist',
-      qualifications: 'BDS, University of Pretoria',
-      experience: '15+ years experience in cosmetic and family dentistry',
-      philosophy: 'Known for gentle care, clear communication, and treatment plans that prioritise comfort and long-term oral health.',
+      name: 'Dr. Maya Vale (Demo)',
+      role: 'Demo Family & Cosmetic Dentist',
+      qualifications: 'Demo BDS, DentaCare Clinical Institute',
+      experience: '12+ fictional years of family and cosmetic dentistry experience',
+      philosophy: 'Demo profile focused on gentle care, clear explanations, and comfort-first treatment planning.',
       image: 'https://images.unsplash.com/photo-1612277795421-9bc7706a4a41?auto=format&fit=crop&w=900&q=80'
     },
     {
-      name: 'Dr. Naledi Mokoena',
-      role: 'Restorative & Implant Dentist',
-      qualifications: 'BChD, University of the Western Cape',
-      experience: '10+ years experience in restorative dentistry and smile rehabilitation',
-      philosophy: 'Focused on restoring function and confidence with modern digital workflows and patient-first care.',
+      name: 'Dr. Theo Lane (Demo)',
+      role: 'Demo Restorative Dentist',
+      qualifications: 'Demo BChD, DentaCare Clinical Institute',
+      experience: '10+ fictional years of restorative and rehabilitation experience',
+      philosophy: 'Demo profile illustrating modern restorative workflows and patient-friendly treatment planning.',
       image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=900&q=80'
     },
     {
-      name: 'Dr. Ethan Brooks',
-      role: 'Orthodontic & Preventive Care Dentist',
-      qualifications: 'BDS, Wits University',
-      experience: '12+ years experience in alignment planning and preventive care',
-      philosophy: 'Passionate about helping children and adults build healthy habits while achieving confident smiles.',
+      name: 'Dr. Zuri Hart (Demo)',
+      role: 'Demo Orthodontic & Preventive Dentist',
+      qualifications: 'Demo BDS, DentaCare Clinical Institute',
+      experience: '9+ fictional years of alignment and preventive-care experience',
+      philosophy: 'Demo profile focused on preventive habits, alignment planning, and accessible patient education.',
       image: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=900&q=80'
     }
   ];
@@ -90,138 +90,138 @@ export class SiteDataService {
     {
       category: 'General Dentistry',
       title: 'Checkups & Preventive Care',
-      description: 'Routine examinations, digital diagnostics, and gentle cleanings to keep your teeth and gums healthy year-round.',
-      steps: ['Consultation and oral exam', 'Cleaning and plaque removal', 'Personalised prevention plan'],
-      price: 'From R750'
+      description: 'Demo service content for routine examinations, diagnostics, and preventative cleaning workflows.',
+      steps: ['Demo consultation and oral exam', 'Demo cleaning and plaque removal', 'Demo prevention plan'],
+      price: 'Demo price: from R750'
     },
     {
       category: 'General Dentistry',
       title: 'Fillings & Root Canal Care',
-      description: 'Comfort-focused treatment for tooth decay and infection using modern techniques designed to preserve your natural tooth.',
-      steps: ['Assessment and X-rays', 'Treatment planning', 'Restoration and aftercare'],
-      price: 'From R950'
+      description: 'Demo service content showing a comfort-focused treatment journey for decay and infection.',
+      steps: ['Demo assessment and X-rays', 'Demo treatment planning', 'Demo restoration and aftercare'],
+      price: 'Demo price: from R950'
     },
     {
       category: 'Cosmetic Dentistry',
       title: 'Teeth Whitening & Veneers',
-      description: 'Brighten and refine your smile with safe whitening options and custom veneers tailored to your facial aesthetics.',
-      steps: ['Smile consultation', 'Shade and design planning', 'Treatment and review'],
-      price: 'From R2 500'
+      description: 'Demo cosmetic-service content for whitening and veneer planning within the portfolio experience.',
+      steps: ['Demo smile consultation', 'Demo shade and design planning', 'Demo treatment and review'],
+      price: 'Demo price: from R2 500'
     },
     {
       category: 'Restorative Dentistry',
       title: 'Crowns, Bridges & Implants',
-      description: 'Restore confidence, function, and bite stability with durable options designed for a natural-looking result.',
-      steps: ['Clinical assessment', 'Digital impressions', 'Placement and follow-up'],
-      price: 'Quote on consultation'
+      description: 'Demo restorative-service content illustrating treatment planning and follow-up workflows.',
+      steps: ['Demo clinical assessment', 'Demo digital impressions', 'Demo placement and follow-up'],
+      price: 'Demo price: quote on consultation'
     },
     {
       category: 'Orthodontics',
       title: 'Braces & Clear Aligners',
-      description: 'Straighten your teeth with treatment plans that fit both teenagers and adults seeking a confident smile.',
-      steps: ['Orthodontic assessment', 'Custom treatment plan', 'Progress reviews'],
-      price: 'From R1 250 / consult'
+      description: 'Demo orthodontic-service content for alignment planning and recurring progress reviews.',
+      steps: ['Demo orthodontic assessment', 'Demo custom treatment plan', 'Demo progress reviews'],
+      price: 'Demo price: from R1 250 / consult'
     },
     {
       category: 'Emergency Dental Care',
       title: 'Urgent Dental Relief',
-      description: 'Fast support for severe toothache, swelling, chipped teeth, and other urgent dental concerns.',
-      steps: ['Emergency triage', 'Pain relief and stabilisation', 'Next-step treatment plan'],
-      price: 'Call for urgent availability'
+      description: 'Demo emergency-service content for showcasing triage, stabilisation, and follow-up scheduling.',
+      steps: ['Demo emergency triage', 'Demo pain relief and stabilisation', 'Demo next-step treatment plan'],
+      price: 'Demo pricing available during booking'
     }
   ];
 
   readonly reviews: ReviewItem[] = [
     {
-      name: 'Nomsa K.',
-      quote: 'Very gentle dentist. My kids love coming here, and the booking process was quick and simple.',
-      service: 'Family dentistry'
+      name: 'Demo Patient A',
+      quote: 'Fictional testimonial used to demonstrate how patient feedback can be presented in the interface.',
+      service: 'Demo family dentistry'
     },
     {
-      name: 'Daniel M.',
-      quote: 'I came in for whitening and left with much more confidence. The team explained everything clearly.',
-      service: 'Cosmetic dentistry'
+      name: 'Demo Patient B',
+      quote: 'Fictional testimonial showing a positive cosmetic-care journey and clear communication.',
+      service: 'Demo cosmetic dentistry'
     },
     {
-      name: 'Ayanda P.',
-      quote: 'I had an emergency toothache and they helped me the same day. Friendly staff and excellent care.',
-      service: 'Emergency care'
+      name: 'Demo Patient C',
+      quote: 'Fictional testimonial showing how an urgent-care experience could be represented.',
+      service: 'Demo emergency care'
     }
   ];
 
   readonly pricing: PricingItem[] = [
-    { service: 'Dental cleaning', price: 'R750' },
-    { service: 'White filling', price: 'R950' },
-    { service: 'Emergency consultation', price: 'R850' },
-    { service: 'Teeth whitening', price: 'R2 500' },
-    { service: 'Orthodontic consultation', price: 'R1 250' }
+    { service: 'Dental cleaning', price: 'Demo R750' },
+    { service: 'White filling', price: 'Demo R950' },
+    { service: 'Emergency consultation', price: 'Demo R850' },
+    { service: 'Teeth whitening', price: 'Demo R2 500' },
+    { service: 'Orthodontic consultation', price: 'Demo R1 250' }
   ];
 
-  readonly medicalAids = ['Discovery Health', 'Bonitas', 'Momentum Health', 'Fedhealth', 'Bestmed'];
-  readonly paymentOptions = ['Cash', 'Card', 'EFT', 'Medical aid claims'];
+  readonly medicalAids = ['Demo Health Plan A', 'Demo Health Plan B', 'Demo Health Plan C'];
+  readonly paymentOptions = ['Demo cash option', 'Demo card option', 'Demo EFT option', 'Demo health-plan claim'];
 
   readonly gallery: GalleryItem[] = [
     {
-      title: 'Whitening refresh',
-      label: 'Before & after whitening',
+      title: 'Demo whitening refresh',
+      label: 'Illustrative portfolio gallery item',
       image: 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=1200&q=80'
     },
     {
-      title: 'Smile makeover',
-      label: 'Veneers consultation journey',
+      title: 'Demo smile makeover',
+      label: 'Illustrative portfolio gallery item',
       image: 'https://images.unsplash.com/photo-1588776814546-daab30f310ce?auto=format&fit=crop&w=1200&q=80'
     },
     {
-      title: 'Healthy alignment',
-      label: 'Orthodontic transformation',
+      title: 'Demo healthy alignment',
+      label: 'Illustrative portfolio gallery item',
       image: 'https://images.unsplash.com/photo-1609840114035-3c981b782dfe?auto=format&fit=crop&w=1200&q=80'
     }
   ];
 
   readonly articles: BlogItem[] = [
     {
-      tag: 'Dental Education',
+      tag: 'Demo Dental Education',
       title: 'How to prevent cavities between appointments',
-      excerpt: 'Simple daily habits, smart brushing, and when to book your next professional cleaning.'
+      excerpt: 'Demo educational copy showing how clinic articles could be presented to visitors.'
     },
     {
-      tag: 'Orthodontics',
+      tag: 'Demo Orthodontics',
       title: 'When should children get braces assessed?',
-      excerpt: 'Learn the right age for an orthodontic evaluation and what early signs to watch for.'
+      excerpt: 'Demo educational copy for an orthodontic article card in this portfolio project.'
     },
     {
-      tag: 'Cosmetic Care',
+      tag: 'Demo Cosmetic Care',
       title: 'Teeth whitening tips that protect enamel',
-      excerpt: 'Understand which whitening options are safe, effective, and worth considering.'
+      excerpt: 'Demo educational copy for a cosmetic-care article card in this portfolio project.'
     }
   ];
 
   readonly faqs: FaqItem[] = [
     {
       question: 'Does teeth whitening hurt?',
-      answer: 'Most patients experience little to no discomfort. We assess sensitivity first and recommend the safest option for your teeth.'
+      answer: 'Demo answer: the application can present guidance here, but this portfolio content is not medical advice.'
     },
     {
       question: 'How often should I visit the dentist?',
-      answer: 'A checkup every 6 months is a good rule for most patients, although your dentist may recommend more frequent visits based on your needs.'
+      answer: 'Demo answer: a real clinic would tailor this guidance to the patient and their clinical needs.'
     },
     {
       question: 'Do you accept medical aid?',
-      answer: 'Yes. We work with several major medical aids and can discuss claims support during your appointment booking.'
+      answer: 'Demo answer: this portfolio build uses fictional health-plan options only.'
     },
     {
       question: 'Can I book an emergency appointment?',
-      answer: 'Yes. Call our emergency line for urgent pain, swelling, bleeding, or broken teeth so we can prioritise your care.'
+      answer: 'Demo answer: the booking flow demonstrates how urgent appointment requests could be captured.'
     }
   ];
 
-  readonly formLinks = ['New patient form', 'Medical history form', 'Consent form'];
+  readonly formLinks = ['Demo new-patient form', 'Demo medical-history form', 'Demo consent form'];
 
   readonly contact = {
-    address: '123 Main Road, Johannesburg',
-    phone: '011 123 4567',
-    emergencyPhone: '082 123 4567',
-    email: 'hello@smilecraftdental.co.za',
-    hours: 'Mon–Fri 08:00 – 17:00 · Sat 09:00 – 13:00'
+    address: '100 Demo Avenue, Example Park, Johannesburg',
+    phone: '010 000 0000',
+    emergencyPhone: '010 000 0001',
+    email: 'hello@dentacare.example',
+    hours: 'Demo hours: Mon–Fri 08:00–17:00 · Sat 09:00–13:00'
   };
 }

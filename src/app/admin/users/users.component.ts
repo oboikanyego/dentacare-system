@@ -62,7 +62,7 @@ export class UsersComponent implements OnInit {
         this.errorMessage = '';
       },
       error: (error) => {
-        this.errorMessage = error?.error?.message || 'Unable to load users';
+        this.errorMessage = error?.error?.message || 'Unable to load demo users';
       },
       complete: () => {
         this.isLoading = false;
@@ -93,31 +93,53 @@ export class UsersComponent implements OnInit {
 
     this.usersService.create(this.staffForm.getRawValue() as CreateUserRequest).subscribe({
       next: () => {
-        this.successMessage = 'User created successfully';
+        this.successMessage = 'Demo user created successfully';
         this.staffForm.reset({ name: '', email: '', phone: '', idNumber: '', password: '', role: 'RECEPTIONIST', isActive: true });
         this.loadUsers();
       },
       error: (error) => {
-        this.errorMessage = error?.error?.message || 'Unable to create user';
+        this.errorMessage = error?.error?.message || 'Unable to create demo user';
       }
     });
   }
 
   toggleUserStatus(user: UserListItem): void {
     const nextStatus = !user.isActive;
-    const confirmed = window.confirm(`${nextStatus ? 'Activate' : 'Deactivate'} ${user.name}?`);
+    const confirmed = window.confirm(`${nextStatus ? 'Activate' : 'Deactivate'} this demo user?`);
     if (!confirmed) {
       return;
     }
 
     this.usersService.setStatus(user._id, nextStatus).subscribe({
       next: () => {
-        this.successMessage = `${user.name} was ${nextStatus ? 'activated' : 'deactivated'}`;
+        this.successMessage = `Demo user was ${nextStatus ? 'activated' : 'deactivated'}`;
         this.loadUsers();
       },
       error: (error) => {
-        this.errorMessage = error?.error?.message || 'Unable to update user';
+        this.errorMessage = error?.error?.message || 'Unable to update demo user';
       }
     });
+  }
+
+  maskName(value?: string | null): string {
+    if (!value?.trim()) return 'Demo user';
+    return value.trim().split(/\s+/).map((part) => `${part.charAt(0)}•••`).join(' ');
+  }
+
+  maskEmail(value?: string | null): string {
+    if (!value) return '—';
+    const [local] = value.split('@');
+    return `${local?.charAt(0) || '•'}•••@•••`;
+  }
+
+  maskPhone(value?: string | null): string {
+    if (!value) return '—';
+    const clean = value.replace(/\s+/g, '');
+    return clean.length > 4 ? `${clean.slice(0, 3)}•••••${clean.slice(-2)}` : '••••';
+  }
+
+  maskIdNumber(value?: string | null): string {
+    if (!value) return '—';
+    return `•••••••••${value.slice(-4)}`;
   }
 }

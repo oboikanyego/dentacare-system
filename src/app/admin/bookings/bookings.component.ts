@@ -49,7 +49,7 @@ export class BookingsComponent implements OnInit {
         this.applyFilters();
       },
       error: (error) => {
-        this.errorMessage = error?.error?.message || 'Unable to load appointments';
+        this.errorMessage = error?.error?.message || 'Unable to load demo appointments';
         this.uiFeedback.error(this.errorMessage);
       },
       complete: () => {
@@ -93,21 +93,21 @@ export class BookingsComponent implements OnInit {
     this.dialog.open(ConfirmDialogComponent, {
       width: '420px',
       data: {
-        title: 'Cancel appointment',
-        message: 'Are you sure you want to cancel this appointment for this patient?',
+        title: 'Cancel demo appointment',
+        message: 'Are you sure you want to cancel this demo appointment?',
         confirmText: 'Yes, cancel'
       }
     }).afterClosed().subscribe((confirmed) => {
       if (!confirmed) return;
       this.appointmentService.cancelStaffAppointment(appointment._id!).subscribe({
         next: () => {
-          this.successMessage = 'Appointment cancelled successfully';
+          this.successMessage = 'Demo appointment cancelled successfully';
           this.uiFeedback.success(this.successMessage);
           this.closeDetails();
           this.load();
         },
         error: (error) => {
-          this.errorMessage = error?.error?.message || 'Unable to cancel appointment';
+          this.errorMessage = error?.error?.message || 'Unable to cancel demo appointment';
           this.uiFeedback.error(this.errorMessage);
         }
       });
@@ -117,28 +117,28 @@ export class BookingsComponent implements OnInit {
   saveDetails(): void {}
 
   reschedule(appointment: Appointment): void {
-    this.dialog.open(AppointmentEditDialogComponent,{
-  panelClass: 'appointment-dialog-panel',
-  width: '920px',
-  maxWidth: '95vw',
-  height: '88vh',
-  autoFocus: false,
-  data: {
-    title: 'Edit / reschedule booking',
-    timeSlots: this.timeSlots,
-    canEditStatus: true,
-    canEditInternalNotes: true
-  }
-}).afterClosed().subscribe((payload) => {
+    this.dialog.open(AppointmentEditDialogComponent, {
+      panelClass: 'appointment-dialog-panel',
+      width: '920px',
+      maxWidth: '95vw',
+      height: '88vh',
+      autoFocus: false,
+      data: {
+        title: 'Edit / reschedule demo booking',
+        timeSlots: this.timeSlots,
+        canEditStatus: true,
+        canEditInternalNotes: true
+      }
+    }).afterClosed().subscribe((payload) => {
       if (!payload || !appointment._id) return;
       this.appointmentService.updateAppointment(appointment._id, payload).subscribe({
         next: () => {
-          this.successMessage = 'Appointment updated successfully';
+          this.successMessage = 'Demo appointment updated successfully';
           this.uiFeedback.success(this.successMessage);
           this.load();
         },
         error: (error) => {
-          this.errorMessage = error?.error?.message || 'Unable to update appointment';
+          this.errorMessage = error?.error?.message || 'Unable to update demo appointment';
           this.uiFeedback.error(this.errorMessage);
         }
       });
@@ -151,6 +151,23 @@ export class BookingsComponent implements OnInit {
 
   canCancel(status: Appointment['status']): boolean {
     return !['CANCELLED', 'COMPLETED', 'NO_SHOW'].includes(status);
+  }
+
+  maskName(value?: string | null): string {
+    if (!value?.trim()) return 'Demo patient';
+    return value.trim().split(/\s+/).map((part) => `${part.charAt(0)}•••`).join(' ');
+  }
+
+  maskEmail(value?: string | null): string {
+    if (!value) return '—';
+    const [local] = value.split('@');
+    return `${local?.charAt(0) || '•'}•••@•••`;
+  }
+
+  maskPhone(value?: string | null): string {
+    if (!value) return '—';
+    const clean = value.replace(/\s+/g, '');
+    return clean.length > 4 ? `${clean.slice(0, 3)}•••••${clean.slice(-2)}` : '••••';
   }
 
   previousPage(): void { this.page = Math.max(1, this.page - 1); }

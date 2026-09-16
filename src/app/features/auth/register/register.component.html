@@ -1,9 +1,10 @@
 <section class="register-page">
   <mat-card class="register-card" appearance="outlined">
     <div class="register-header">
-      <p class="section-label">Patient registration</p>
-      <h1>Create your account</h1>
-      <p class="muted">Register once, then log in to track, reschedule, and cancel your appointments.</p>
+      <p class="section-label">Demo patient registration</p>
+      <h1>Create a demo account</h1>
+      <p class="muted">Register a fictional account to try appointment tracking, rescheduling, and cancellation.</p>
+      <p class="muted helper-text"><strong>Demo data only:</strong> Do not enter real client, patient, identity, phone, email, or password information into this portfolio application.</p>
     </div>
 
     @if (errorMessage) {
@@ -13,16 +14,16 @@
     <form [formGroup]="form" (ngSubmit)="submit()" class="register-form">
       <div class="grid two-up">
         <mat-form-field appearance="outline">
-          <mat-label>Full name</mat-label>
-          <input matInput type="text" formControlName="name" [matTooltip]="getErrorMessage('name')" [matTooltipDisabled]="!getErrorMessage('name')" matTooltipPosition="above" placeholder="Your full name">
+          <mat-label>Demo full name</mat-label>
+          <input matInput type="text" formControlName="name" [matTooltip]="getErrorMessage('name')" [matTooltipDisabled]="!getErrorMessage('name')" matTooltipPosition="above" placeholder="Demo Patient">
           @if (f['name'].touched && f['name'].invalid) {
             <mat-error>Full name is required.</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" [matTooltip]="getErrorMessage('email')" [matTooltipDisabled]="!getErrorMessage('email')" matTooltipPosition="above" placeholder="name@example.com">
+          <mat-label>Demo email</mat-label>
+          <input matInput type="email" formControlName="email" [matTooltip]="getErrorMessage('email')" [matTooltipDisabled]="!getErrorMessage('email')" matTooltipPosition="above" placeholder="patient@dentacare.example">
           @if (f['email'].touched && f['email'].invalid) {
             <mat-error>Enter a valid email address.</mat-error>
           }
@@ -31,26 +32,26 @@
 
       <div class="grid two-up">
         <mat-form-field appearance="outline">
-          <mat-label>Phone</mat-label>
-          <input matInput type="tel" formControlName="phone" [matTooltip]="getErrorMessage('phone')" [matTooltipDisabled]="!getErrorMessage('phone')" matTooltipPosition="above" placeholder="0712345678">
+          <mat-label>Demo phone</mat-label>
+          <input matInput type="tel" formControlName="phone" [matTooltip]="getErrorMessage('phone')" [matTooltipDisabled]="!getErrorMessage('phone')" matTooltipPosition="above" placeholder="0710000000">
           @if (f['phone'].touched && f['phone'].invalid) {
-            <mat-error>Use a valid South African mobile number.</mat-error>
+            <mat-error>Use a valid South African mobile number format.</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>ID number</mat-label>
-          <input matInput type="text" formControlName="idNumber" [matTooltip]="getErrorMessage('idNumber')" [matTooltipDisabled]="!getErrorMessage('idNumber')" matTooltipPosition="above" placeholder="13-digit South African ID">
+          <mat-label>Demo ID number</mat-label>
+          <input matInput type="text" formControlName="idNumber" [matTooltip]="getErrorMessage('idNumber')" [matTooltipDisabled]="!getErrorMessage('idNumber')" matTooltipPosition="above" placeholder="9001015009087">
           @if (f['idNumber'].touched && f['idNumber'].invalid) {
-            <mat-error>Enter a valid 13-digit ID number.</mat-error>
+            <mat-error>Enter a valid 13-digit ID number format.</mat-error>
           }
         </mat-form-field>
       </div>
 
       <div class="grid two-up">
         <mat-form-field appearance="outline">
-          <mat-label>Password</mat-label>
-          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" [matTooltip]="getErrorMessage('password')" [matTooltipDisabled]="!getErrorMessage('password')" matTooltipPosition="above" placeholder="Create a password">
+          <mat-label>Demo password</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" [matTooltip]="getErrorMessage('password')" [matTooltipDisabled]="!getErrorMessage('password')" matTooltipPosition="above" placeholder="Create a demo password">
           <button mat-button matSuffix type="button" class="suffix-button" (click)="togglePassword()">
             {{ hidePassword ? 'Show' : 'Hide' }}
           </button>
@@ -60,8 +61,8 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Confirm password</mat-label>
-          <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" [matTooltip]="getErrorMessage('confirmPassword')" [matTooltipDisabled]="!getErrorMessage('confirmPassword')" matTooltipPosition="above" placeholder="Re-enter password">
+          <mat-label>Confirm demo password</mat-label>
+          <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" [matTooltip]="getErrorMessage('confirmPassword')" [matTooltipDisabled]="!getErrorMessage('confirmPassword')" matTooltipPosition="above" placeholder="Re-enter demo password">
           <button mat-button matSuffix type="button" class="suffix-button" (click)="toggleConfirmPassword()">
             {{ hideConfirmPassword ? 'Show' : 'Hide' }}
           </button>
@@ -73,7 +74,7 @@
 
       <div class="strength-wrap">
         <div class="strength-meta">
-          <span>Password strength</span>
+          <span>Password strength:</span>
           <strong [class.weak]="passwordStrength === 'Weak'" [class.medium]="passwordStrength === 'Medium'" [class.strong]="passwordStrength === 'Strong'">
             {{ passwordStrength }}
           </strong>
@@ -89,13 +90,13 @@
       <button mat-flat-button color="primary" type="submit" class="submit-button" [disabled]="isSubmitting">
         @if (isSubmitting) {
           <mat-spinner diameter="20"></mat-spinner>
-          <span>Creating account...</span>
+          <span>Creating demo account...</span>
         } @else {
-          <span>Create account</span>
+          <span>Create demo account</span>
         }
       </button>
     </form>
 
-    <p class="footer-text">Already registered? <a routerLink="/login">Login here</a>.</p>
+    <p class="footer-text">Already have a demo account? <a routerLink="/login">Login here</a>.</p>
   </mat-card>
 </section>

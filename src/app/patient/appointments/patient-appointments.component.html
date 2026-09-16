@@ -1,8 +1,8 @@
 <section class="page-width">
   <div class="section-header">
-    <span class="eyebrow">Patient portal</span>
-    <h1>My appointments</h1>
-    <p>Search, filter, sort, and page through your bookings instead of scrolling through a long list.</p>
+    <span class="eyebrow">Demo patient portal</span>
+    <h1>My demo appointments</h1>
+    <p>Search, filter, sort, and page through fictional portfolio bookings. Do not use real patient information in this demo application.</p>
   </div>
 
   @if (message) {
@@ -15,10 +15,10 @@
   @if (loading) {
     <div class="card skeleton-table"></div>
   } @else if (!appointments.length) {
-    <div class="card">No appointments found yet.</div>
+    <div class="card">No demo appointments found yet.</div>
   } @else {
     <div class="toolbar toolbar-3">
-      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Search service, dentist, branch, date or notes">
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Search demo service, dentist, branch, date or notes">
       <select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
         <option value="ALL">All statuses</option>
         <option value="PENDING">Pending</option>
@@ -85,7 +85,7 @@
   @if (selectedAppointment) {
     <div class="details-card card">
       <div class="details-header">
-        <h2>Appointment details</h2>
+        <h2>Demo appointment details</h2>
         <button class="ghost-button" type="button" (click)="closeDetails()">Close</button>
       </div>
       <p><strong>Type:</strong> {{ selectedAppointment.serviceName }}</p>
