@@ -3,7 +3,7 @@
     <span class="brand-mark">✦</span>
     <span class="brand-copy">
       <strong>DentaCare</strong>
-      <small>Portfolio demo clinic</small>
+      <small>Modern dental care</small>
     </span>
   </a>
 
@@ -32,23 +32,22 @@
     @if (user()) {
       <div class="profile-menu" (click)="stopPropagation($event)">
         <button class="profile-button" type="button" (click)="toggleProfile()">
-          <span class="avatar">D</span>
-          <span class="user-chip">Demo account · {{ user()?.role }}</span>
+          <span class="avatar">{{ user()?.role?.charAt(0) }}</span>
+          <span class="user-chip">{{ user()?.role }}</span>
         </button>
 
         @if (profileOpen()) {
           <div class="profile-dropdown">
-            <strong>Demo account</strong>
+            <strong>Account</strong>
             <span><b>Role:</b> {{ user()?.role }}</span>
-            <span>Personal account details are hidden in this portfolio UI.</span>
             <button class="ghost-button" type="button" (click)="goToProfileArea()">Open dashboard</button>
             <button class="cta-button" type="button" (click)="logout()">Logout</button>
           </div>
         }
       </div>
     } @else {
-      <a class="ghost-button" routerLink="/register">Register</a>
-      <a class="cta-button" routerLink="/login">Login</a>
+      <a class="auth-button auth-button--secondary" routerLink="/register">Create account</a>
+      <a class="auth-button auth-button--primary" routerLink="/login">Sign in</a>
     }
   </div>
 
@@ -80,12 +79,15 @@
 
     @if (user()) {
       <div class="mobile-user-card">
-        <strong>Demo account</strong>
+        <strong>Signed in</strong>
         <span><b>Role:</b> {{ user()?.role }}</span>
       </div>
       <button class="cta-button full-width" type="button" (click)="logout()">Logout</button>
     } @else {
-      <a class="cta-button full-width" routerLink="/login" (click)="closeMenu()">Login</a>
+      <div class="mobile-auth-actions">
+        <a class="auth-button auth-button--secondary full-width" routerLink="/register" (click)="closeMenu()">Create account</a>
+        <a class="auth-button auth-button--primary full-width" routerLink="/login" (click)="closeMenu()">Sign in</a>
+      </div>
     }
   </nav>
 }
