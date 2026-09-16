@@ -18,7 +18,8 @@ test.describe('public experience', () => {
 
     await page.getByRole('link', { name: 'Try Demo Booking' }).first().click();
     await expect(page).toHaveURL(/\/appointment$/);
-    await expect(page.getByRole('heading', { name: 'Book an appointment' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Book a demo appointment' })).toBeVisible();
+    await expect(page.getByText(/Do not enter real names, ID numbers/i)).toBeVisible();
   });
 
   test('keeps public demo pages within a mobile viewport', async ({ page }) => {
@@ -34,7 +35,7 @@ test.describe('public experience', () => {
     }
   });
 
-  test('shows validation feedback for an incomplete appointment', async ({ page }) => {
+  test('shows validation feedback for an incomplete demo appointment', async ({ page }) => {
     await page.route('**/api/master-data**', async (route) => {
       await route.fulfill({
         status: 200,
@@ -47,7 +48,7 @@ test.describe('public experience', () => {
     });
 
     await page.goto('/appointment');
-    await page.getByRole('button', { name: 'Confirm appointment' }).click();
+    await page.getByRole('button', { name: 'Confirm demo appointment' }).click();
 
     await expect(page.getByText('This field is required.').first()).toBeVisible();
   });
