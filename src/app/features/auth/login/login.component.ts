@@ -64,7 +64,7 @@ export class LoginComponent {
       next: () => {
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
         this.uiFeedback.success('Login successful.');
-        this.uiFeedback.showWelcome(this.authService.getCurrentUser()?.name);
+        this.uiFeedback.showWelcome('Demo user');
         this.router.navigateByUrl(returnUrl || this.authService.getLandingRoute());
       },
       error: (error) => {
