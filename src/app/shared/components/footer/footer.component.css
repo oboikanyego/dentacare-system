@@ -1,24 +1,43 @@
 .footer {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 24px 0 48px;
+  padding: 28px 0 48px;
   display: flex;
   justify-content: space-between;
-  gap: 24px;
+  align-items: flex-start;
+  gap: 32px;
   color: #52717c;
+  border-top: 1px solid rgba(18, 63, 82, 0.08);
+}
+
+.footer > div {
+  max-width: 720px;
 }
 
 .footer strong {
+  display: block;
+  margin-bottom: 6px;
   color: #12313d;
 }
 
 .footer p {
   margin: 0;
   line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.footer > p:last-child {
+  max-width: 280px;
+  text-align: right;
 }
 
 @media (max-width: 768px) {
   .footer {
     flex-direction: column;
+  }
+
+  .footer > p:last-child {
+    max-width: none;
+    text-align: left;
   }
 }
