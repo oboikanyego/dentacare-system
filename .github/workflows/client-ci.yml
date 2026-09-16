@@ -24,8 +24,8 @@ jobs:
       - name: Install application dependencies
         run: npm ci
 
-      - name: Build Angular application
-        run: npm run build
+      - name: Build deployable Angular application
+        run: npm run build:deploy
 
       - name: Install Playwright test runner
         run: npm install --no-save --package-lock=false @playwright/test@1.55.0

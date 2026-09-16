@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build:deploy"
+  publish = "dist/dentacare-angular/browser"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
