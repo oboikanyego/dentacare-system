@@ -1,23 +1,34 @@
 import { expect, test } from '@playwright/test';
 
-test('submits a complete public demo appointment', async ({ page }) => {
-  await page.route('**/api/master-data**', async (route) => {
+const masterData = {
+  branches: [{ value: 'sandton', label: 'Sandton Clinic' }],
+  services: [{ value: 'cleaning', label: 'Dental Cleaning' }],
+  timeSlots: [{ value: '09:00', label: '09:00' }],
+  appointmentStatuses: [{ value: 'PENDING', label: 'Pending' }]
+};
+
+test('submits a complete public appointment using live autocomplete data', async ({ page }) => {
+  await page.route('**/api/master-data/**', async (route) => {
+    const url = new URL(route.request().url());
+    const key = url.pathname.split('/').pop() as keyof typeof masterData;
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify({
-        services: [{ value: 'cleaning', label: 'Demo Dental Cleaning' }],
-        timeSlots: [{ value: 'slot-0900', label: '09:00' }],
-        branches: [{ value: 'sandton', label: 'Demo Sandton Clinic' }],
-        appointmentStatuses: [{ value: 'PENDING', label: 'Pending' }]
-      })
+      body: JSON.stringify({ key, description: key, items: masterData[key] || [] })
     });
   });
+
   await page.route('**/api/dentists**', async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify([{ _id: 'dentist-1', name: 'Dr Demo Dentist', specialization: 'Demo General Dentistry' }])
+      body: JSON.stringify([
+        {
+          _id: 'dentist-1',
+          name: 'Dr Maya Vale',
+          specialization: 'General Dentistry'
+        }
+      ])
     });
   });
 
@@ -38,21 +49,21 @@ test('submits a complete public demo appointment', async ({ page }) => {
 
   await page.goto('/appointment');
 
-  await page.locator('[formcontrolname="branchId"]').click();
-  await page.getByRole('option', { name: 'Demo Sandton Clinic' }).click();
-  await page.locator('[formcontrolname="serviceId"]').click();
-  await page.getByRole('option', { name: 'Demo Dental Cleaning' }).click();
-  await page.locator('[formcontrolname="dentistId"]').click();
-  await page.getByRole('option', { name: /Dr Demo Dentist/ }).click();
+  await page.getByPlaceholder('Search branches').fill('Sand');
+  await page.getByRole('option', { name: 'Sandton Clinic' }).click();
+  await page.getByPlaceholder('Search services').fill('Clean');
+  await page.getByRole('option', { name: 'Dental Cleaning' }).click();
+  await page.getByPlaceholder('Search dentists').fill('Maya');
+  await page.getByRole('option', { name: /Dr Maya Vale/ }).click();
   await page.locator('[formcontrolname="date"]').fill('2099-12-20');
-  await page.locator('[formcontrolname="slotId"]').click();
+  await page.getByPlaceholder('Search times').fill('09');
   await page.getByRole('option', { name: '09:00' }).click();
 
-  await page.locator('[formcontrolname="patientName"]').fill('Demo Patient');
-  await page.locator('[formcontrolname="idNumber"]').fill('0000000000000');
-  await page.locator('[formcontrolname="phone"]').fill('0710000000');
-  await page.locator('[formcontrolname="email"]').fill('demo@test.invalid');
-  await page.locator('[formcontrolname="reason"]').fill('Demo routine check-up');
+  await page.locator('[formcontrolname="patientName"]').fill('John Doe');
+  await page.locator('[formcontrolname="idNumber"]').fill('9001015009001');
+  await page.locator('[formcontrolname="phone"]').fill('0710000101');
+  await page.locator('[formcontrolname="email"]').fill('john.doe@dentacare.example');
+  await page.locator('[formcontrolname="reason"]').fill('Routine check-up');
   await page.locator('[formcontrolname="notes"]').fill('Fictional test visit');
 
   await page.getByRole('button', { name: 'Confirm appointment' }).click();
@@ -60,18 +71,18 @@ test('submits a complete public demo appointment', async ({ page }) => {
   await expect.poll(() => submittedBody).toBeTruthy();
   expect(submittedBody).toMatchObject({
     serviceId: 'cleaning',
-    serviceName: 'Demo Dental Cleaning',
+    serviceName: 'Dental Cleaning',
     dentistId: 'dentist-1',
-    dentistName: 'Dr Demo Dentist',
+    dentistName: 'Dr Maya Vale',
     branchId: 'sandton',
-    branchName: 'Demo Sandton Clinic',
-    slotId: 'slot-0900',
+    branchName: 'Sandton Clinic',
+    slotId: '09:00',
     time: '09:00',
-    patientName: 'Demo Patient',
-    idNumber: '0000000000000',
-    phone: '0710000000',
-    email: 'demo@test.invalid',
-    reason: 'Demo routine check-up',
+    patientName: 'John Doe',
+    idNumber: '9001015009001',
+    phone: '0710000101',
+    email: 'john.doe@dentacare.example',
+    reason: 'Routine check-up',
     durationMinutes: 30
   });
   await expect(page.getByText('Your appointment has been booked successfully.')).toBeVisible();
