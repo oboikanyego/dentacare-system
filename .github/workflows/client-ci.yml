@@ -24,6 +24,9 @@ jobs:
       - name: Install application dependencies
         run: npm ci
 
+      - name: Check formatting
+        run: npm run format:check
+
       - name: Build deployable Angular application
         run: npm run build:deploy
 
