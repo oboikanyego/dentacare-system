@@ -3,9 +3,11 @@
 * {
   box-sizing: border-box;
 }
+
 html {
   scroll-behavior: smooth;
 }
+
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -18,18 +20,22 @@ img {
   max-width: 100%;
   display: block;
 }
+
 button,
 input,
 select,
 textarea {
   font: inherit;
 }
+
 button {
   cursor: pointer;
 }
+
 main {
   min-width: 0;
 }
+
 p,
 li,
 td,
@@ -39,6 +45,7 @@ label,
 small {
   overflow-wrap: anywhere;
 }
+
 h1,
 h2,
 h3,
@@ -46,6 +53,7 @@ h4,
 p {
   text-wrap: pretty;
 }
+
 table {
   max-width: 100%;
 }
@@ -54,6 +62,22 @@ select,
 input,
 textarea {
   min-height: 46px;
+}
+
+input:not(.mat-mdc-input-element),
+select,
+textarea:not(.mat-mdc-input-element) {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  background: #fff;
+  color: #0f172a;
+  padding: 0.78rem 0.9rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
 }
 
 select {
@@ -70,28 +94,87 @@ select {
     5px 5px;
   background-repeat: no-repeat;
   padding-right: 2.6rem !important;
-  color: #0f172a;
 }
 
 select:focus,
 input:focus,
 textarea:focus {
   outline: none;
-  border-color: #14b8a6 !important;
-  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.12);
+  border-color: #0f766e !important;
+  box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.12);
 }
 
-.mdc-text-field--outlined {
+.mat-mdc-form-field {
+  width: 100%;
   --mdc-outlined-text-field-container-shape: 14px;
-  --mdc-outlined-text-field-focus-outline-color: #14b8a6;
-  --mdc-outlined-text-field-hover-outline-color: #94a3b8;
+  --mdc-outlined-text-field-outline-color: #cbd5e1;
+  --mdc-outlined-text-field-hover-outline-color: #5eead4;
+  --mdc-outlined-text-field-focus-outline-color: #0f766e;
+  --mdc-outlined-text-field-focus-label-text-color: #0f766e;
+  --mdc-outlined-text-field-label-text-color: #475569;
+  --mdc-outlined-text-field-input-text-color: #0f172a;
+  --mdc-outlined-text-field-input-text-placeholder-color: #94a3b8;
+  --mdc-outlined-text-field-error-outline-color: #dc2626;
+  --mdc-outlined-text-field-error-focus-outline-color: #dc2626;
+  --mdc-outlined-text-field-error-hover-outline-color: #dc2626;
+}
+
+.mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  background: linear-gradient(180deg, #ffffff 0%, #fbfefe 100%);
+  border-radius: 14px;
+  box-shadow: 0 2px 7px rgba(15, 23, 42, 0.045);
+  transition:
+    box-shadow 160ms ease,
+    transform 160ms ease,
+    background-color 160ms ease;
+}
+
+.mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.07);
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+  background: #fff;
+  box-shadow:
+    0 0 0 4px rgba(20, 184, 166, 0.1),
+    0 7px 18px rgba(15, 118, 110, 0.09);
+}
+
+.mat-mdc-form-field .mat-mdc-form-field-hint,
+.mat-mdc-form-field .mat-mdc-form-field-error {
+  font-size: 0.76rem;
+  letter-spacing: 0.01em;
+}
+
+.mat-mdc-form-field .mat-datepicker-toggle button,
+.mat-mdc-form-field .mat-mdc-icon-button {
+  border-radius: 10px;
+}
+
+.mat-datepicker-content {
+  border-radius: 18px !important;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.2) !important;
+  overflow: hidden;
+}
+
+.mat-calendar-body-selected {
+  background-color: #0f766e !important;
+}
+
+.mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border-color: #14b8a6 !important;
+}
+
+.mat-calendar-body-disabled > .mat-calendar-body-cell-content {
+  color: #cbd5e1 !important;
 }
 
 .mat-mdc-card-outlined {
   --mdc-outlined-card-container-shape: 24px;
 }
 
-.mat-mdc-select-panel {
+.mat-mdc-select-panel,
+.mat-mdc-autocomplete-panel {
   border-radius: 16px !important;
   padding: 0.4rem !important;
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16) !important;
@@ -119,10 +202,12 @@ textarea:focus {
   background: #065f46 !important;
   color: #fff !important;
 }
+
 .app-snackbar-error .mdc-snackbar__surface {
   background: #991b1b !important;
   color: #fff !important;
 }
+
 .mat-mdc-snack-bar-container .mat-mdc-button {
   color: #fff !important;
 }
