@@ -49,9 +49,6 @@ export interface AppointmentEditDialogData {
 export class AppointmentEditDialogComponent implements OnInit {
   form!: FormGroup;
   readonly minDate = startOfLocalDay(new Date());
-  readonly historicalRecord = ['CANCELLED', 'COMPLETED', 'NO_SHOW'].includes(
-    this.data.appointment?.status ?? ''
-  );
 
   private readonly fb = inject(FormBuilder);
 
@@ -59,6 +56,10 @@ export class AppointmentEditDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public readonly data: AppointmentEditDialogData,
     public readonly dialogRef: MatDialogRef<AppointmentEditDialogComponent>
   ) {}
+
+  get historicalRecord(): boolean {
+    return ['CANCELLED', 'COMPLETED', 'NO_SHOW'].includes(this.data.appointment?.status ?? '');
+  }
 
   ngOnInit(): void {
     const initialDate = this.parseAppointmentDate(this.data.appointment?.date);
