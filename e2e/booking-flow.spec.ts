@@ -77,7 +77,7 @@ test('submits a complete public appointment using live autocomplete data', async
   await page.goto('/appointment');
 
   const dateInput = page.locator('[formcontrolname="date"]');
-  await expect(dateInput).toHaveAttribute('readonly', '');
+  await expect(dateInput).toHaveAttribute('readonly', 'true');
   await page.getByLabel('Open calendar').click();
   await expect(page.getByLabel('Previous month')).toBeDisabled();
   await page.keyboard.press('Escape');
