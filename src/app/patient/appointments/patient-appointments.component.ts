@@ -101,9 +101,7 @@ export class PatientAppointmentsComponent implements OnInit {
 
         return matchesStatus && matchesSearch;
       })
-      .sort((a, b) =>
-        String(a[this.sortKey] || '').localeCompare(String(b[this.sortKey] || ''))
-      );
+      .sort((a, b) => String(a[this.sortKey] || '').localeCompare(String(b[this.sortKey] || '')));
 
     this.page = 1;
   }

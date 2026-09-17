@@ -5,7 +5,8 @@ function authResponse(role: 'ADMIN' | 'RECEPTIONIST' | 'PATIENT') {
     token: `${role.toLowerCase()}-token`,
     user: {
       _id: `${role.toLowerCase()}-1`,
-      name: role === 'ADMIN' ? 'Alex Morgan' : role === 'RECEPTIONIST' ? 'Riley Brooks' : 'John Doe',
+      name:
+        role === 'ADMIN' ? 'Alex Morgan' : role === 'RECEPTIONIST' ? 'Riley Brooks' : 'John Doe',
       email: `${role.toLowerCase()}@test.invalid`,
       phone: '0710000000',
       idNumber: '9001015009001',
@@ -82,7 +83,11 @@ test.describe('role based journeys', () => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
     });
     await page.route('**/api/master-data/timeSlots', async (route) => {
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ key: 'timeSlots', description: 'Slots', items: [] }) });
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ key: 'timeSlots', description: 'Slots', items: [] })
+      });
     });
 
     await loginAs(page, 'RECEPTIONIST');

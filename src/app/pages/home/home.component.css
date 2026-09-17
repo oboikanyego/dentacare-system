@@ -108,7 +108,7 @@ h1 {
 .testimonial-card,
 .hero-card {
   border-radius: 28px;
-  background: rgba(255,255,255,0.86);
+  background: rgba(255, 255, 255, 0.86);
   border: 1px solid rgba(18, 63, 82, 0.08);
   box-shadow: 0 20px 45px rgba(18, 63, 82, 0.08);
 }

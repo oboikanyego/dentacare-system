@@ -10,7 +10,8 @@
     <div class="brand-feature">
       <h2>Everything in one place</h2>
       <p>
-        Patients can track appointments, while reception, dentists, and admins manage bookings and users from one workspace.
+        Patients can track appointments, while reception, dentists, and admins manage bookings and
+        users from one workspace.
       </p>
       <div class="brand-pills">
         <span>Role-based access</span>
@@ -21,21 +22,51 @@
   </div>
 
   <div class="auth-panel auth-panel--form">
-    <mat-card class="auth-card" appearance="outlined">
+    <mat-card
+      class="auth-card"
+      appearance="outlined"
+    >
       <p class="section-label">Welcome back</p>
       <h2>Login</h2>
       <p class="muted">Use your email and password to continue.</p>
 
-      <div class="sample-account-panel" aria-label="Sample accounts">
+      <div
+        class="sample-account-panel"
+        aria-label="Sample accounts"
+      >
         <div class="sample-account-copy">
           <strong>Try a sample account</strong>
           <span>Choose a role to fill the login details automatically.</span>
         </div>
         <div class="sample-account-grid">
-          <button type="button" class="sample-account-button" (click)="useSampleAccount('patient')">{{ sampleAccounts.patient.label }}</button>
-          <button type="button" class="sample-account-button" (click)="useSampleAccount('receptionist')">{{ sampleAccounts.receptionist.label }}</button>
-          <button type="button" class="sample-account-button" (click)="useSampleAccount('dentist')">{{ sampleAccounts.dentist.label }}</button>
-          <button type="button" class="sample-account-button" (click)="useSampleAccount('admin')">{{ sampleAccounts.admin.label }}</button>
+          <button
+            type="button"
+            class="sample-account-button"
+            (click)="useSampleAccount('patient')"
+          >
+            {{ sampleAccounts.patient.label }}
+          </button>
+          <button
+            type="button"
+            class="sample-account-button"
+            (click)="useSampleAccount('receptionist')"
+          >
+            {{ sampleAccounts.receptionist.label }}
+          </button>
+          <button
+            type="button"
+            class="sample-account-button"
+            (click)="useSampleAccount('dentist')"
+          >
+            {{ sampleAccounts.dentist.label }}
+          </button>
+          <button
+            type="button"
+            class="sample-account-button"
+            (click)="useSampleAccount('admin')"
+          >
+            {{ sampleAccounts.admin.label }}
+          </button>
         </div>
       </div>
 
@@ -43,10 +74,22 @@
         <div class="banner banner--error">{{ errorMessage }}</div>
       }
 
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="onSubmit()"
+        class="auth-form"
+      >
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="name@example.com" [matTooltip]="getErrorMessage('email')" [matTooltipDisabled]="!getErrorMessage('email')" matTooltipPosition="above">
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="name@example.com"
+            [matTooltip]="getErrorMessage('email')"
+            [matTooltipDisabled]="!getErrorMessage('email')"
+            matTooltipPosition="above"
+          />
           @if (f['email'].touched && f['email'].invalid) {
             <mat-error>A valid email is required.</mat-error>
           }
@@ -54,8 +97,22 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Password</mat-label>
-          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Enter password" [matTooltip]="getErrorMessage('password')" [matTooltipDisabled]="!getErrorMessage('password')" matTooltipPosition="above">
-          <button mat-button matSuffix type="button" class="suffix-button" (click)="togglePassword()">
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="Enter password"
+            [matTooltip]="getErrorMessage('password')"
+            [matTooltipDisabled]="!getErrorMessage('password')"
+            matTooltipPosition="above"
+          />
+          <button
+            mat-button
+            matSuffix
+            type="button"
+            class="suffix-button"
+            (click)="togglePassword()"
+          >
             {{ hidePassword ? 'Show' : 'Hide' }}
           </button>
           @if (f['password'].touched && f['password'].invalid) {
@@ -65,10 +122,20 @@
 
         <div class="form-actions-row">
           <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
-          <a routerLink="/forgot-password" class="inline-link">Forgot password?</a>
+          <a
+            routerLink="/forgot-password"
+            class="inline-link"
+            >Forgot password?</a
+          >
         </div>
 
-        <button mat-flat-button color="primary" type="submit" class="submit-button" [disabled]="isSubmitting">
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          class="submit-button"
+          [disabled]="isSubmitting"
+        >
           @if (isSubmitting) {
             <mat-spinner diameter="20"></mat-spinner>
             <span>Signing in...</span>

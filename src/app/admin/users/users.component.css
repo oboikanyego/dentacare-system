@@ -20,10 +20,10 @@
 
 .eyebrow {
   display: inline-block;
-  margin-bottom: .75rem;
-  padding: .45rem .75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.45rem 0.75rem;
   border-radius: 999px;
-  background: rgba(18, 63, 82, .08);
+  background: rgba(18, 63, 82, 0.08);
   color: #0e6c84;
   font-weight: 700;
 }
@@ -35,7 +35,7 @@ h2 {
 }
 
 h1 {
-  margin: 0 0 .65rem;
+  margin: 0 0 0.65rem;
 }
 
 h2 {
@@ -85,8 +85,8 @@ select {
 }
 
 .privacy-note {
-  margin: .25rem 0 1rem;
-  padding: .75rem .85rem;
+  margin: 0.25rem 0 1rem;
+  padding: 0.75rem 0.85rem;
   border-radius: 12px;
   background: #f8fafc;
   color: #64748b;
@@ -145,8 +145,14 @@ select {
   border-radius: 12px;
 }
 
-.alert.success { background: #ecfdf5; color: #047857; }
-.alert.error { background: #fef2f2; color: #b91c1c; }
+.alert.success {
+  background: #ecfdf5;
+  color: #047857;
+}
+.alert.error {
+  background: #fef2f2;
+  color: #b91c1c;
+}
 
 .toolbar {
   display: grid;

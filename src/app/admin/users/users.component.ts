@@ -90,9 +90,7 @@ export class UsersComponent implements OnInit {
 
         return matchesRole && matchesStatus && (!term || haystack.includes(term));
       })
-      .sort((a, b) =>
-        String(a[this.sortKey] || '').localeCompare(String(b[this.sortKey] || ''))
-      );
+      .sort((a, b) => String(a[this.sortKey] || '').localeCompare(String(b[this.sortKey] || '')));
   }
 
   openCreateStaffDialog(): void {

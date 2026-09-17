@@ -5,8 +5,12 @@ test.describe('public experience', () => {
     await page.goto('/');
 
     await expect(page).toHaveTitle(/DentaCare \| Home/);
-    await expect(page.getByRole('heading', { name: /Dental care that is easy to understand/i })).toBeVisible();
-    await expect(page.getByText('Sample data is used throughout this portfolio application.')).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: /Dental care that is easy to understand/i })
+    ).toBeVisible();
+    await expect(
+      page.getByText('Sample data is used throughout this portfolio application.')
+    ).toBeVisible();
     await expect(page.getByText('SmileCraft Dental')).toHaveCount(0);
 
     const contactCards = page.locator('.contact-strip article');
@@ -17,8 +21,12 @@ test.describe('public experience', () => {
 
     await page.getByRole('link', { name: 'Book an appointment' }).first().click();
     await expect(page).toHaveURL(/\/appointment$/);
-    await expect(page.getByRole('heading', { name: 'Book your dental appointment.' })).toBeVisible();
-    await expect(page.getByText(/Please use fictional personal and medical information/i)).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Book your dental appointment.' })
+    ).toBeVisible();
+    await expect(
+      page.getByText(/Please use fictional personal and medical information/i)
+    ).toBeVisible();
   });
 
   test('keeps public pages within a mobile viewport', async ({ page }) => {

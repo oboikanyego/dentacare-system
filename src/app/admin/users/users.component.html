@@ -5,7 +5,13 @@
       <h1>User management</h1>
       <p>Manage sample patient and staff accounts used to explore role-based workflows.</p>
     </div>
-    <button class="primary-button" type="button" (click)="openCreateStaffDialog()">Add staff member</button>
+    <button
+      class="primary-button"
+      type="button"
+      (click)="openCreateStaffDialog()"
+    >
+      Add staff member
+    </button>
   </div>
 
   @if (successMessage) {
@@ -25,20 +31,34 @@
     </div>
 
     <div class="toolbar toolbar-3">
-      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Search name, email, ID number or role">
-      <select [(ngModel)]="roleFilter" (ngModelChange)="applyFilters()">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applyFilters()"
+        placeholder="Search name, email, ID number or role"
+      />
+      <select
+        [(ngModel)]="roleFilter"
+        (ngModelChange)="applyFilters()"
+      >
         <option value="ALL">All roles</option>
         @for (role of roles; track role.value) {
           <option [value]="role.value">{{ role.label }}</option>
         }
         <option value="PATIENT">Patient</option>
       </select>
-      <select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+      <select
+        [(ngModel)]="statusFilter"
+        (ngModelChange)="applyFilters()"
+      >
         <option value="ALL">All statuses</option>
         <option value="true">Active</option>
         <option value="false">Inactive</option>
       </select>
-      <select [(ngModel)]="sortKey" (ngModelChange)="applyFilters()">
+      <select
+        [(ngModel)]="sortKey"
+        (ngModelChange)="applyFilters()"
+      >
         <option value="name">Sort by name</option>
         <option value="email">Sort by email</option>
         <option value="role">Sort by role</option>
@@ -66,16 +86,28 @@
           <tbody>
             @for (user of filteredUsers; track user._id) {
               <tr>
-                <td><strong>{{ user.name }}</strong></td>
+                <td>
+                  <strong>{{ user.name }}</strong>
+                </td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.phone || '—' }}</td>
                 <td>{{ user.idNumber || '—' }}</td>
                 <td>{{ user.role }}</td>
                 <td>
-                  <span class="pill" [class.inactive]="!user.isActive">{{ user.isActive ? 'Active' : 'Inactive' }}</span>
+                  <span
+                    class="pill"
+                    [class.inactive]="!user.isActive"
+                    >{{ user.isActive ? 'Active' : 'Inactive' }}</span
+                  >
                 </td>
                 <td>
-                  <button type="button" class="ghost-button" (click)="toggleUserStatus(user)">{{ user.isActive ? 'Deactivate' : 'Activate' }}</button>
+                  <button
+                    type="button"
+                    class="ghost-button"
+                    (click)="toggleUserStatus(user)"
+                  >
+                    {{ user.isActive ? 'Deactivate' : 'Activate' }}
+                  </button>
                 </td>
               </tr>
             }

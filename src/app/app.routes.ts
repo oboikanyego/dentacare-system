@@ -19,8 +19,16 @@ export const routes: Routes = [
   { path: '', component: HomeComponent, title: 'DentaCare | Home' },
   { path: 'login', component: LoginComponent, title: 'DentaCare | Login' },
   { path: 'register', component: RegisterComponent, title: 'DentaCare | Register' },
-  { path: 'forgot-password', component: ForgotPasswordComponent, title: 'DentaCare | Forgot Password' },
-  { path: 'reset-password', component: ResetPasswordComponent, title: 'DentaCare | Reset Password' },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
+    title: 'DentaCare | Forgot Password'
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
+    title: 'DentaCare | Reset Password'
+  },
   { path: 'about', component: AboutComponent, title: 'DentaCare | About' },
   { path: 'services', component: ServicesComponent, title: 'DentaCare | Services' },
   { path: 'contact', component: ContactComponent, title: 'DentaCare | Contact' },

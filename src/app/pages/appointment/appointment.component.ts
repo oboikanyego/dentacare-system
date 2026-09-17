@@ -1,12 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  DestroyRef,
-  OnInit,
-  WritableSignal,
-  inject,
-  signal
-} from '@angular/core';
+import { Component, DestroyRef, OnInit, WritableSignal, inject, signal } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,10 +26,7 @@ import { MasterDataItem } from '../../core/models/master-data.model';
 import { AppointmentService } from '../../core/services/appointment.service';
 import { AuthService } from '../../core/services/auth.service';
 import { DentistService } from '../../core/services/dentist.service';
-import {
-  MasterDataListResponse,
-  MasterDataService
-} from '../../core/services/master-data.service';
+import { MasterDataListResponse, MasterDataService } from '../../core/services/master-data.service';
 import { UiFeedbackService } from '../../core/services/ui-feedback.service';
 
 type SearchableMasterDataField = 'branchId' | 'serviceId' | 'slotId';
@@ -188,9 +178,7 @@ export class AppointmentComponent implements OnInit {
   }
 
   getDentistLabel(dentist: Dentist): string {
-    return dentist.specialization
-      ? `${dentist.name} · ${dentist.specialization}`
-      : dentist.name;
+    return dentist.specialization ? `${dentist.name} · ${dentist.specialization}` : dentist.name;
   }
 
   submitBooking(): void {
@@ -231,7 +219,7 @@ export class AppointmentComponent implements OnInit {
       status: isPatient
         ? ('CONFIRMED' as const)
         : isStaff
-          ? ((formValue.status as never) || 'PENDING')
+          ? (formValue.status as never) || 'PENDING'
           : ('PENDING' as const)
     };
 
@@ -257,8 +245,7 @@ export class AppointmentComponent implements OnInit {
           this.resetBookingSelection(isPatient);
         },
         error: (error) => {
-          const message =
-            error?.error?.message || 'Failed to book appointment. Please try again.';
+          const message = error?.error?.message || 'Failed to book appointment. Please try again.';
           this.errorMessage.set(message);
           this.uiFeedback.error(message);
         }
@@ -313,9 +300,7 @@ export class AppointmentComponent implements OnInit {
         }),
         switchMap((search) =>
           this.masterDataService.search(key, search, 12).pipe(
-            catchError(() =>
-              of<MasterDataListResponse>({ key, description: '', items: [] })
-            ),
+            catchError(() => of<MasterDataListResponse>({ key, description: '', items: [] })),
             finalize(() => loading.set(false))
           )
         ),

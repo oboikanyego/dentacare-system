@@ -5,10 +5,15 @@
 </section>
 
 <section class="page-width booking-section material-booking-layout">
-  <mat-card class="booking-copy card" appearance="outlined">
+  <mat-card
+    class="booking-copy card"
+    appearance="outlined"
+  >
     <h2>Booking steps</h2>
     <div class="booking-points">
-      <article><strong>Step 1:</strong><span>Search for a branch, service, and dentist</span></article>
+      <article>
+        <strong>Step 1:</strong><span>Search for a branch, service, and dentist</span>
+      </article>
       <article><strong>Step 2:</strong><span>Choose a date, time, and duration</span></article>
       <article><strong>Step 3:</strong><span>Confirm the appointment details</span></article>
     </div>
@@ -19,21 +24,31 @@
     </ul>
   </mat-card>
 
-  <mat-card class="booking-card material-booking-card" appearance="outlined">
+  <mat-card
+    class="booking-card material-booking-card"
+    appearance="outlined"
+  >
     <h2>Appointment details</h2>
     <p class="demo-input-notice">
-      <strong>Portfolio note:</strong> Please use fictional personal and medical information when trying the booking flow.
+      <strong>Portfolio note:</strong> Please use fictional personal and medical information when
+      trying the booking flow.
     </p>
 
     @if (isSignedIn()) {
-      <p class="signed-in-banner">This appointment will be linked to your signed-in account automatically.</p>
+      <p class="signed-in-banner">
+        This appointment will be linked to your signed-in account automatically.
+      </p>
     }
 
     @if (errorMessage()) {
       <div class="alert error">{{ errorMessage() }}</div>
     }
 
-    <form class="booking-form material-booking-form" [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
+    <form
+      class="booking-form material-booking-form"
+      [formGroup]="bookingForm"
+      (ngSubmit)="submitBooking()"
+    >
       <div class="grid two-up">
         <mat-form-field appearance="outline">
           <mat-label>Branch</mat-label>
@@ -48,7 +63,10 @@
             [matTooltipDisabled]="!getFieldError('branchId')"
           />
           @if (branchLoading()) {
-            <mat-spinner matSuffix diameter="18"></mat-spinner>
+            <mat-spinner
+              matSuffix
+              diameter="18"
+            ></mat-spinner>
           }
           <mat-autocomplete #branchAuto="matAutocomplete">
             @for (branch of branchOptions(); track branch.value) {
@@ -81,7 +99,10 @@
             [matTooltipDisabled]="!getFieldError('serviceId')"
           />
           @if (serviceLoading()) {
-            <mat-spinner matSuffix diameter="18"></mat-spinner>
+            <mat-spinner
+              matSuffix
+              diameter="18"
+            ></mat-spinner>
           }
           <mat-autocomplete #serviceAuto="matAutocomplete">
             @for (service of serviceOptions(); track service.value) {
@@ -116,7 +137,10 @@
             [matTooltipDisabled]="!getFieldError('dentistId')"
           />
           @if (dentistLoading()) {
-            <mat-spinner matSuffix diameter="18"></mat-spinner>
+            <mat-spinner
+              matSuffix
+              diameter="18"
+            ></mat-spinner>
           }
           <mat-autocomplete #dentistAuto="matAutocomplete">
             @for (dentist of dentistOptions(); track dentist._id) {
@@ -169,7 +193,10 @@
             [matTooltipDisabled]="!getFieldError('slotId')"
           />
           @if (timeLoading()) {
-            <mat-spinner matSuffix diameter="18"></mat-spinner>
+            <mat-spinner
+              matSuffix
+              diameter="18"
+            ></mat-spinner>
           }
           <mat-autocomplete #timeAuto="matAutocomplete">
             @for (slot of timeOptions(); track slot.value) {
@@ -302,7 +329,12 @@
       @if (isStaff()) {
         <mat-form-field appearance="outline">
           <mat-label>Internal notes</mat-label>
-          <textarea matInput rows="3" formControlName="internalNotes" placeholder="Add staff notes"></textarea>
+          <textarea
+            matInput
+            rows="3"
+            formControlName="internalNotes"
+            placeholder="Add staff notes"
+          ></textarea>
         </mat-form-field>
       }
 

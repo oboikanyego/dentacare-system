@@ -18,15 +18,15 @@ export class AuthService {
   readonly currentUser = signal<AuthUser | null>(this.readStoredUser());
 
   login(payload: LoginRequest): Observable<LoginResponse> {
-    return this.api.post<LoginResponse>(API_ENDPOINTS.auth.login, payload).pipe(
-      tap((res) => this.persistSession(res))
-    );
+    return this.api
+      .post<LoginResponse>(API_ENDPOINTS.auth.login, payload)
+      .pipe(tap((res) => this.persistSession(res)));
   }
 
   register(payload: RegisterRequest): Observable<LoginResponse> {
-    return this.api.post<LoginResponse>(API_ENDPOINTS.auth.register, payload).pipe(
-      tap((res) => this.persistSession(res))
-    );
+    return this.api
+      .post<LoginResponse>(API_ENDPOINTS.auth.register, payload)
+      .pipe(tap((res) => this.persistSession(res)));
   }
 
   forgotPassword(payload: ForgotPasswordRequest): Observable<{ message: string }> {
@@ -94,6 +94,6 @@ export class AuthService {
 
   private readStoredUser(): AuthUser | null {
     const raw = localStorage.getItem('user');
-    return raw ? JSON.parse(raw) as AuthUser : null;
+    return raw ? (JSON.parse(raw) as AuthUser) : null;
   }
 }

@@ -40,7 +40,9 @@
   gap: 1rem;
 }
 
-mat-form-field { width: 100%; }
+mat-form-field {
+  width: 100%;
+}
 
 .dialog-actions {
   padding: 1rem 1.5rem 1.35rem !important;
@@ -55,10 +57,24 @@ mat-form-field { width: 100%; }
 }
 
 @media (max-width: 720px) {
-  .staff-dialog { min-width: 0; width: 100%; }
-  .form-grid { grid-template-columns: 1fr; }
-  .dialog-heading { padding: 1.2rem 1rem 0.65rem; }
-  .dialog-content { padding: 1rem 1rem 0.35rem !important; }
-  .dialog-actions { padding: 0.9rem 1rem 1rem !important; flex-wrap: wrap; }
-  .dialog-actions button { width: 100%; }
+  .staff-dialog {
+    min-width: 0;
+    width: 100%;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .dialog-heading {
+    padding: 1.2rem 1rem 0.65rem;
+  }
+  .dialog-content {
+    padding: 1rem 1rem 0.35rem !important;
+  }
+  .dialog-actions {
+    padding: 0.9rem 1rem 1rem !important;
+    flex-wrap: wrap;
+  }
+  .dialog-actions button {
+    width: 100%;
+  }
 }

@@ -14,7 +14,7 @@
   margin-bottom: 14px;
   padding: 8px 14px;
   border-radius: 999px;
-  background: rgba(18,63,82,.08);
+  background: rgba(18, 63, 82, 0.08);
   color: #0e6c84;
   font-weight: 700;
 }
@@ -23,7 +23,7 @@ h1,
 h2 {
   margin: 0;
   line-height: 1.08;
-  letter-spacing: -.035em;
+  letter-spacing: -0.035em;
   color: #12313d;
 }
 
@@ -53,9 +53,9 @@ summary {
 .map-card,
 details {
   border-radius: 28px;
-  background: rgba(255,255,255,.86);
-  border: 1px solid rgba(18,63,82,.08);
-  box-shadow: 0 20px 45px rgba(18,63,82,.08);
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(18, 63, 82, 0.08);
+  box-shadow: 0 20px 45px rgba(18, 63, 82, 0.08);
   padding: 24px;
 }
 
@@ -73,7 +73,7 @@ details {
   gap: 12px;
   align-items: start;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(18,63,82,.08);
+  border-bottom: 1px solid rgba(18, 63, 82, 0.08);
 }
 
 .contact-list li:last-child {

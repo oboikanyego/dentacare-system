@@ -31,7 +31,8 @@ export interface AppointmentEditDialogData {
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatTooltipModule,MatIconModule
+    MatTooltipModule,
+    MatIconModule
   ],
   templateUrl: './appointment-edit-dialog.component.html',
   styleUrls: ['./appointment-edit-dialog.component.css']

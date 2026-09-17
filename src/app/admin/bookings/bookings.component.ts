@@ -102,9 +102,7 @@ export class BookingsComponent implements OnInit {
 
         return matchesStatus && (!term || haystack.includes(term));
       })
-      .sort((a, b) =>
-        String(a[this.sortKey] || '').localeCompare(String(b[this.sortKey] || ''))
-      );
+      .sort((a, b) => String(a[this.sortKey] || '').localeCompare(String(b[this.sortKey] || '')));
 
     this.page = 1;
   }
