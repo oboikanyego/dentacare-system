@@ -55,6 +55,6 @@ test('staff booking uses the protected staff endpoint and does not prefill staff
   await page.locator('[formcontrolname="email"]').fill('patient@test.invalid');
   await page.locator('[formcontrolname="reason"]').fill('E2E demo booking');
 
-  await page.getByRole('button', { name: 'Confirm demo appointment' }).click();
+  await page.getByRole('button', { name: 'Confirm appointment' }).click();
   await expect.poll(() => requestUrl).toContain('/api/appointments/staff');
 });
