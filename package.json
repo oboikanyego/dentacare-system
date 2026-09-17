@@ -8,6 +8,8 @@
     "build": "ng build",
     "build:deploy": "node scripts/generate-runtime-config.mjs && ng build",
     "watch": "ng build --watch --configuration development",
+    "format": "npx --yes prettier@3.6.2 --write \"src/**/*.{ts,html,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mjs\" \"*.{json,md,ts}\"",
+    "format:check": "npx --yes prettier@3.6.2 --check \"src/**/*.{ts,html,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mjs\" \"*.{json,md,ts}\"",
     "e2e:setup": "npm install --no-save --package-lock=false @playwright/test@1.55.0 && npx playwright install chromium",
     "e2e": "playwright test",
     "e2e:headed": "playwright test --headed"

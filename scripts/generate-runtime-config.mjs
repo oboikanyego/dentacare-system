@@ -6,6 +6,8 @@ const output = `window.__DENTACARE_CONFIG__ = {\n  apiBaseUrl: ${JSON.stringify(
 mkdirSync('public', { recursive: true });
 writeFileSync('public/runtime-config.js', output, 'utf8');
 
-console.log(apiBaseUrl
-  ? `DentaCare runtime API configured: ${apiBaseUrl}`
-  : 'DentaCare runtime API uses same-origin /api fallback.');
+console.log(
+  apiBaseUrl
+    ? `DentaCare runtime API configured: ${apiBaseUrl}`
+    : 'DentaCare runtime API uses same-origin /api fallback.'
+);

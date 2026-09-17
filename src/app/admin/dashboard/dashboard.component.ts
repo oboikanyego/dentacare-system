@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { AppointmentService } from '../../core/services/appointment.service';
-import { UsersService } from '../../core/services/users.service';
+import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize, forkJoin } from 'rxjs';
 import { Appointment } from '../../core/models/appointment.model';
 import { UserListItem } from '../../core/models/user.model';
+import { AppointmentService } from '../../core/services/appointment.service';
+import { UsersService } from '../../core/services/users.service';
 
 @Component({
   selector: 'app-admin-dashboard-page',
@@ -13,44 +15,55 @@ import { UserListItem } from '../../core/models/user.model';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly appointmentService = inject(AppointmentService);
   private readonly usersService = inject(UsersService);
 
-  isLoading = true;
-  errorMessage = '';
-  appointments: Appointment[] = [];
-  users: UserListItem[] = [];
+  readonly isLoading = signal(true);
+  readonly errorMessage = signal('');
+  readonly appointments = signal<Appointment[]>([]);
+  readonly users = signal<UserListItem[]>([]);
+
+  private readonly todayIso = new Date().toISOString().slice(0, 10);
+
+  readonly bookingsToday = computed(
+    () => this.appointments().filter((appointment) => appointment.date === this.todayIso).length
+  );
+  readonly pendingCount = computed(
+    () => this.appointments().filter((appointment) => appointment.status === 'PENDING').length
+  );
+  readonly cancelledCount = computed(
+    () => this.appointments().filter((appointment) => appointment.status === 'CANCELLED').length
+  );
+  readonly completedCount = computed(
+    () => this.appointments().filter((appointment) => appointment.status === 'COMPLETED').length
+  );
+  readonly activeUsers = computed(() => this.users().filter((user) => user.isActive).length);
 
   ngOnInit(): void {
     this.load();
   }
 
   load(): void {
-    this.isLoading = true;
-    this.errorMessage = '';
-    this.appointmentService.listStaffAppointments().subscribe({
-      next: (appointments) => {
-        this.appointments = appointments;
-        this.usersService.list().subscribe({
-          next: (users) => { this.users = users; },
-          error: (error) => { this.errorMessage = error?.error?.message || 'Unable to load dashboard'; },
-          complete: () => { this.isLoading = false; }
-        });
-      },
-      error: (error) => {
-        this.errorMessage = error?.error?.message || 'Unable to load dashboard';
-        this.isLoading = false;
-      }
-    });
-  }
+    this.isLoading.set(true);
+    this.errorMessage.set('');
 
-  get todayIso(): string {
-    return new Date().toISOString().slice(0, 10);
+    forkJoin({
+      appointments: this.appointmentService.listStaffAppointments(),
+      users: this.usersService.list()
+    })
+      .pipe(
+        finalize(() => this.isLoading.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: ({ appointments, users }) => {
+          this.appointments.set(appointments);
+          this.users.set(users);
+        },
+        error: (error) => {
+          this.errorMessage.set(error?.error?.message || 'Unable to load dashboard');
+        }
+      });
   }
-
-  get bookingsToday(): number { return this.appointments.filter(a => a.date === this.todayIso).length; }
-  get pendingCount(): number { return this.appointments.filter(a => a.status === 'PENDING').length; }
-  get cancelledCount(): number { return this.appointments.filter(a => a.status === 'CANCELLED').length; }
-  get completedCount(): number { return this.appointments.filter(a => a.status === 'COMPLETED').length; }
-  get activeUsers(): number { return this.users.filter(u => u.isActive).length; }
 }

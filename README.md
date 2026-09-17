@@ -5,12 +5,14 @@ Angular 20 frontend for the DentaCare clinic management platform. The client sup
 ## Core flows
 
 ### Public
+
 - Browse clinic home, services, about, and contact pages
 - Register and sign in
 - Request password-reset OTP and reset password
 - Book an appointment with branch, service, dentist, date, time, duration, contact details, reason, and notes
 
 ### Patient
+
 - Role-protected patient portal
 - View, search, filter, sort, and page through appointments
 - View appointment details and audit information
@@ -19,6 +21,7 @@ Angular 20 frontend for the DentaCare clinic management platform. The client sup
 - Patient details are prefilled when booking while signed in
 
 ### Staff
+
 - Role-protected bookings workspace for receptionists, dentists, and admins
 - Search/filter/sort clinic bookings
 - View appointment detail and audit trail
@@ -27,6 +30,7 @@ Angular 20 frontend for the DentaCare clinic management platform. The client sup
 - Set appointment status and internal notes
 
 ### Admin
+
 - Dashboard
 - User management
 - Create staff accounts
@@ -95,6 +99,7 @@ npm run e2e:headed
 GitHub Actions installs Chromium and runs the production Angular build plus the full Playwright suite on pull requests and pushes to `main`.
 
 Automated flows currently cover:
+
 - home-to-booking navigation
 - booking validation
 - complete public appointment submission and API payload

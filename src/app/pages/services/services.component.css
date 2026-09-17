@@ -13,7 +13,7 @@
   margin-bottom: 14px;
   padding: 8px 14px;
   border-radius: 999px;
-  background: rgba(18,63,82,.08);
+  background: rgba(18, 63, 82, 0.08);
   color: #0e6c84;
   font-weight: 700;
 }
@@ -28,7 +28,7 @@ h1,
 h2 {
   margin: 0;
   line-height: 1.08;
-  letter-spacing: -.035em;
+  letter-spacing: -0.035em;
 }
 
 h1 {
@@ -54,20 +54,20 @@ span {
 }
 
 .service-grid {
-  grid-template-columns: repeat(2, minmax(0,1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   margin-bottom: 32px;
 }
 
 .gallery-grid {
-  grid-template-columns: repeat(3, minmax(0,1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .service-card,
 .gallery-card {
   border-radius: 28px;
-  background: rgba(255,255,255,.86);
-  border: 1px solid rgba(18,63,82,.08);
-  box-shadow: 0 20px 45px rgba(18,63,82,.08);
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(18, 63, 82, 0.08);
+  box-shadow: 0 20px 45px rgba(18, 63, 82, 0.08);
   padding: 24px;
   min-width: 0;
 }
@@ -96,11 +96,11 @@ span {
   display: grid;
   gap: 4px;
   padding-top: 14px;
-  border-top: 1px solid rgba(18,63,82,.1);
+  border-top: 1px solid rgba(18, 63, 82, 0.1);
 }
 
 .price-row span {
-  font-size: .85rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: #0e6c84;
 }

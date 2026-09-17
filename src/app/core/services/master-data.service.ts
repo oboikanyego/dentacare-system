@@ -1,8 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiService } from './api.service';
 import { API_ENDPOINTS } from '../constants/api-endpoints';
-import { MasterDataResponse, MasterDataItem } from '../models/master-data.model';
+import { MasterDataItem, MasterDataResponse } from '../models/master-data.model';
+import { ApiService } from './api.service';
+
+export interface MasterDataListResponse {
+  key: string;
+  description: string;
+  items: MasterDataItem[];
+}
 
 @Injectable({ providedIn: 'root' })
 export class MasterDataService {
@@ -14,7 +20,14 @@ export class MasterDataService {
     });
   }
 
-  getOne(key: string): Observable<{ key: string; description: string; items: MasterDataItem[] }> {
-    return this.api.get<{ key: string; description: string; items: MasterDataItem[] }>(`${API_ENDPOINTS.masterData}/${key}`);
+  getOne(key: string): Observable<MasterDataListResponse> {
+    return this.search(key);
+  }
+
+  search(key: string, search = '', limit = 20): Observable<MasterDataListResponse> {
+    return this.api.get<MasterDataListResponse>(`${API_ENDPOINTS.masterData}/${key}`, {
+      search,
+      limit
+    });
   }
 }

@@ -6,25 +6,46 @@
   </div>
 
   <mat-dialog-content class="dialog-content">
-    <form class="form-grid" [formGroup]="form">
+    <form
+      class="form-grid"
+      [formGroup]="form"
+    >
       <mat-form-field appearance="outline">
         <mat-label>Full name</mat-label>
-        <input matInput formControlName="name" placeholder="Jordan Smith">
+        <input
+          matInput
+          formControlName="name"
+          placeholder="Jordan Smith"
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="email" placeholder="jordan@dentacare.example">
+        <input
+          matInput
+          type="email"
+          formControlName="email"
+          placeholder="jordan@dentacare.example"
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Phone</mat-label>
-        <input matInput type="tel" formControlName="phone" placeholder="0710000100">
+        <input
+          matInput
+          type="tel"
+          formControlName="phone"
+          placeholder="0710000100"
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>ID number</mat-label>
-        <input matInput formControlName="idNumber" placeholder="9001015009001">
+        <input
+          matInput
+          formControlName="idNumber"
+          placeholder="9001015009001"
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -38,13 +59,34 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
-        <input matInput type="password" formControlName="password" placeholder="Minimum 8 characters">
+        <input
+          matInput
+          type="password"
+          formControlName="password"
+          placeholder="Minimum 8 characters"
+        />
       </mat-form-field>
     </form>
   </mat-dialog-content>
 
-  <mat-dialog-actions class="dialog-actions" align="end">
-    <button mat-stroked-button type="button" (click)="dialogRef.close()">Cancel</button>
-    <button mat-flat-button color="primary" type="button" (click)="save()">Add staff member</button>
+  <mat-dialog-actions
+    class="dialog-actions"
+    align="end"
+  >
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="dialogRef.close()"
+    >
+      Cancel
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="save()"
+    >
+      Add staff member
+    </button>
   </mat-dialog-actions>
 </div>

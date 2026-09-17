@@ -1,5 +1,8 @@
 <header class="topbar">
-  <a class="brand" routerLink="/">
+  <a
+    class="brand"
+    routerLink="/"
+  >
     <span class="brand-mark">✦</span>
     <span class="brand-copy">
       <strong>DentaCare</strong>
@@ -7,31 +10,78 @@
     </span>
   </a>
 
-  <nav class="desktop-nav" aria-label="Primary navigation">
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-    <a routerLink="/about" routerLinkActive="active">About</a>
-    <a routerLink="/services" routerLinkActive="active">Services</a>
-    <a routerLink="/appointment" routerLinkActive="active">Book</a>
-    <a routerLink="/contact" routerLinkActive="active">Contact</a>
+  <nav
+    class="desktop-nav"
+    aria-label="Primary navigation"
+  >
+    <a
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Home</a
+    >
+    <a
+      routerLink="/about"
+      routerLinkActive="active"
+      >About</a
+    >
+    <a
+      routerLink="/services"
+      routerLinkActive="active"
+      >Services</a
+    >
+    <a
+      routerLink="/appointment"
+      routerLinkActive="active"
+      >Book</a
+    >
+    <a
+      routerLink="/contact"
+      routerLinkActive="active"
+      >Contact</a
+    >
 
     @if (isPatient()) {
-      <a routerLink="/patient/appointments" routerLinkActive="active">My Appointments</a>
+      <a
+        routerLink="/patient/appointments"
+        routerLinkActive="active"
+        >My Appointments</a
+      >
     }
 
     @if (isStaff()) {
-      <a routerLink="/staff/bookings" routerLinkActive="active">Staff Bookings</a>
+      <a
+        routerLink="/staff/bookings"
+        routerLinkActive="active"
+        >Staff Bookings</a
+      >
     }
 
     @if (isAdmin()) {
-      <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
-      <a routerLink="/admin/users" routerLinkActive="active">Users</a>
+      <a
+        routerLink="/admin/dashboard"
+        routerLinkActive="active"
+        >Dashboard</a
+      >
+      <a
+        routerLink="/admin/users"
+        routerLinkActive="active"
+        >Users</a
+      >
     }
   </nav>
 
   <div class="action-row desktop-only">
     @if (user()) {
-      <div class="profile-menu" (click)="stopPropagation($event)">
-        <button class="profile-button" type="button" (click)="toggleProfile()">
+      <div
+        class="profile-menu"
+        (click)="stopPropagation($event)"
+      >
+        <button
+          class="profile-button"
+          type="button"
+          (click)="toggleProfile()"
+        >
           <span class="avatar">{{ user()?.role?.charAt(0) }}</span>
           <span class="user-chip">{{ user()?.role }}</span>
         </button>
@@ -40,41 +90,105 @@
           <div class="profile-dropdown">
             <strong>Account</strong>
             <span><b>Role:</b> {{ user()?.role }}</span>
-            <button class="ghost-button" type="button" (click)="goToProfileArea()">Open dashboard</button>
-            <button class="cta-button" type="button" (click)="logout()">Logout</button>
+            <button
+              class="ghost-button"
+              type="button"
+              (click)="goToProfileArea()"
+            >
+              Open dashboard
+            </button>
+            <button
+              class="cta-button"
+              type="button"
+              (click)="logout()"
+            >
+              Logout
+            </button>
           </div>
         }
       </div>
     } @else {
-      <a class="auth-button auth-button--secondary" routerLink="/register">Create account</a>
-      <a class="auth-button auth-button--primary" routerLink="/login">Sign in</a>
+      <a
+        class="auth-button auth-button--secondary"
+        routerLink="/register"
+        >Create account</a
+      >
+      <a
+        class="auth-button auth-button--primary"
+        routerLink="/login"
+        >Sign in</a
+      >
     }
   </div>
 
-  <button class="menu-toggle mobile-only" type="button" (click)="toggleMenu()" aria-label="Toggle menu">
+  <button
+    class="menu-toggle mobile-only"
+    type="button"
+    (click)="toggleMenu()"
+    aria-label="Toggle menu"
+  >
     ☰
   </button>
 </header>
 
 @if (menuOpen()) {
-  <nav class="mobile-menu" aria-label="Mobile navigation">
-    <a routerLink="/" (click)="closeMenu()">Home</a>
-    <a routerLink="/about" (click)="closeMenu()">About</a>
-    <a routerLink="/services" (click)="closeMenu()">Services</a>
-    <a routerLink="/appointment" (click)="closeMenu()">Book</a>
-    <a routerLink="/contact" (click)="closeMenu()">Contact</a>
+  <nav
+    class="mobile-menu"
+    aria-label="Mobile navigation"
+  >
+    <a
+      routerLink="/"
+      (click)="closeMenu()"
+      >Home</a
+    >
+    <a
+      routerLink="/about"
+      (click)="closeMenu()"
+      >About</a
+    >
+    <a
+      routerLink="/services"
+      (click)="closeMenu()"
+      >Services</a
+    >
+    <a
+      routerLink="/appointment"
+      (click)="closeMenu()"
+      >Book</a
+    >
+    <a
+      routerLink="/contact"
+      (click)="closeMenu()"
+      >Contact</a
+    >
 
     @if (isPatient()) {
-      <a routerLink="/patient/appointments" (click)="closeMenu()">My Appointments</a>
+      <a
+        routerLink="/patient/appointments"
+        (click)="closeMenu()"
+        >My Appointments</a
+      >
     }
 
     @if (isStaff()) {
-      <a routerLink="/staff/bookings" (click)="closeMenu()">Staff Bookings</a>
+      <a
+        routerLink="/staff/bookings"
+        (click)="closeMenu()"
+        >Staff Bookings</a
+      >
     }
 
     @if (isAdmin()) {
-      <a routerLink="/admin/dashboard" (click)="closeMenu()">Dashboard</a>
-      <a routerLink="/admin/users" (click)="closeMenu()">Users</a>
+      <a
+        routerLink="/admin/dashboard"
+        (click)="closeMenu()"
+        >Dashboard</a
+      >
+      <a
+        routerLink="/admin/users"
+        (click)="closeMenu()"
+        >Users</a
+      >
     }
 
     @if (user()) {
@@ -82,11 +196,27 @@
         <strong>Signed in</strong>
         <span><b>Role:</b> {{ user()?.role }}</span>
       </div>
-      <button class="cta-button full-width" type="button" (click)="logout()">Logout</button>
+      <button
+        class="cta-button full-width"
+        type="button"
+        (click)="logout()"
+      >
+        Logout
+      </button>
     } @else {
       <div class="mobile-auth-actions">
-        <a class="auth-button auth-button--secondary full-width" routerLink="/register" (click)="closeMenu()">Create account</a>
-        <a class="auth-button auth-button--primary full-width" routerLink="/login" (click)="closeMenu()">Sign in</a>
+        <a
+          class="auth-button auth-button--secondary full-width"
+          routerLink="/register"
+          (click)="closeMenu()"
+          >Create account</a
+        >
+        <a
+          class="auth-button auth-button--primary full-width"
+          routerLink="/login"
+          (click)="closeMenu()"
+          >Sign in</a
+        >
       </div>
     }
   </nav>

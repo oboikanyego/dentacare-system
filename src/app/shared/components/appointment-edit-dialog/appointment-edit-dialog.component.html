@@ -6,11 +6,18 @@
   </div>
 
   <mat-dialog-content class="dialog-content">
-    <form class="dialog-form" [formGroup]="form">
+    <form
+      class="dialog-form"
+      [formGroup]="form"
+    >
       <div class="grid two-up">
         <mat-form-field appearance="outline">
           <mat-label>Date</mat-label>
-          <input matInput type="date" formControlName="date">
+          <input
+            matInput
+            type="date"
+            formControlName="date"
+          />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -38,20 +45,46 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Patient notes</mat-label>
-        <textarea matInput rows="4" formControlName="notes" placeholder="Add notes about the visit"></textarea>
+        <textarea
+          matInput
+          rows="4"
+          formControlName="notes"
+          placeholder="Add notes about the visit"
+        ></textarea>
       </mat-form-field>
 
       @if (data.canEditInternalNotes) {
         <mat-form-field appearance="outline">
           <mat-label>Internal notes</mat-label>
-          <textarea matInput rows="4" formControlName="internalNotes" placeholder="Visible to clinic staff only"></textarea>
+          <textarea
+            matInput
+            rows="4"
+            formControlName="internalNotes"
+            placeholder="Visible to clinic staff only"
+          ></textarea>
         </mat-form-field>
       }
     </form>
   </mat-dialog-content>
 
-  <mat-dialog-actions class="dialog-actions" align="end">
-    <button mat-stroked-button type="button" (click)="dialogRef.close()">Cancel</button>
-    <button mat-flat-button color="primary" type="button" (click)="save()">Save changes</button>
+  <mat-dialog-actions
+    class="dialog-actions"
+    align="end"
+  >
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="dialogRef.close()"
+    >
+      Cancel
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="save()"
+    >
+      Save changes
+    </button>
   </mat-dialog-actions>
 </div>

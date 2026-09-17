@@ -1,14 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { AppointmentService } from '../../core/services/appointment.service';
+import { EMPTY, finalize, switchMap } from 'rxjs';
 import { Appointment } from '../../core/models/appointment.model';
-import { MasterDataService } from '../../core/services/master-data.service';
 import { MasterDataItem } from '../../core/models/master-data.model';
+import { AppointmentService } from '../../core/services/appointment.service';
+import { MasterDataService } from '../../core/services/master-data.service';
+import { UiFeedbackService } from '../../core/services/ui-feedback.service';
 import { AppointmentEditDialogComponent } from '../../shared/components/appointment-edit-dialog/appointment-edit-dialog.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
-import { UiFeedbackService } from '../../core/services/ui-feedback.service';
 
 @Component({
   selector: 'app-patient-appointments',
@@ -18,6 +20,7 @@ import { UiFeedbackService } from '../../core/services/ui-feedback.service';
   styleUrls: ['./patient-appointments.component.css']
 })
 export class PatientAppointmentsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly appointmentService = inject(AppointmentService);
   private readonly masterDataService = inject(MasterDataService);
   private readonly dialog = inject(MatDialog);
@@ -37,38 +40,69 @@ export class PatientAppointmentsComponent implements OnInit {
   selectedAppointment: Appointment | null = null;
 
   ngOnInit(): void {
-    this.masterDataService.getOne('timeSlots').subscribe({ next: (response) => this.timeSlots = response.items || [] });
+    this.masterDataService
+      .getOne('timeSlots')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.timeSlots = response.items || [];
+        },
+        error: () => {
+          this.timeSlots = [];
+        }
+      });
+
     this.loadAppointments();
   }
 
   loadAppointments(): void {
     this.loading = true;
-    this.appointmentService.listMyAppointments().subscribe({
-      next: (appointments) => {
-        this.appointments = appointments;
-        this.applyFilters();
-        this.errorMessage = '';
-      },
-      error: (error) => {
-        this.errorMessage = error?.error?.message || 'Unable to load appointments';
-        this.uiFeedback.error(this.errorMessage);
-      },
-      complete: () => {
-        this.loading = false;
-      }
-    });
+    this.errorMessage = '';
+
+    this.appointmentService
+      .listMyAppointments()
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (appointments) => {
+          this.appointments = appointments;
+          this.applyFilters();
+        },
+        error: (error) => {
+          this.errorMessage = error?.error?.message || 'Unable to load appointments';
+          this.uiFeedback.error(this.errorMessage);
+        }
+      });
   }
 
   applyFilters(): void {
     const term = this.searchTerm.trim().toLowerCase();
-    this.filteredAppointments = this.appointments.filter((appointment) => {
-      const matchesStatus = this.statusFilter === 'ALL' || appointment.status === this.statusFilter;
-      const haystack = [appointment.serviceName, appointment.dentistName, appointment.branchName, appointment.date, appointment.time, appointment.reason, appointment.notes]
-        .join(' ')
-        .toLowerCase();
-      const matchesSearch = !term || haystack.includes(term);
-      return matchesStatus && matchesSearch;
-    }).sort((a, b) => String(a[this.sortKey] || '').localeCompare(String(b[this.sortKey] || '')));
+
+    this.filteredAppointments = this.appointments
+      .filter((appointment) => {
+        const matchesStatus =
+          this.statusFilter === 'ALL' || appointment.status === this.statusFilter;
+        const haystack = [
+          appointment.serviceName,
+          appointment.dentistName,
+          appointment.branchName,
+          appointment.date,
+          appointment.time,
+          appointment.reason,
+          appointment.notes
+        ]
+          .join(' ')
+          .toLowerCase();
+        const matchesSearch = !term || haystack.includes(term);
+
+        return matchesStatus && matchesSearch;
+      })
+      .sort((a, b) => String(a[this.sortKey] || '').localeCompare(String(b[this.sortKey] || '')));
+
     this.page = 1;
   }
 
@@ -92,16 +126,25 @@ export class PatientAppointmentsComponent implements OnInit {
   cancelAppointment(appointment: Appointment): void {
     if (!appointment._id) return;
 
-    this.dialog.open(ConfirmDialogComponent, {
-      width: '420px',
-      data: {
-        title: 'Cancel appointment',
-        message: 'Are you sure you want to cancel this appointment?',
-        confirmText: 'Yes, cancel'
-      }
-    }).afterClosed().subscribe((confirmed) => {
-      if (!confirmed) return;
-      this.appointmentService.cancelMyAppointment(appointment._id!).subscribe({
+    const appointmentId = appointment._id;
+
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        width: '420px',
+        data: {
+          title: 'Cancel appointment',
+          message: 'Are you sure you want to cancel this appointment?',
+          confirmText: 'Yes, cancel'
+        }
+      })
+      .afterClosed()
+      .pipe(
+        switchMap((confirmed) =>
+          confirmed ? this.appointmentService.cancelMyAppointment(appointmentId) : EMPTY
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
         next: () => {
           this.message = 'Appointment cancelled successfully';
           this.uiFeedback.success(this.message);
@@ -113,23 +156,32 @@ export class PatientAppointmentsComponent implements OnInit {
           this.uiFeedback.error(this.errorMessage);
         }
       });
-    });
   }
 
   rescheduleAppointment(appointment: Appointment): void {
     if (!appointment._id) return;
-    this.dialog.open(AppointmentEditDialogComponent, {
-      width: '640px',
-      maxWidth: '96vw',
-      data: {
-        title: 'Reschedule appointment',
-        appointment,
-        timeSlots: this.timeSlots,
-        auditNote: 'Rescheduled by patient'
-      }
-    }).afterClosed().subscribe((payload) => {
-      if (!payload) return;
-      this.appointmentService.updateMyAppointment(appointment._id!, payload).subscribe({
+
+    const appointmentId = appointment._id;
+
+    this.dialog
+      .open(AppointmentEditDialogComponent, {
+        width: '640px',
+        maxWidth: '96vw',
+        data: {
+          title: 'Reschedule appointment',
+          appointment,
+          timeSlots: this.timeSlots,
+          auditNote: 'Rescheduled by patient'
+        }
+      })
+      .afterClosed()
+      .pipe(
+        switchMap((payload) =>
+          payload ? this.appointmentService.updateMyAppointment(appointmentId, payload) : EMPTY
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
         next: () => {
           this.message = 'Appointment rescheduled successfully';
           this.uiFeedback.success(this.message);
@@ -141,7 +193,6 @@ export class PatientAppointmentsComponent implements OnInit {
           this.uiFeedback.error(this.errorMessage);
         }
       });
-    });
   }
 
   statusClass(status: Appointment['status']): string {

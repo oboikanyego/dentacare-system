@@ -1,12 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { finalize } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 
 function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
@@ -37,6 +45,7 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
   styleUrl: './reset-password.component.css'
 })
 export class ResetPasswordComponent {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
@@ -48,12 +57,18 @@ export class ResetPasswordComponent {
   message = '';
   errorMessage = '';
 
-  readonly form = this.fb.group({
-    email: [this.route.snapshot.queryParamMap.get('email') || '', [Validators.required, Validators.email]],
-    otp: ['', [Validators.required, Validators.minLength(6)]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
-  }, { validators: passwordMatchValidator });
+  readonly form = this.fb.group(
+    {
+      email: [
+        this.route.snapshot.queryParamMap.get('email') || '',
+        [Validators.required, Validators.email]
+      ],
+      otp: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
+    },
+    { validators: passwordMatchValidator }
+  );
 
   submit(): void {
     this.message = '';
@@ -65,21 +80,26 @@ export class ResetPasswordComponent {
     }
 
     const { confirmPassword, ...payload } = this.form.getRawValue();
-    this.isSubmitting = true;
+    void confirmPassword;
 
-    this.authService.resetPassword(payload as never).subscribe({
-      next: (response) => {
-        this.message = response.message;
-        this.router.navigateByUrl('/login');
-      },
-      error: (error) => {
-        this.errorMessage = error?.error?.message || 'Unable to reset password';
-        this.isSubmitting = false;
-      },
-      complete: () => {
-        this.isSubmitting = false;
-      }
-    });
+    this.isSubmitting = true;
+    this.authService
+      .resetPassword(payload as never)
+      .pipe(
+        finalize(() => {
+          this.isSubmitting = false;
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (response) => {
+          this.message = response.message;
+          this.router.navigateByUrl('/login');
+        },
+        error: (error) => {
+          this.errorMessage = error?.error?.message || 'Unable to reset password';
+        }
+      });
   }
 
   togglePassword(): void {

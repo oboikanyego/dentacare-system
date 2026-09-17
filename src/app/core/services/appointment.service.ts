@@ -28,19 +28,43 @@ export class AppointmentService {
     return this.api.post<Appointment>(`${API_ENDPOINTS.appointments}/staff`, payload);
   }
 
-  updateAppointment(id: string, payload: Partial<Appointment> & { auditNote?: string }): Observable<{ message: string; appointment: Appointment }> {
-    return this.api.patch<{ message: string; appointment: Appointment }>(`${API_ENDPOINTS.appointments}/${id}`, payload);
+  updateAppointment(
+    id: string,
+    payload: Partial<Appointment> & { auditNote?: string }
+  ): Observable<{ message: string; appointment: Appointment }> {
+    return this.api.patch<{ message: string; appointment: Appointment }>(
+      `${API_ENDPOINTS.appointments}/${id}`,
+      payload
+    );
   }
 
-  updateMyAppointment(id: string, payload: Partial<Appointment> & { auditNote?: string }): Observable<{ message: string; appointment: Appointment }> {
-    return this.api.patch<{ message: string; appointment: Appointment }>(`${API_ENDPOINTS.appointments}/mine/${id}`, payload);
+  updateMyAppointment(
+    id: string,
+    payload: Partial<Appointment> & { auditNote?: string }
+  ): Observable<{ message: string; appointment: Appointment }> {
+    return this.api.patch<{ message: string; appointment: Appointment }>(
+      `${API_ENDPOINTS.appointments}/mine/${id}`,
+      payload
+    );
   }
 
-  cancelMyAppointment(id: string, cancelReason = 'Cancelled by patient'): Observable<{ message: string; appointment: Appointment }> {
-    return this.api.patch<{ message: string; appointment: Appointment }>(`${API_ENDPOINTS.appointments}/mine/${id}/cancel`, { cancelReason });
+  cancelMyAppointment(
+    id: string,
+    cancelReason = 'Cancelled by patient'
+  ): Observable<{ message: string; appointment: Appointment }> {
+    return this.api.patch<{ message: string; appointment: Appointment }>(
+      `${API_ENDPOINTS.appointments}/mine/${id}/cancel`,
+      { cancelReason }
+    );
   }
 
-  cancelStaffAppointment(id: string, cancelReason = 'Cancelled by staff'): Observable<{ message: string; appointment: Appointment }> {
-    return this.api.patch<{ message: string; appointment: Appointment }>(`${API_ENDPOINTS.appointments}/${id}/cancel`, { cancelReason });
+  cancelStaffAppointment(
+    id: string,
+    cancelReason = 'Cancelled by staff'
+  ): Observable<{ message: string; appointment: Appointment }> {
+    return this.api.patch<{ message: string; appointment: Appointment }>(
+      `${API_ENDPOINTS.appointments}/${id}/cancel`,
+      { cancelReason }
+    );
   }
 }

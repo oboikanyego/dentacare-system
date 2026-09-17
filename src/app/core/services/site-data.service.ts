@@ -50,7 +50,8 @@ export class SiteDataService {
   readonly clinicName = 'DentaCare';
   readonly city = 'Johannesburg';
   readonly tagline = 'Modern dental care, made simpler';
-  readonly intro = 'Book visits, explore services, and manage appointments through one clean patient and clinic experience.';
+  readonly intro =
+    'Book visits, explore services, and manage appointments through one clean patient and clinic experience.';
 
   readonly featuredServices = [
     'Same-day checkups',
@@ -66,23 +67,28 @@ export class SiteDataService {
       qualifications: 'BDS, DentaCare Clinical Institute',
       experience: '12+ years in family and cosmetic dentistry',
       philosophy: 'Gentle care, clear explanations, and comfort-first treatment planning.',
-      image: 'https://images.unsplash.com/photo-1612277795421-9bc7706a4a41?auto=format&fit=crop&w=900&q=80'
+      image:
+        'https://images.unsplash.com/photo-1612277795421-9bc7706a4a41?auto=format&fit=crop&w=900&q=80'
     },
     {
       name: 'Dr. Theo Lane',
       role: 'Restorative Dentist',
       qualifications: 'BChD, DentaCare Clinical Institute',
       experience: '10+ years in restorative and rehabilitation care',
-      philosophy: 'Modern restorative workflows paired with practical, patient-friendly treatment planning.',
-      image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=900&q=80'
+      philosophy:
+        'Modern restorative workflows paired with practical, patient-friendly treatment planning.',
+      image:
+        'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=900&q=80'
     },
     {
       name: 'Dr. Zuri Hart',
       role: 'Orthodontic & Preventive Dentist',
       qualifications: 'BDS, DentaCare Clinical Institute',
       experience: '9+ years in alignment and preventive care',
-      philosophy: 'Preventive habits, thoughtful alignment planning, and accessible patient education.',
-      image: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=900&q=80'
+      philosophy:
+        'Preventive habits, thoughtful alignment planning, and accessible patient education.',
+      image:
+        'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=900&q=80'
     }
   ];
 
@@ -91,7 +97,11 @@ export class SiteDataService {
       category: 'General Dentistry',
       title: 'Checkups & Preventive Care',
       description: 'Routine examinations, diagnostics, cleaning, and preventive guidance.',
-      steps: ['Consultation and oral exam', 'Cleaning and plaque removal', 'Personal prevention plan'],
+      steps: [
+        'Consultation and oral exam',
+        'Cleaning and plaque removal',
+        'Personal prevention plan'
+      ],
       price: 'From R750'
     },
     {
@@ -111,7 +121,8 @@ export class SiteDataService {
     {
       category: 'Restorative Dentistry',
       title: 'Crowns, Bridges & Implants',
-      description: 'Restorative treatment planning focused on function, comfort, and long-term follow-up.',
+      description:
+        'Restorative treatment planning focused on function, comfort, and long-term follow-up.',
       steps: ['Clinical assessment', 'Digital impressions', 'Placement and follow-up'],
       price: 'Quote on consultation'
     },
@@ -164,17 +175,20 @@ export class SiteDataService {
     {
       title: 'Whitening refresh',
       label: 'Illustrative sample result',
-      image: 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=1200&q=80'
+      image:
+        'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=1200&q=80'
     },
     {
       title: 'Smile makeover',
       label: 'Illustrative sample result',
-      image: 'https://images.unsplash.com/photo-1588776814546-daab30f310ce?auto=format&fit=crop&w=1200&q=80'
+      image:
+        'https://images.unsplash.com/photo-1588776814546-daab30f310ce?auto=format&fit=crop&w=1200&q=80'
     },
     {
       title: 'Healthy alignment',
       label: 'Illustrative sample result',
-      image: 'https://images.unsplash.com/photo-1609840114035-3c981b782dfe?auto=format&fit=crop&w=1200&q=80'
+      image:
+        'https://images.unsplash.com/photo-1609840114035-3c981b782dfe?auto=format&fit=crop&w=1200&q=80'
     }
   ];
 
@@ -199,19 +213,23 @@ export class SiteDataService {
   readonly faqs: FaqItem[] = [
     {
       question: 'Does teeth whitening hurt?',
-      answer: 'Sensitivity can vary. A clinician would normally discuss options based on the patient and treatment plan.'
+      answer:
+        'Sensitivity can vary. A clinician would normally discuss options based on the patient and treatment plan.'
     },
     {
       question: 'How often should I visit the dentist?',
-      answer: 'Visit frequency depends on the patient and their oral-health needs. A dentist can recommend an appropriate schedule.'
+      answer:
+        'Visit frequency depends on the patient and their oral-health needs. A dentist can recommend an appropriate schedule.'
     },
     {
       question: 'Do you accept medical aid?',
-      answer: 'The application includes sample health-plan options to demonstrate payment and claim workflows.'
+      answer:
+        'The application includes sample health-plan options to demonstrate payment and claim workflows.'
     },
     {
       question: 'Can I book an emergency appointment?',
-      answer: 'Yes. The booking flow includes urgent appointment scenarios and same-day availability where configured.'
+      answer:
+        'Yes. The booking flow includes urgent appointment scenarios and same-day availability where configured.'
     }
   ];
 

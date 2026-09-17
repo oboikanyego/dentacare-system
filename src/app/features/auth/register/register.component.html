@@ -1,21 +1,41 @@
 <section class="register-page">
-  <mat-card class="register-card" appearance="outlined">
+  <mat-card
+    class="register-card"
+    appearance="outlined"
+  >
     <div class="register-header">
       <p class="section-label">Patient registration</p>
       <h1>Create your account</h1>
-      <p class="muted">Register an account to track appointments, reschedule bookings, and manage cancellations.</p>
-      <p class="muted helper-text"><strong>Portfolio note:</strong> Please use fictional personal information when trying the application.</p>
+      <p class="muted">
+        Register an account to track appointments, reschedule bookings, and manage cancellations.
+      </p>
+      <p class="muted helper-text">
+        <strong>Portfolio note:</strong> Please use fictional personal information when trying the
+        application.
+      </p>
     </div>
 
     @if (errorMessage) {
       <div class="banner banner--error">{{ errorMessage }}</div>
     }
 
-    <form [formGroup]="form" (ngSubmit)="submit()" class="register-form">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      class="register-form"
+    >
       <div class="grid two-up">
         <mat-form-field appearance="outline">
           <mat-label>Full name</mat-label>
-          <input matInput type="text" formControlName="name" [matTooltip]="getErrorMessage('name')" [matTooltipDisabled]="!getErrorMessage('name')" matTooltipPosition="above" placeholder="Jane Doe">
+          <input
+            matInput
+            type="text"
+            formControlName="name"
+            [matTooltip]="getErrorMessage('name')"
+            [matTooltipDisabled]="!getErrorMessage('name')"
+            matTooltipPosition="above"
+            placeholder="Jane Doe"
+          />
           @if (f['name'].touched && f['name'].invalid) {
             <mat-error>Full name is required.</mat-error>
           }
@@ -23,7 +43,15 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" [matTooltip]="getErrorMessage('email')" [matTooltipDisabled]="!getErrorMessage('email')" matTooltipPosition="above" placeholder="jane.doe@dentacare.example">
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            [matTooltip]="getErrorMessage('email')"
+            [matTooltipDisabled]="!getErrorMessage('email')"
+            matTooltipPosition="above"
+            placeholder="jane.doe@dentacare.example"
+          />
           @if (f['email'].touched && f['email'].invalid) {
             <mat-error>Enter a valid email address.</mat-error>
           }
@@ -33,7 +61,15 @@
       <div class="grid two-up">
         <mat-form-field appearance="outline">
           <mat-label>Phone</mat-label>
-          <input matInput type="tel" formControlName="phone" [matTooltip]="getErrorMessage('phone')" [matTooltipDisabled]="!getErrorMessage('phone')" matTooltipPosition="above" placeholder="0720000102">
+          <input
+            matInput
+            type="tel"
+            formControlName="phone"
+            [matTooltip]="getErrorMessage('phone')"
+            [matTooltipDisabled]="!getErrorMessage('phone')"
+            matTooltipPosition="above"
+            placeholder="0720000102"
+          />
           @if (f['phone'].touched && f['phone'].invalid) {
             <mat-error>Use a valid South African mobile number format.</mat-error>
           }
@@ -41,7 +77,15 @@
 
         <mat-form-field appearance="outline">
           <mat-label>ID number</mat-label>
-          <input matInput type="text" formControlName="idNumber" [matTooltip]="getErrorMessage('idNumber')" [matTooltipDisabled]="!getErrorMessage('idNumber')" matTooltipPosition="above" placeholder="9202025009002">
+          <input
+            matInput
+            type="text"
+            formControlName="idNumber"
+            [matTooltip]="getErrorMessage('idNumber')"
+            [matTooltipDisabled]="!getErrorMessage('idNumber')"
+            matTooltipPosition="above"
+            placeholder="9202025009002"
+          />
           @if (f['idNumber'].touched && f['idNumber'].invalid) {
             <mat-error>Enter a valid 13-digit ID number format.</mat-error>
           }
@@ -51,8 +95,22 @@
       <div class="grid two-up">
         <mat-form-field appearance="outline">
           <mat-label>Password</mat-label>
-          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" [matTooltip]="getErrorMessage('password')" [matTooltipDisabled]="!getErrorMessage('password')" matTooltipPosition="above" placeholder="Create a password">
-          <button mat-button matSuffix type="button" class="suffix-button" (click)="togglePassword()">
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            [matTooltip]="getErrorMessage('password')"
+            [matTooltipDisabled]="!getErrorMessage('password')"
+            matTooltipPosition="above"
+            placeholder="Create a password"
+          />
+          <button
+            mat-button
+            matSuffix
+            type="button"
+            class="suffix-button"
+            (click)="togglePassword()"
+          >
             {{ hidePassword ? 'Show' : 'Hide' }}
           </button>
           @if (f['password'].touched && f['password'].invalid) {
@@ -62,8 +120,22 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Confirm password</mat-label>
-          <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" [matTooltip]="getErrorMessage('confirmPassword')" [matTooltipDisabled]="!getErrorMessage('confirmPassword')" matTooltipPosition="above" placeholder="Re-enter password">
-          <button mat-button matSuffix type="button" class="suffix-button" (click)="toggleConfirmPassword()">
+          <input
+            matInput
+            [type]="hideConfirmPassword ? 'password' : 'text'"
+            formControlName="confirmPassword"
+            [matTooltip]="getErrorMessage('confirmPassword')"
+            [matTooltipDisabled]="!getErrorMessage('confirmPassword')"
+            matTooltipPosition="above"
+            placeholder="Re-enter password"
+          />
+          <button
+            mat-button
+            matSuffix
+            type="button"
+            class="suffix-button"
+            (click)="toggleConfirmPassword()"
+          >
             {{ hideConfirmPassword ? 'Show' : 'Hide' }}
           </button>
           @if (f['confirmPassword'].touched && f['confirmPassword'].invalid) {
@@ -75,11 +147,18 @@
       <div class="strength-wrap">
         <div class="strength-meta">
           <span>Password strength:</span>
-          <strong [class.weak]="passwordStrength === 'Weak'" [class.medium]="passwordStrength === 'Medium'" [class.strong]="passwordStrength === 'Strong'">
+          <strong
+            [class.weak]="passwordStrength === 'Weak'"
+            [class.medium]="passwordStrength === 'Medium'"
+            [class.strong]="passwordStrength === 'Strong'"
+          >
             {{ passwordStrength }}
           </strong>
         </div>
-        <mat-progress-bar mode="determinate" [value]="passwordScore"></mat-progress-bar>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="passwordScore"
+        ></mat-progress-bar>
         <p class="muted helper-text">Use 8+ characters with upper, lower, number, and symbol.</p>
       </div>
 
@@ -87,7 +166,13 @@
         <div class="banner banner--error compact">Passwords do not match.</div>
       }
 
-      <button mat-flat-button color="primary" type="submit" class="submit-button" [disabled]="isSubmitting">
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        class="submit-button"
+        [disabled]="isSubmitting"
+      >
         @if (isSubmitting) {
           <mat-spinner diameter="20"></mat-spinner>
           <span>Creating account...</span>

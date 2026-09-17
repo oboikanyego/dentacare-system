@@ -1,25 +1,40 @@
 <section class="page-width admin-section">
-  <span class="eyebrow">Demo admin / Dashboard</span>
-  <h1>Demo clinic overview</h1>
-  <p class="lead">Portfolio counters for fictional bookings and demo users.</p>
+  <span class="eyebrow">Administration / Dashboard</span>
+  <h1>Clinic overview</h1>
+  <p class="lead">A live summary of bookings and active users.</p>
 
-  @if (errorMessage) {
-    <div class="alert error">{{ errorMessage }}</div>
+  @if (errorMessage()) {
+    <div class="alert error">{{ errorMessage() }}</div>
   }
 
-  @if (isLoading) {
+  @if (isLoading()) {
     <div class="stats-grid">
-      @for (item of [1,2,3,4,5]; track item) {
+      @for (item of [1, 2, 3, 4, 5]; track item) {
         <article class="card skeleton-card"></article>
       }
     </div>
   } @else {
     <div class="stats-grid">
-      <article class="card"><strong>{{ bookingsToday }}</strong><span>Demo bookings today</span></article>
-      <article class="card"><strong>{{ pendingCount }}</strong><span>Pending demo bookings</span></article>
-      <article class="card"><strong>{{ cancelledCount }}</strong><span>Cancelled demo bookings</span></article>
-      <article class="card"><strong>{{ completedCount }}</strong><span>Completed demo bookings</span></article>
-      <article class="card"><strong>{{ activeUsers }}</strong><span>Active demo users</span></article>
+      <article class="card">
+        <strong>{{ bookingsToday() }}</strong
+        ><span>Bookings today</span>
+      </article>
+      <article class="card">
+        <strong>{{ pendingCount() }}</strong
+        ><span>Pending bookings</span>
+      </article>
+      <article class="card">
+        <strong>{{ cancelledCount() }}</strong
+        ><span>Cancelled bookings</span>
+      </article>
+      <article class="card">
+        <strong>{{ completedCount() }}</strong
+        ><span>Completed bookings</span>
+      </article>
+      <article class="card">
+        <strong>{{ activeUsers() }}</strong
+        ><span>Active users</span>
+      </article>
     </div>
   }
 </section>

@@ -47,7 +47,7 @@
 .glow-ring {
   position: absolute;
   inset: -35%;
-  background: radial-gradient(circle, rgba(20,184,166,.24) 0%, rgba(20,184,166,0) 62%);
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.24) 0%, rgba(20, 184, 166, 0) 62%);
   animation: pulse-glow 1.8s ease-in-out infinite;
 }
 
@@ -57,15 +57,33 @@
   position: relative;
 }
 
-.welcome-card h2 { color: #0f172a; }
-.welcome-card p { color: #64748b; text-align: center; }
+.welcome-card h2 {
+  color: #0f172a;
+}
+.welcome-card p {
+  color: #64748b;
+  text-align: center;
+}
 
 @keyframes pulse-glow {
-  0%, 100% { transform: scale(0.92); opacity: 0.7; }
-  50% { transform: scale(1.06); opacity: 1; }
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
 }
 
 @keyframes welcome-pop {
-  from { transform: translateY(12px) scale(0.98); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
+  from {
+    transform: translateY(12px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
 }

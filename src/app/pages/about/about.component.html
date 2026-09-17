@@ -1,7 +1,10 @@
 <section class="page-width intro-section">
   <span class="eyebrow">About DentaCare</span>
   <h1>A patient-first dental experience built around trust, comfort, and clear communication.</h1>
-  <p>Meet the sample clinical team and see how DentaCare brings patient information, appointment booking, and clinic workflows into one place.</p>
+  <p>
+    Meet the sample clinical team and see how DentaCare brings patient information, appointment
+    booking, and clinic workflows into one place.
+  </p>
 </section>
 
 <section class="page-width about-grid">
@@ -16,10 +19,16 @@
   </article>
 
   <article class="about-card clinic-card">
-    <img src="https://images.unsplash.com/photo-1588776814546-daab30f310ce?auto=format&fit=crop&w=1200&q=80" alt="Modern dental clinic interior">
+    <img
+      src="https://images.unsplash.com/photo-1588776814546-daab30f310ce?auto=format&fit=crop&w=1200&q=80"
+      alt="Modern dental clinic interior"
+    />
     <div>
       <h2>A calm, modern clinic environment</h2>
-      <p>The interface is designed to support a welcoming patient experience before, during, and after an appointment.</p>
+      <p>
+        The interface is designed to support a welcoming patient experience before, during, and
+        after an appointment.
+      </p>
     </div>
   </article>
 </section>
@@ -33,7 +42,10 @@
   <div class="doctor-grid">
     @for (dentist of data.dentists; track dentist.name) {
       <article class="doctor-card">
-        <img [src]="dentist.image" [alt]="dentist.name">
+        <img
+          [src]="dentist.image"
+          [alt]="dentist.name"
+        />
         <div class="doctor-info">
           <h3>{{ dentist.name }}</h3>
           <p class="doctor-role">{{ dentist.role }}</p>
