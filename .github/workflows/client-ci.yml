@@ -6,9 +6,6 @@ on:
   push:
     branches: [main]
 
-permissions:
-  contents: write
-
 jobs:
   build-and-e2e:
     runs-on: ubuntu-latest
@@ -17,8 +14,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Use Node.js 20
         uses: actions/setup-node@v4
@@ -28,21 +23,6 @@ jobs:
 
       - name: Install application dependencies
         run: npm ci
-
-      - name: Apply Prettier formatting
-        if: github.event_name == 'pull_request'
-        run: npm run format
-
-      - name: Commit formatting sweep
-        if: github.event_name == 'pull_request'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src e2e scripts README.md package.json playwright.config.ts angular.json tsconfig*.json
-          if ! git diff --cached --quiet; then
-            git commit -m "style: apply Prettier across frontend"
-            git push origin HEAD:${{ github.head_ref }}
-          fi
 
       - name: Check formatting
         run: npm run format:check
