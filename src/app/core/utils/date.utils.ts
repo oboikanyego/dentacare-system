@@ -9,7 +9,9 @@ export function startOfToday(): Date {
 export function parseApiDate(value: string | Date | null | undefined): Date | null {
   if (!value) return null;
   if (value instanceof Date) {
-    return Number.isNaN(value.getTime()) ? null : new Date(value.getFullYear(), value.getMonth(), value.getDate());
+    return Number.isNaN(value.getTime())
+      ? null
+      : new Date(value.getFullYear(), value.getMonth(), value.getDate());
   }
 
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
