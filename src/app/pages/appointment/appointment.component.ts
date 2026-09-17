@@ -30,7 +30,11 @@ import { AuthService } from '../../core/services/auth.service';
 import { DentistService } from '../../core/services/dentist.service';
 import { MasterDataListResponse, MasterDataService } from '../../core/services/master-data.service';
 import { UiFeedbackService } from '../../core/services/ui-feedback.service';
-import { formatLocalDate, notPastDateValidator, startOfLocalDay } from '../../core/validators/date.validators';
+import {
+  formatLocalDate,
+  notPastDateValidator,
+  startOfLocalDay
+} from '../../core/validators/date.validators';
 
 type SearchableMasterDataField = 'branchId' | 'serviceId' | 'slotId';
 

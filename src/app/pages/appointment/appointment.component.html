@@ -5,7 +5,10 @@
 </section>
 
 <section class="page-width booking-section material-booking-layout">
-  <mat-card class="booking-copy card" appearance="outlined">
+  <mat-card
+    class="booking-copy card"
+    appearance="outlined"
+  >
     <h2>Booking steps</h2>
     <div class="booking-points">
       <article>
@@ -21,7 +24,10 @@
     </ul>
   </mat-card>
 
-  <mat-card class="booking-card material-booking-card" appearance="outlined">
+  <mat-card
+    class="booking-card material-booking-card"
+    appearance="outlined"
+  >
     <h2>Appointment details</h2>
     <p class="demo-input-notice">
       <strong>Portfolio note:</strong> Please use fictional personal and medical information when
@@ -57,7 +63,10 @@
             [matTooltipDisabled]="!getFieldError('branchId')"
           />
           @if (branchLoading()) {
-            <mat-spinner matSuffix diameter="18"></mat-spinner>
+            <mat-spinner
+              matSuffix
+              diameter="18"
+            ></mat-spinner>
           }
           <mat-autocomplete #branchAuto="matAutocomplete">
             @for (branch of branchOptions(); track branch.value) {
@@ -90,7 +99,10 @@
             [matTooltipDisabled]="!getFieldError('serviceId')"
           />
           @if (serviceLoading()) {
-            <mat-spinner matSuffix diameter="18"></mat-spinner>
+            <mat-spinner
+              matSuffix
+              diameter="18"
+            ></mat-spinner>
           }
           <mat-autocomplete #serviceAuto="matAutocomplete">
             @for (service of serviceOptions(); track service.value) {
@@ -125,7 +137,10 @@
             [matTooltipDisabled]="!getFieldError('dentistId')"
           />
           @if (dentistLoading()) {
-            <mat-spinner matSuffix diameter="18"></mat-spinner>
+            <mat-spinner
+              matSuffix
+              diameter="18"
+            ></mat-spinner>
           }
           <mat-autocomplete #dentistAuto="matAutocomplete">
             @for (dentist of dentistOptions(); track dentist._id) {
@@ -160,7 +175,10 @@
             [matTooltip]="getFieldError('date')"
             [matTooltipDisabled]="!getFieldError('date')"
           />
-          <mat-datepicker-toggle matIconSuffix [for]="appointmentDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="appointmentDatePicker"
+          ></mat-datepicker-toggle>
           <mat-datepicker #appointmentDatePicker></mat-datepicker>
           <mat-hint>Today or a future date only</mat-hint>
           @if (isFieldInvalid('date')) {
@@ -183,7 +201,10 @@
             [matTooltipDisabled]="!getFieldError('slotId')"
           />
           @if (timeLoading()) {
-            <mat-spinner matSuffix diameter="18"></mat-spinner>
+            <mat-spinner
+              matSuffix
+              diameter="18"
+            ></mat-spinner>
           }
           <mat-autocomplete #timeAuto="matAutocomplete">
             @for (slot of timeOptions(); track slot.value) {
