@@ -14,6 +14,20 @@ async function chooseFirstSelectOption(page: any, controlName: string) {
   await page.keyboard.press('Enter');
 }
 
+async function chooseFutureDate(page: any, days = 10) {
+  const target = new Date();
+  target.setHours(12, 0, 0, 0);
+  target.setDate(target.getDate() + days);
+  const ariaLabel = target.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  });
+
+  await page.getByLabel('Open calendar').click();
+  await page.getByRole('button', { name: ariaLabel, exact: true }).click();
+}
+
 test('staff booking uses live autocomplete and the protected staff endpoint', async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem('token', 'e2e-token');
@@ -60,6 +74,7 @@ test('staff booking uses live autocomplete and the protected staff endpoint', as
   await page.goto('/appointment');
   await expect(page.locator('[formcontrolname="patientName"]')).toHaveValue('');
   await expect(page.locator('[formcontrolname="email"]')).toHaveValue('');
+  await expect(page.locator('[formcontrolname="date"]')).toHaveAttribute('readonly', '');
 
   await page.getByPlaceholder('Search branches').fill('Main');
   await page.getByRole('option', { name: 'Main Clinic' }).click();
@@ -67,7 +82,7 @@ test('staff booking uses live autocomplete and the protected staff endpoint', as
   await page.getByRole('option', { name: 'Dental Check-up' }).click();
   await page.getByPlaceholder('Search dentists').fill('Sample');
   await page.getByRole('option', { name: 'Dr Sample' }).click();
-  await page.locator('[formcontrolname="date"]').fill('2099-12-20');
+  await chooseFutureDate(page);
   await page.getByPlaceholder('Search times').fill('09');
   await page.getByRole('option', { name: '09:00' }).click();
   await chooseFirstSelectOption(page, 'status');
