@@ -4,6 +4,7 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  DENTACARE_API_BASE_URL = "https://dentacare-api-c8mz.onrender.com/api"
 
 [[redirects]]
   from = "/*"
