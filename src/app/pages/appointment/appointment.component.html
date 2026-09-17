@@ -20,7 +20,7 @@
     <ul>
       <li>Search results are refreshed from the API as you type</li>
       <li>Signed-in patients can track and cancel their bookings</li>
-      <li>Overlapping bookings and out-of-hours bookings are blocked</li>
+      <li>Past dates, overlapping bookings, and out-of-hours bookings are blocked</li>
     </ul>
   </mat-card>
 
@@ -167,12 +167,21 @@
           <mat-label>Date</mat-label>
           <input
             matInput
-            type="date"
             formControlName="date"
+            [matDatepicker]="bookingDatePicker"
             [min]="minDate"
+            placeholder="Choose appointment date"
+            readonly
             [matTooltip]="getFieldError('date')"
             [matTooltipDisabled]="!getFieldError('date')"
           />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="bookingDatePicker"
+            aria-label="Open appointment date calendar"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #bookingDatePicker></mat-datepicker>
+          <mat-hint>Today or a future date only</mat-hint>
           @if (isFieldInvalid('date')) {
             <mat-error>{{ getFieldError('date') }}</mat-error>
           }
