@@ -74,7 +74,7 @@ test('staff booking uses live autocomplete and the protected staff endpoint', as
   await page.goto('/appointment');
   await expect(page.locator('[formcontrolname="patientName"]')).toHaveValue('');
   await expect(page.locator('[formcontrolname="email"]')).toHaveValue('');
-  await expect(page.locator('[formcontrolname="date"]')).toHaveAttribute('readonly', '');
+  await expect(page.locator('[formcontrolname="date"]')).toHaveAttribute('readonly', 'true');
 
   await page.getByPlaceholder('Search branches').fill('Main');
   await page.getByRole('option', { name: 'Main Clinic' }).click();
