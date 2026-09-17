@@ -1,32 +1,30 @@
 <section class="page-width intro-section">
-  <span class="eyebrow">Demo appointment booking</span>
-  <h1>Try the dental booking workflow.</h1>
-  <p>
-    Select a fictional branch, service, dentist, time, and notes to explore the portfolio flow. Do not enter real client or patient information.
-  </p>
+  <span class="eyebrow">Appointment booking</span>
+  <h1>Book your dental appointment.</h1>
+  <p>Select a branch, service, dentist, date, and time to complete your booking.</p>
 </section>
 
 <section class="page-width booking-section material-booking-layout">
   <mat-card class="booking-copy card" appearance="outlined">
-    <h2>Demo booking flow</h2>
+    <h2>Booking steps</h2>
     <div class="booking-points">
-      <article><strong>Step 1:</strong><span>Select a demo branch, service, and dentist</span></article>
-      <article><strong>Step 2:</strong><span>Choose a demo date, time, and duration</span></article>
-      <article><strong>Step 3:</strong><span>Submit the fictional appointment</span></article>
+      <article><strong>Step 1:</strong><span>Select a branch, service, and dentist</span></article>
+      <article><strong>Step 2:</strong><span>Choose a date, time, and duration</span></article>
+      <article><strong>Step 3:</strong><span>Confirm the appointment details</span></article>
     </div>
     <ul>
-      <li>Use fictional patient details only</li>
-      <li>Signed-in demo patients can track and cancel their bookings</li>
+      <li>Sample accounts are available for exploring the patient journey</li>
+      <li>Signed-in patients can track and cancel their bookings</li>
       <li>Overlapping bookings and out-of-hours bookings are blocked</li>
     </ul>
   </mat-card>
 
   <mat-card class="booking-card material-booking-card" appearance="outlined">
-    <h2>Book a demo appointment</h2>
-    <p class="demo-input-notice"><strong>Demo data only:</strong> Please do not enter real names, ID numbers, phone numbers, email addresses, medical details, or client information.</p>
+    <h2>Appointment details</h2>
+    <p class="demo-input-notice"><strong>Portfolio note:</strong> Please use fictional personal and medical information when trying the booking flow.</p>
 
     @if (isSignedIn()) {
-      <p class="signed-in-banner">Signed-in demo patients will have this booking linked to their demo account automatically.</p>
+      <p class="signed-in-banner">This appointment will be linked to your signed-in account automatically.</p>
     }
 
     @if (errorMessage) {
@@ -36,9 +34,9 @@
     <form class="booking-form material-booking-form" [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
       <div class="grid two-up">
         <mat-form-field appearance="outline">
-          <mat-label>Demo branch</mat-label>
+          <mat-label>Branch</mat-label>
           <mat-select formControlName="branchId" [matTooltip]="getFieldError('branchId')" [matTooltipDisabled]="!getFieldError('branchId')">
-            <mat-option value="">Select a demo branch</mat-option>
+            <mat-option value="">Select a branch</mat-option>
             @for (branch of branches; track branch.value) {
               <mat-option [value]="branch.value">{{ branch.label }}</mat-option>
             }
@@ -47,9 +45,9 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Demo appointment type</mat-label>
+          <mat-label>Appointment type</mat-label>
           <mat-select formControlName="serviceId" [matTooltip]="getFieldError('serviceId')" [matTooltipDisabled]="!getFieldError('serviceId')">
-            <mat-option value="">Select a demo service</mat-option>
+            <mat-option value="">Select a service</mat-option>
             @for (service of services; track service.value) {
               <mat-option [value]="service.value">{{ service.label }}</mat-option>
             }
@@ -60,9 +58,9 @@
 
       <div class="grid two-up">
         <mat-form-field appearance="outline">
-          <mat-label>Demo dentist</mat-label>
+          <mat-label>Dentist</mat-label>
           <mat-select formControlName="dentistId" [matTooltip]="getFieldError('dentistId')" [matTooltipDisabled]="!getFieldError('dentistId')">
-            <mat-option value="">Select a demo dentist</mat-option>
+            <mat-option value="">Select a dentist</mat-option>
             @for (dentist of dentists; track dentist._id) {
               <mat-option [value]="dentist._id">{{ dentist.name }} {{ dentist.specialization ? '· ' + dentist.specialization : '' }}</mat-option>
             }
@@ -112,56 +110,56 @@
 
       <div class="grid two-up">
         <mat-form-field appearance="outline">
-          <mat-label>Demo full name</mat-label>
-          <input matInput type="text" formControlName="patientName" placeholder="Demo Patient" [matTooltip]="getFieldError('patientName')" [matTooltipDisabled]="!getFieldError('patientName')">
+          <mat-label>Full name</mat-label>
+          <input matInput type="text" formControlName="patientName" placeholder="John Doe" [matTooltip]="getFieldError('patientName')" [matTooltipDisabled]="!getFieldError('patientName')">
           @if (isFieldInvalid('patientName')) { <mat-error>{{ getFieldError('patientName') }}</mat-error> }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Demo ID number</mat-label>
-          <input matInput type="text" formControlName="idNumber" placeholder="9001015009087" [matTooltip]="getFieldError('idNumber')" [matTooltipDisabled]="!getFieldError('idNumber')">
+          <mat-label>ID number</mat-label>
+          <input matInput type="text" formControlName="idNumber" placeholder="9001015009001" [matTooltip]="getFieldError('idNumber')" [matTooltipDisabled]="!getFieldError('idNumber')">
           @if (isFieldInvalid('idNumber')) { <mat-error>{{ getFieldError('idNumber') }}</mat-error> }
         </mat-form-field>
       </div>
 
       <div class="grid two-up">
         <mat-form-field appearance="outline">
-          <mat-label>Demo phone number</mat-label>
-          <input matInput type="tel" formControlName="phone" placeholder="0710000000" [matTooltip]="getFieldError('phone')" [matTooltipDisabled]="!getFieldError('phone')">
+          <mat-label>Phone number</mat-label>
+          <input matInput type="tel" formControlName="phone" placeholder="0710000101" [matTooltip]="getFieldError('phone')" [matTooltipDisabled]="!getFieldError('phone')">
           @if (isFieldInvalid('phone')) { <mat-error>{{ getFieldError('phone') }}</mat-error> }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Demo email</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="patient@dentacare.example" [matTooltip]="getFieldError('email')" [matTooltipDisabled]="!getFieldError('email')">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="john.doe@dentacare.example" [matTooltip]="getFieldError('email')" [matTooltipDisabled]="!getFieldError('email')">
           @if (isFieldInvalid('email')) { <mat-error>{{ getFieldError('email') }}</mat-error> }
         </mat-form-field>
       </div>
 
       <mat-form-field appearance="outline">
-        <mat-label>Demo reason for visit</mat-label>
-        <textarea matInput rows="3" formControlName="reason" placeholder="Example: routine demo check-up" [matTooltip]="getFieldError('reason')" [matTooltipDisabled]="!getFieldError('reason')"></textarea>
+        <mat-label>Reason for visit</mat-label>
+        <textarea matInput rows="3" formControlName="reason" placeholder="Example: routine check-up" [matTooltip]="getFieldError('reason')" [matTooltipDisabled]="!getFieldError('reason')"></textarea>
         @if (isFieldInvalid('reason')) { <mat-error>{{ getFieldError('reason') }}</mat-error> }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Demo additional notes</mat-label>
-        <textarea matInput rows="4" formControlName="notes" placeholder="Use fictional notes only"></textarea>
+        <mat-label>Additional notes</mat-label>
+        <textarea matInput rows="4" formControlName="notes" placeholder="Add any sample notes for the appointment"></textarea>
       </mat-form-field>
 
       @if (isStaff()) {
         <mat-form-field appearance="outline">
-          <mat-label>Demo internal notes</mat-label>
-          <textarea matInput rows="3" formControlName="internalNotes" placeholder="Use fictional staff notes only"></textarea>
+          <mat-label>Internal notes</mat-label>
+          <textarea matInput rows="3" formControlName="internalNotes" placeholder="Add staff notes"></textarea>
         </mat-form-field>
       }
 
       <button mat-flat-button color="primary" type="submit" class="submit-button" [disabled]="loading">
         @if (loading) {
           <mat-spinner diameter="20"></mat-spinner>
-          <span>Booking demo appointment...</span>
+          <span>Booking appointment...</span>
         } @else {
-          <span>Confirm demo appointment</span>
+          <span>Confirm appointment</span>
         }
       </button>
     </form>

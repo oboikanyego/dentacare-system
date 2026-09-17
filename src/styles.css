@@ -1,13 +1,7 @@
 @import '@angular/material/prebuilt-themes/azure-blue.css';
 
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -16,66 +10,71 @@ body {
   line-height: 1.5;
 }
 
-img {
-  max-width: 100%;
-  display: block;
-}
+img { max-width: 100%; display: block; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+main { min-width: 0; }
+p, li, td, th, summary, label, small { overflow-wrap: anywhere; }
+h1, h2, h3, h4, p { text-wrap: pretty; }
+table { max-width: 100%; }
 
-button,
-input,
 select,
+input,
 textarea {
-  font: inherit;
+  min-height: 46px;
 }
 
-button {
-  cursor: pointer;
+select {
+  appearance: none;
+  background-color: #fff;
+  background-image: linear-gradient(45deg, transparent 50%, #64748b 50%), linear-gradient(135deg, #64748b 50%, transparent 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 2.6rem !important;
+  color: #0f172a;
 }
 
-main {
-  min-width: 0;
-}
-
-p,
-li,
-td,
-th,
-summary,
-label,
-small {
-  overflow-wrap: anywhere;
-}
-
-h1,
-h2,
-h3,
-h4,
-p {
-  text-wrap: pretty;
-}
-
-table {
-  max-width: 100%;
+select:focus,
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #14b8a6 !important;
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.12);
 }
 
 .mdc-text-field--outlined {
   --mdc-outlined-text-field-container-shape: 14px;
+  --mdc-outlined-text-field-focus-outline-color: #14b8a6;
+  --mdc-outlined-text-field-hover-outline-color: #94a3b8;
 }
 
-.mat-mdc-card-outlined {
-  --mdc-outlined-card-container-shape: 24px;
+.mat-mdc-card-outlined { --mdc-outlined-card-container-shape: 24px; }
+
+.mat-mdc-select-panel {
+  border-radius: 16px !important;
+  padding: 0.4rem !important;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16) !important;
 }
 
-.app-snackbar-success .mdc-snackbar__surface {
-  background: #065f46 !important;
-  color: #fff !important;
+.mat-mdc-option {
+  min-height: 44px !important;
+  border-radius: 10px !important;
+  margin: 2px 0 !important;
+  color: #334155 !important;
 }
 
-.app-snackbar-error .mdc-snackbar__surface {
-  background: #991b1b !important;
-  color: #fff !important;
+.mat-mdc-option:hover:not(.mdc-list-item--disabled),
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  background: #ecfdf5 !important;
 }
 
-.mat-mdc-snack-bar-container .mat-mdc-button {
-  color: #fff !important;
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 24px !important;
+  overflow: hidden;
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.22) !important;
 }
+
+.app-snackbar-success .mdc-snackbar__surface { background: #065f46 !important; color: #fff !important; }
+.app-snackbar-error .mdc-snackbar__surface { background: #991b1b !important; color: #fff !important; }
+.mat-mdc-snack-bar-container .mat-mdc-button { color: #fff !important; }

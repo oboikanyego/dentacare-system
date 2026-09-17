@@ -1,7 +1,7 @@
 <section class="page-width intro-section">
-  <span class="eyebrow">Demo services</span>
-  <h1>Explore fictional treatment options and a polished service catalogue.</h1>
-  <p>Every service, procedure step and price on this page is mock content included to demonstrate the DentaCare portfolio experience.</p>
+  <span class="eyebrow">Services</span>
+  <h1>Explore treatment options for routine, cosmetic, restorative, and urgent dental care.</h1>
+  <p>Review common procedures, indicative pricing, and the typical steps involved before choosing an appointment.</p>
 </section>
 
 <section class="page-width service-grid">
@@ -10,14 +10,14 @@
       <span class="service-category">{{ service.category }}</span>
       <h2>{{ service.title }}</h2>
       <p>{{ service.description }}</p>
-      <h3>Demo procedure steps:</h3>
+      <h3>What to expect:</h3>
       <ul>
         @for (step of service.steps; track step) {
           <li>{{ step }}</li>
         }
       </ul>
       <div class="price-row">
-        <span>Indicative demo price:</span>
+        <span>Indicative price:</span>
         <strong>{{ service.price }}</strong>
       </div>
     </article>
@@ -26,8 +26,8 @@
 
 <section class="page-width gallery-section">
   <div class="section-heading">
-    <span class="eyebrow">Demo gallery</span>
-    <h2>Stock imagery demonstrates how treatment galleries could be presented.</h2>
+    <span class="eyebrow">Treatment gallery</span>
+    <h2>Illustrative examples of how treatment results can be presented.</h2>
   </div>
   <div class="gallery-grid">
     @for (item of data.gallery; track item.title) {

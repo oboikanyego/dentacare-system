@@ -55,7 +55,7 @@ test('submits a complete public demo appointment', async ({ page }) => {
   await page.locator('[formcontrolname="reason"]').fill('Demo routine check-up');
   await page.locator('[formcontrolname="notes"]').fill('Fictional test visit');
 
-  await page.getByRole('button', { name: 'Confirm demo appointment' }).click();
+  await page.getByRole('button', { name: 'Confirm appointment' }).click();
 
   await expect.poll(() => submittedBody).toBeTruthy();
   expect(submittedBody).toMatchObject({

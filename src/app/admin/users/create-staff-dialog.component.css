@@ -1,11 +1,10 @@
-.appointment-dialog {
+.staff-dialog {
   min-width: min(720px, calc(100vw - 32px));
   max-width: 100%;
-  background: #fff;
 }
 
 .dialog-heading {
-  padding: 1.5rem 1.5rem 0.65rem;
+  padding: 1.5rem 1.5rem 0.75rem;
   border-bottom: 1px solid #eef2f7;
 }
 
@@ -23,8 +22,6 @@
   margin: 0;
   padding: 0;
   color: #0f172a;
-  font-size: 1.45rem;
-  line-height: 1.2;
 }
 
 .dialog-heading p {
@@ -37,19 +34,13 @@
   max-height: 68vh;
 }
 
-.dialog-form {
-  display: grid;
-  gap: 1rem;
-}
-
-.grid.two-up {
+.form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
 
 mat-form-field { width: 100%; }
-textarea[matInput] { resize: vertical; min-height: 96px; }
 
 .dialog-actions {
   padding: 1rem 1.5rem 1.35rem !important;
@@ -58,16 +49,16 @@ textarea[matInput] { resize: vertical; min-height: 96px; }
 }
 
 .dialog-actions button {
-  min-width: 120px;
   min-height: 44px;
+  min-width: 130px;
   border-radius: 12px;
 }
 
 @media (max-width: 720px) {
-  .appointment-dialog { min-width: 0; width: 100%; }
+  .staff-dialog { min-width: 0; width: 100%; }
+  .form-grid { grid-template-columns: 1fr; }
   .dialog-heading { padding: 1.2rem 1rem 0.65rem; }
   .dialog-content { padding: 1rem 1rem 0.35rem !important; }
   .dialog-actions { padding: 0.9rem 1rem 1rem !important; flex-wrap: wrap; }
-  .grid.two-up { grid-template-columns: 1fr; }
   .dialog-actions button { width: 100%; }
 }

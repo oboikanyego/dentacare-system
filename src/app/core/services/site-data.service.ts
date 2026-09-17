@@ -47,41 +47,41 @@ export interface FaqItem {
 
 @Injectable({ providedIn: 'root' })
 export class SiteDataService {
-  readonly clinicName = 'DentaCare Demo Clinic';
-  readonly city = 'Johannesburg Demo';
-  readonly tagline = 'Portfolio demo for a modern dental practice';
-  readonly intro = 'A fictional dental-practice experience created to demonstrate online booking, role-based workflows, responsive UI, and clear patient communication.';
+  readonly clinicName = 'DentaCare';
+  readonly city = 'Johannesburg';
+  readonly tagline = 'Modern dental care, made simpler';
+  readonly intro = 'Book visits, explore services, and manage appointments through one clean patient and clinic experience.';
 
   readonly featuredServices = [
-    'Demo same-day checkups',
-    'Demo teeth cleaning',
-    'Demo whitening',
-    'Demo emergency care'
+    'Same-day checkups',
+    'Teeth cleaning',
+    'Teeth whitening',
+    'Emergency care'
   ];
 
   readonly dentists: DentistItem[] = [
     {
-      name: 'Dr. Maya Vale (Demo)',
-      role: 'Demo Family & Cosmetic Dentist',
-      qualifications: 'Demo BDS, DentaCare Clinical Institute',
-      experience: '12+ fictional years of family and cosmetic dentistry experience',
-      philosophy: 'Demo profile focused on gentle care, clear explanations, and comfort-first treatment planning.',
+      name: 'Dr. Maya Vale',
+      role: 'Family & Cosmetic Dentist',
+      qualifications: 'BDS, DentaCare Clinical Institute',
+      experience: '12+ years in family and cosmetic dentistry',
+      philosophy: 'Gentle care, clear explanations, and comfort-first treatment planning.',
       image: 'https://images.unsplash.com/photo-1612277795421-9bc7706a4a41?auto=format&fit=crop&w=900&q=80'
     },
     {
-      name: 'Dr. Theo Lane (Demo)',
-      role: 'Demo Restorative Dentist',
-      qualifications: 'Demo BChD, DentaCare Clinical Institute',
-      experience: '10+ fictional years of restorative and rehabilitation experience',
-      philosophy: 'Demo profile illustrating modern restorative workflows and patient-friendly treatment planning.',
+      name: 'Dr. Theo Lane',
+      role: 'Restorative Dentist',
+      qualifications: 'BChD, DentaCare Clinical Institute',
+      experience: '10+ years in restorative and rehabilitation care',
+      philosophy: 'Modern restorative workflows paired with practical, patient-friendly treatment planning.',
       image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=900&q=80'
     },
     {
-      name: 'Dr. Zuri Hart (Demo)',
-      role: 'Demo Orthodontic & Preventive Dentist',
-      qualifications: 'Demo BDS, DentaCare Clinical Institute',
-      experience: '9+ fictional years of alignment and preventive-care experience',
-      philosophy: 'Demo profile focused on preventive habits, alignment planning, and accessible patient education.',
+      name: 'Dr. Zuri Hart',
+      role: 'Orthodontic & Preventive Dentist',
+      qualifications: 'BDS, DentaCare Clinical Institute',
+      experience: '9+ years in alignment and preventive care',
+      philosophy: 'Preventive habits, thoughtful alignment planning, and accessible patient education.',
       image: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=900&q=80'
     }
   ];
@@ -90,138 +90,138 @@ export class SiteDataService {
     {
       category: 'General Dentistry',
       title: 'Checkups & Preventive Care',
-      description: 'Demo service content for routine examinations, diagnostics, and preventative cleaning workflows.',
-      steps: ['Demo consultation and oral exam', 'Demo cleaning and plaque removal', 'Demo prevention plan'],
-      price: 'Demo price: from R750'
+      description: 'Routine examinations, diagnostics, cleaning, and preventive guidance.',
+      steps: ['Consultation and oral exam', 'Cleaning and plaque removal', 'Personal prevention plan'],
+      price: 'From R750'
     },
     {
       category: 'General Dentistry',
       title: 'Fillings & Root Canal Care',
-      description: 'Demo service content showing a comfort-focused treatment journey for decay and infection.',
-      steps: ['Demo assessment and X-rays', 'Demo treatment planning', 'Demo restoration and aftercare'],
-      price: 'Demo price: from R950'
+      description: 'Comfort-focused treatment options for decay, sensitivity, and infection.',
+      steps: ['Assessment and X-rays', 'Treatment planning', 'Restoration and aftercare'],
+      price: 'From R950'
     },
     {
       category: 'Cosmetic Dentistry',
       title: 'Teeth Whitening & Veneers',
-      description: 'Demo cosmetic-service content for whitening and veneer planning within the portfolio experience.',
-      steps: ['Demo smile consultation', 'Demo shade and design planning', 'Demo treatment and review'],
-      price: 'Demo price: from R2 500'
+      description: 'Whitening and veneer planning designed around a natural-looking smile.',
+      steps: ['Smile consultation', 'Shade and design planning', 'Treatment and review'],
+      price: 'From R2 500'
     },
     {
       category: 'Restorative Dentistry',
       title: 'Crowns, Bridges & Implants',
-      description: 'Demo restorative-service content illustrating treatment planning and follow-up workflows.',
-      steps: ['Demo clinical assessment', 'Demo digital impressions', 'Demo placement and follow-up'],
-      price: 'Demo price: quote on consultation'
+      description: 'Restorative treatment planning focused on function, comfort, and long-term follow-up.',
+      steps: ['Clinical assessment', 'Digital impressions', 'Placement and follow-up'],
+      price: 'Quote on consultation'
     },
     {
       category: 'Orthodontics',
       title: 'Braces & Clear Aligners',
-      description: 'Demo orthodontic-service content for alignment planning and recurring progress reviews.',
-      steps: ['Demo orthodontic assessment', 'Demo custom treatment plan', 'Demo progress reviews'],
-      price: 'Demo price: from R1 250 / consult'
+      description: 'Alignment planning with structured progress reviews throughout treatment.',
+      steps: ['Orthodontic assessment', 'Custom treatment plan', 'Progress reviews'],
+      price: 'From R1 250 / consult'
     },
     {
       category: 'Emergency Dental Care',
       title: 'Urgent Dental Relief',
-      description: 'Demo emergency-service content for showcasing triage, stabilisation, and follow-up scheduling.',
-      steps: ['Demo emergency triage', 'Demo pain relief and stabilisation', 'Demo next-step treatment plan'],
-      price: 'Demo pricing available during booking'
+      description: 'Fast triage, stabilisation, and follow-up planning for urgent dental concerns.',
+      steps: ['Emergency triage', 'Pain relief and stabilisation', 'Next-step treatment plan'],
+      price: 'Pricing available during booking'
     }
   ];
 
   readonly reviews: ReviewItem[] = [
     {
-      name: 'Demo Patient A',
-      quote: 'Fictional testimonial used to demonstrate how patient feedback can be presented in the interface.',
-      service: 'Demo family dentistry'
+      name: 'John Doe',
+      quote: 'The booking process was simple, clear, and easy to follow from start to finish.',
+      service: 'Family dentistry'
     },
     {
-      name: 'Demo Patient B',
-      quote: 'Fictional testimonial showing a positive cosmetic-care journey and clear communication.',
-      service: 'Demo cosmetic dentistry'
+      name: 'Jane Doe',
+      quote: 'I liked how clearly the treatment options and appointment details were explained.',
+      service: 'Cosmetic dentistry'
     },
     {
-      name: 'Demo Patient C',
-      quote: 'Fictional testimonial showing how an urgent-care experience could be represented.',
-      service: 'Demo emergency care'
+      name: 'Sam Taylor',
+      quote: 'The urgent booking flow made it easy to understand the next available steps.',
+      service: 'Emergency care'
     }
   ];
 
   readonly pricing: PricingItem[] = [
-    { service: 'Dental cleaning', price: 'Demo R750' },
-    { service: 'White filling', price: 'Demo R950' },
-    { service: 'Emergency consultation', price: 'Demo R850' },
-    { service: 'Teeth whitening', price: 'Demo R2 500' },
-    { service: 'Orthodontic consultation', price: 'Demo R1 250' }
+    { service: 'Dental cleaning', price: 'R750' },
+    { service: 'White filling', price: 'R950' },
+    { service: 'Emergency consultation', price: 'R850' },
+    { service: 'Teeth whitening', price: 'R2 500' },
+    { service: 'Orthodontic consultation', price: 'R1 250' }
   ];
 
-  readonly medicalAids = ['Demo Health Plan A', 'Demo Health Plan B', 'Demo Health Plan C'];
-  readonly paymentOptions = ['Demo cash option', 'Demo card option', 'Demo EFT option', 'Demo health-plan claim'];
+  readonly medicalAids = ['Health Plan A', 'Health Plan B', 'Health Plan C'];
+  readonly paymentOptions = ['Cash', 'Card', 'EFT', 'Health-plan claim'];
 
   readonly gallery: GalleryItem[] = [
     {
-      title: 'Demo whitening refresh',
-      label: 'Illustrative portfolio gallery item',
+      title: 'Whitening refresh',
+      label: 'Illustrative sample result',
       image: 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=1200&q=80'
     },
     {
-      title: 'Demo smile makeover',
-      label: 'Illustrative portfolio gallery item',
+      title: 'Smile makeover',
+      label: 'Illustrative sample result',
       image: 'https://images.unsplash.com/photo-1588776814546-daab30f310ce?auto=format&fit=crop&w=1200&q=80'
     },
     {
-      title: 'Demo healthy alignment',
-      label: 'Illustrative portfolio gallery item',
+      title: 'Healthy alignment',
+      label: 'Illustrative sample result',
       image: 'https://images.unsplash.com/photo-1609840114035-3c981b782dfe?auto=format&fit=crop&w=1200&q=80'
     }
   ];
 
   readonly articles: BlogItem[] = [
     {
-      tag: 'Demo Dental Education',
+      tag: 'Dental Education',
       title: 'How to prevent cavities between appointments',
-      excerpt: 'Demo educational copy showing how clinic articles could be presented to visitors.'
+      excerpt: 'Practical oral-care habits that can help support a healthy routine between visits.'
     },
     {
-      tag: 'Demo Orthodontics',
+      tag: 'Orthodontics',
       title: 'When should children get braces assessed?',
-      excerpt: 'Demo educational copy for an orthodontic article card in this portfolio project.'
+      excerpt: 'A simple overview of when an orthodontic assessment may be worth discussing.'
     },
     {
-      tag: 'Demo Cosmetic Care',
+      tag: 'Cosmetic Care',
       title: 'Teeth whitening tips that protect enamel',
-      excerpt: 'Demo educational copy for a cosmetic-care article card in this portfolio project.'
+      excerpt: 'Things to consider before whitening and how to keep enamel care in mind.'
     }
   ];
 
   readonly faqs: FaqItem[] = [
     {
       question: 'Does teeth whitening hurt?',
-      answer: 'Demo answer: the application can present guidance here, but this portfolio content is not medical advice.'
+      answer: 'Sensitivity can vary. A clinician would normally discuss options based on the patient and treatment plan.'
     },
     {
       question: 'How often should I visit the dentist?',
-      answer: 'Demo answer: a real clinic would tailor this guidance to the patient and their clinical needs.'
+      answer: 'Visit frequency depends on the patient and their oral-health needs. A dentist can recommend an appropriate schedule.'
     },
     {
       question: 'Do you accept medical aid?',
-      answer: 'Demo answer: this portfolio build uses fictional health-plan options only.'
+      answer: 'The application includes sample health-plan options to demonstrate payment and claim workflows.'
     },
     {
       question: 'Can I book an emergency appointment?',
-      answer: 'Demo answer: the booking flow demonstrates how urgent appointment requests could be captured.'
+      answer: 'Yes. The booking flow includes urgent appointment scenarios and same-day availability where configured.'
     }
   ];
 
-  readonly formLinks = ['Demo new-patient form', 'Demo medical-history form', 'Demo consent form'];
+  readonly formLinks = ['New-patient form', 'Medical-history form', 'Consent form'];
 
   readonly contact = {
-    address: '100 Demo Avenue, Example Park, Johannesburg',
+    address: '100 Cedar Avenue, Parkview, Johannesburg',
     phone: '010 000 0000',
     emergencyPhone: '010 000 0001',
     email: 'hello@dentacare.example',
-    hours: 'Demo hours: Mon–Fri 08:00–17:00 · Sat 09:00–13:00'
+    hours: 'Mon–Fri 08:00–17:00 · Sat 09:00–13:00'
   };
 }

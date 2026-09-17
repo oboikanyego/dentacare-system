@@ -1,12 +1,12 @@
 <section class="page-width intro-section">
-  <span class="eyebrow">Demo contact page</span>
-  <h1>See how clinic contact details and patient questions can be presented clearly.</h1>
-  <p>Every address, phone number, email address, opening hour and emergency contact on this page is fictional portfolio data.</p>
+  <span class="eyebrow">Contact</span>
+  <h1>Get in touch with DentaCare.</h1>
+  <p>Find the clinic contact details, opening hours, and answers to common patient questions.</p>
 </section>
 
 <section class="page-width contact-grid">
   <article class="contact-card">
-    <h2>Demo contact summary</h2>
+    <h2>Contact details</h2>
     <ul class="contact-list">
       <li><strong>Address:</strong> <span>{{ data.contact.address }}</span></li>
       <li><strong>Phone:</strong> <span>{{ data.contact.phone }}</span></li>
@@ -17,16 +17,16 @@
   </article>
 
   <article class="map-card">
-    <span>Demo map area:</span>
-    <strong>No real clinic location is connected</strong>
-    <p>A real deployment could integrate a map provider here after supplying the required API configuration.</p>
+    <span>Location:</span>
+    <strong>Parkview, Johannesburg</strong>
+    <p>A map integration can be connected here for production use.</p>
   </article>
 </section>
 
 <section class="page-width faq-section">
   <div class="section-heading">
-    <span class="eyebrow">Demo FAQ</span>
-    <h2>Example questions show how patient information can be grouped and scanned.</h2>
+    <span class="eyebrow">Frequently asked questions</span>
+    <h2>Quick answers to common patient questions.</h2>
   </div>
   <div class="faq-list">
     @for (faq of data.faqs; track faq.question) {

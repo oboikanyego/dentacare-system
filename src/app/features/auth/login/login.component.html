@@ -8,14 +8,14 @@
     </div>
 
     <div class="brand-feature">
-      <h2>Sign in faster</h2>
+      <h2>Everything in one place</h2>
       <p>
-        Patients can track appointments, while reception, dentists, and admins can manage bookings and users from one place.
+        Patients can track appointments, while reception, dentists, and admins manage bookings and users from one workspace.
       </p>
       <div class="brand-pills">
         <span>Role-based access</span>
         <span>Appointment tracking</span>
-        <span>Secure access</span>
+        <span>Clinic workflows</span>
       </div>
     </div>
   </div>
@@ -25,6 +25,19 @@
       <p class="section-label">Welcome back</p>
       <h2>Login</h2>
       <p class="muted">Use your email and password to continue.</p>
+
+      <div class="sample-account-panel" aria-label="Sample accounts">
+        <div class="sample-account-copy">
+          <strong>Try a sample account</strong>
+          <span>Choose a role to fill the login details automatically.</span>
+        </div>
+        <div class="sample-account-grid">
+          <button type="button" class="sample-account-button" (click)="useSampleAccount('patient')">{{ sampleAccounts.patient.label }}</button>
+          <button type="button" class="sample-account-button" (click)="useSampleAccount('receptionist')">{{ sampleAccounts.receptionist.label }}</button>
+          <button type="button" class="sample-account-button" (click)="useSampleAccount('dentist')">{{ sampleAccounts.dentist.label }}</button>
+          <button type="button" class="sample-account-button" (click)="useSampleAccount('admin')">{{ sampleAccounts.admin.label }}</button>
+        </div>
+      </div>
 
       @if (errorMessage) {
         <div class="banner banner--error">{{ errorMessage }}</div>

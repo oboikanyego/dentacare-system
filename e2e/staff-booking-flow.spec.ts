@@ -1,5 +1,12 @@
 import { expect, test } from '@playwright/test';
 
+async function chooseFirstOption(page: any, controlName: string) {
+  const select = page.locator(`[formcontrolname="${controlName}"]`);
+  await select.click();
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+}
+
 test('staff booking uses the protected staff endpoint and does not prefill staff identity', async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem('token', 'e2e-token');
@@ -38,23 +45,18 @@ test('staff booking uses the protected staff endpoint and does not prefill staff
   await expect(page.locator('[formcontrolname="patientName"]')).toHaveValue('');
   await expect(page.locator('[formcontrolname="email"]')).toHaveValue('');
 
-  await page.locator('[formcontrolname="branchId"]').click();
-  await page.getByRole('option', { name: 'Demo Main Clinic' }).click();
-  await page.locator('[formcontrolname="serviceId"]').click();
-  await page.getByRole('option', { name: 'Demo Check-up' }).click();
-  await page.locator('[formcontrolname="dentistId"]').click();
-  await page.getByRole('option', { name: 'Dr Demo E2E' }).click();
+  await chooseFirstOption(page, 'branchId');
+  await chooseFirstOption(page, 'serviceId');
+  await chooseFirstOption(page, 'dentistId');
   await page.locator('[formcontrolname="date"]').fill('2099-12-20');
-  await page.locator('[formcontrolname="slotId"]').click();
-  await page.getByRole('option', { name: '09:00' }).click();
-  await page.locator('[formcontrolname="status"]').click();
-  await page.getByRole('option', { name: 'Confirmed' }).click();
+  await chooseFirstOption(page, 'slotId');
+  await chooseFirstOption(page, 'status');
   await page.locator('[formcontrolname="patientName"]').fill('E2E Demo Patient');
   await page.locator('[formcontrolname="idNumber"]').fill('0000000000000');
   await page.locator('[formcontrolname="phone"]').fill('0710000000');
   await page.locator('[formcontrolname="email"]').fill('patient@test.invalid');
   await page.locator('[formcontrolname="reason"]').fill('E2E demo booking');
 
-  await page.getByRole('button', { name: 'Confirm demo appointment' }).click();
+  await page.getByRole('button', { name: 'Confirm appointment' }).click();
   await expect.poll(() => requestUrl).toContain('/api/appointments/staff');
 });
