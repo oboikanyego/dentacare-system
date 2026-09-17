@@ -7,6 +7,15 @@ const masterData = {
   appointmentStatuses: [{ value: 'PENDING', label: 'Pending' }]
 };
 
+async function chooseFutureDate(page: any) {
+  const dateInput = page.locator('[formcontrolname="date"]');
+  await expect(dateInput).toHaveAttribute('readonly', '');
+  await page.locator('mat-datepicker-toggle button').click();
+  await expect(page.locator('.mat-calendar-body-disabled').first()).toBeVisible();
+  await page.locator('.mat-calendar-next-button').click();
+  await page.locator('.mat-calendar-body-cell:not(.mat-calendar-body-disabled)').first().click();
+}
+
 test('submits a complete public appointment using live autocomplete data', async ({ page }) => {
   await page.route('**/api/master-data/**', async (route) => {
     const url = new URL(route.request().url());
@@ -55,7 +64,7 @@ test('submits a complete public appointment using live autocomplete data', async
   await page.getByRole('option', { name: 'Dental Cleaning' }).click();
   await page.getByPlaceholder('Search dentists').fill('Maya');
   await page.getByRole('option', { name: /Dr Maya Vale/ }).click();
-  await page.locator('[formcontrolname="date"]').fill('2099-12-20');
+  await chooseFutureDate(page);
   await page.getByPlaceholder('Search times').fill('09');
   await page.getByRole('option', { name: '09:00' }).click();
 
@@ -85,5 +94,6 @@ test('submits a complete public appointment using live autocomplete data', async
     reason: 'Routine check-up',
     durationMinutes: 30
   });
+  expect(submittedBody?.['date']).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   await expect(page.getByText('Your appointment has been booked successfully.')).toBeVisible();
 });

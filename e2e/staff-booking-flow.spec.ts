@@ -14,6 +14,14 @@ async function chooseFirstSelectOption(page: any, controlName: string) {
   await page.keyboard.press('Enter');
 }
 
+async function chooseFutureDate(page: any) {
+  const dateInput = page.locator('[formcontrolname="date"]');
+  await expect(dateInput).toHaveAttribute('readonly', '');
+  await page.locator('mat-datepicker-toggle button').click();
+  await page.locator('.mat-calendar-next-button').click();
+  await page.locator('.mat-calendar-body-cell:not(.mat-calendar-body-disabled)').first().click();
+}
+
 test('staff booking uses live autocomplete and the protected staff endpoint', async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem('token', 'e2e-token');
@@ -67,7 +75,7 @@ test('staff booking uses live autocomplete and the protected staff endpoint', as
   await page.getByRole('option', { name: 'Dental Check-up' }).click();
   await page.getByPlaceholder('Search dentists').fill('Sample');
   await page.getByRole('option', { name: 'Dr Sample' }).click();
-  await page.locator('[formcontrolname="date"]').fill('2099-12-20');
+  await chooseFutureDate(page);
   await page.getByPlaceholder('Search times').fill('09');
   await page.getByRole('option', { name: '09:00' }).click();
   await chooseFirstSelectOption(page, 'status');
