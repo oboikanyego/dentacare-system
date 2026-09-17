@@ -1,15 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, WritableSignal, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   catchError,
   debounceTime,
@@ -28,6 +30,11 @@ import { AuthService } from '../../core/services/auth.service';
 import { DentistService } from '../../core/services/dentist.service';
 import { MasterDataListResponse, MasterDataService } from '../../core/services/master-data.service';
 import { UiFeedbackService } from '../../core/services/ui-feedback.service';
+import {
+  formatLocalDate,
+  notPastDateValidator,
+  startOfLocalDay
+} from '../../core/validators/date.validators';
 
 type SearchableMasterDataField = 'branchId' | 'serviceId' | 'slotId';
 
@@ -40,8 +47,10 @@ type SearchableMasterDataField = 'branchId' | 'serviceId' | 'slotId';
     MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
+    MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
+    MatNativeDateModule,
     MatProgressSpinnerModule,
     MatSelectModule,
     MatTooltipModule
@@ -83,13 +92,13 @@ export class AppointmentComponent implements OnInit {
   readonly dentistSearch = new FormControl('', { nonNullable: true });
   readonly timeSearch = new FormControl('', { nonNullable: true });
 
-  readonly minDate = this.getTodayDate();
+  readonly minDate = startOfLocalDay(new Date());
 
   readonly bookingForm = this.fb.group({
     serviceId: ['', Validators.required],
     dentistId: ['', Validators.required],
     branchId: ['', Validators.required],
-    date: ['', Validators.required],
+    date: [null as Date | null, [Validators.required, notPastDateValidator()]],
     slotId: ['', Validators.required],
     patientName: ['', Validators.required],
     phone: ['', [Validators.required, Validators.pattern(/^(?:\+27|0)[6-8][0-9]{8}$/)]],
@@ -203,7 +212,7 @@ export class AppointmentComponent implements OnInit {
       email: formValue.email ?? '',
       phone: formValue.phone ?? '',
       idNumber: formValue.idNumber ?? '',
-      date: formValue.date ?? '',
+      date: formatLocalDate(formValue.date),
       time: selectedSlot?.label || '',
       reason: formValue.reason ?? '',
       notes: formValue.notes ?? '',
@@ -261,6 +270,10 @@ export class AppointmentComponent implements OnInit {
     const field = this.bookingForm.get(fieldName);
     if (!field?.errors || !(field.dirty || field.touched)) return '';
     if (field.errors['required']) return 'This field is required.';
+    if (field.errors['pastDate'] || field.errors['matDatepickerMin']) {
+      return 'Choose today or a future date.';
+    }
+    if (field.errors['matDatepickerParse']) return 'Choose a valid date from the calendar.';
     if (field.errors['email']) return 'Enter a valid email address.';
     if (field.errors['pattern']) {
       if (fieldName === 'phone') return 'Use a valid South African mobile number.';
@@ -344,7 +357,7 @@ export class AppointmentComponent implements OnInit {
       serviceId: '',
       dentistId: '',
       branchId: '',
-      date: '',
+      date: null,
       slotId: '',
       durationMinutes: 30,
       reason: '',
@@ -361,13 +374,5 @@ export class AppointmentComponent implements OnInit {
     this.serviceSearch.setValue('');
     this.dentistSearch.setValue('');
     this.timeSearch.setValue('');
-  }
-
-  private getTodayDate(): string {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = `${today.getMonth() + 1}`.padStart(2, '0');
-    const day = `${today.getDate()}`.padStart(2, '0');
-    return `${year}-${month}-${day}`;
   }
 }

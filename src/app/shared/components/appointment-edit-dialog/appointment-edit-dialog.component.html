@@ -12,12 +12,28 @@
     >
       <div class="grid two-up">
         <mat-form-field appearance="outline">
-          <mat-label>Date</mat-label>
+          <mat-label>Appointment date</mat-label>
           <input
             matInput
-            type="date"
             formControlName="date"
+            [matDatepicker]="editDatePicker"
+            [min]="minDate"
+            readonly
+            placeholder="Choose a date"
           />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="editDatePicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #editDatePicker></mat-datepicker>
+          @if (historicalRecord) {
+            <mat-hint>Historical appointment dates are locked.</mat-hint>
+          } @else {
+            <mat-hint>Today or a future date only</mat-hint>
+          }
+          @if (getDateError()) {
+            <mat-error>{{ getDateError() }}</mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline">

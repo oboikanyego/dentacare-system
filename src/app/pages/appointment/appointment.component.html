@@ -164,15 +164,23 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Date</mat-label>
+          <mat-label>Appointment date</mat-label>
           <input
             matInput
-            type="date"
             formControlName="date"
+            [matDatepicker]="appointmentDatePicker"
             [min]="minDate"
+            readonly
+            placeholder="Choose a date"
             [matTooltip]="getFieldError('date')"
             [matTooltipDisabled]="!getFieldError('date')"
           />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="appointmentDatePicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #appointmentDatePicker></mat-datepicker>
+          <mat-hint>Today or a future date only</mat-hint>
           @if (isFieldInvalid('date')) {
             <mat-error>{{ getFieldError('date') }}</mat-error>
           }

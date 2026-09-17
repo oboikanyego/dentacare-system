@@ -7,6 +7,33 @@ const masterData = {
   appointmentStatuses: [{ value: 'PENDING', label: 'Pending' }]
 };
 
+function addDays(days: number): Date {
+  const date = new Date();
+  date.setHours(12, 0, 0, 0);
+  date.setDate(date.getDate() + days);
+  return date;
+}
+
+function toIsoDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+async function chooseFutureDate(page: any, days = 7): Promise<string> {
+  const target = addDays(days);
+  const ariaLabel = target.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  });
+
+  await page.getByLabel('Open calendar').click();
+  await page.getByRole('button', { name: ariaLabel, exact: true }).click();
+  return toIsoDate(target);
+}
+
 test('submits a complete public appointment using live autocomplete data', async ({ page }) => {
   await page.route('**/api/master-data/**', async (route) => {
     const url = new URL(route.request().url());
@@ -49,13 +76,19 @@ test('submits a complete public appointment using live autocomplete data', async
 
   await page.goto('/appointment');
 
+  const dateInput = page.locator('[formcontrolname="date"]');
+  await expect(dateInput).toHaveAttribute('readonly', 'true');
+  await page.getByLabel('Open calendar').click();
+  await expect(page.getByLabel('Previous month')).toBeDisabled();
+  await page.keyboard.press('Escape');
+
   await page.getByPlaceholder('Search branches').fill('Sand');
   await page.getByRole('option', { name: 'Sandton Clinic' }).click();
   await page.getByPlaceholder('Search services').fill('Clean');
   await page.getByRole('option', { name: 'Dental Cleaning' }).click();
   await page.getByPlaceholder('Search dentists').fill('Maya');
   await page.getByRole('option', { name: /Dr Maya Vale/ }).click();
-  await page.locator('[formcontrolname="date"]').fill('2099-12-20');
+  const selectedDate = await chooseFutureDate(page);
   await page.getByPlaceholder('Search times').fill('09');
   await page.getByRole('option', { name: '09:00' }).click();
 
@@ -76,6 +109,7 @@ test('submits a complete public appointment using live autocomplete data', async
     dentistName: 'Dr Maya Vale',
     branchId: 'sandton',
     branchName: 'Sandton Clinic',
+    date: selectedDate,
     slotId: '09:00',
     time: '09:00',
     patientName: 'John Doe',
