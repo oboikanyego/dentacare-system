@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { finalize } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { UiFeedbackService } from '../../../core/services/ui-feedback.service';
 
@@ -33,6 +35,7 @@ type SampleRole = 'patient' | 'receptionist' | 'dentist' | 'admin';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -81,21 +84,25 @@ export class LoginComponent {
     }
 
     this.isSubmitting = true;
-    this.authService.login(this.loginForm.getRawValue()).subscribe({
-      next: () => {
-        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-        this.uiFeedback.success('Login successful.');
-        this.uiFeedback.showWelcome('Welcome back');
-        this.router.navigateByUrl(returnUrl || this.authService.getLandingRoute());
-      },
-      error: (error) => {
-        this.errorMessage = error?.error?.message || 'Invalid email or password';
-        this.isSubmitting = false;
-      },
-      complete: () => {
-        this.isSubmitting = false;
-      }
-    });
+    this.authService
+      .login(this.loginForm.getRawValue())
+      .pipe(
+        finalize(() => {
+          this.isSubmitting = false;
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: () => {
+          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+          this.uiFeedback.success('Login successful.');
+          this.uiFeedback.showWelcome('Welcome back');
+          this.router.navigateByUrl(returnUrl || this.authService.getLandingRoute());
+        },
+        error: (error) => {
+          this.errorMessage = error?.error?.message || 'Invalid email or password';
+        }
+      });
   }
 
   togglePassword(): void {
@@ -105,7 +112,9 @@ export class LoginComponent {
   getErrorMessage(fieldName: 'email' | 'password'): string {
     const field = this.loginForm.get(fieldName);
     if (!field?.errors || !(field.touched || field.dirty)) return '';
-    if (field.errors['required']) return fieldName === 'email' ? 'Email is required.' : 'Password is required.';
+    if (field.errors['required']) {
+      return fieldName === 'email' ? 'Email is required.' : 'Password is required.';
+    }
     if (field.errors['email']) return 'Enter a valid email address.';
     return 'Check this field.';
   }
