@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { finalize } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { UiFeedbackService } from '../../../core/services/ui-feedback.service';
 
@@ -42,6 +50,7 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
@@ -52,14 +61,17 @@ export class RegisterComponent {
   hidePassword = true;
   hideConfirmPassword = true;
 
-  readonly form = this.fb.group({
-    name: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.pattern(/^(?:\+27|0)[6-8][0-9]{8}$/)]],
-    idNumber: ['', [Validators.required, Validators.pattern(/^\d{13}$/)]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(8)]]
-  }, { validators: passwordMatchValidator });
+  readonly form = this.fb.group(
+    {
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.pattern(/^(?:\+27|0)[6-8][0-9]{8}$/)]],
+      idNumber: ['', [Validators.required, Validators.pattern(/^\d{13}$/)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(8)]]
+    },
+    { validators: passwordMatchValidator }
+  );
 
   get f() {
     return this.form.controls;
@@ -91,22 +103,27 @@ export class RegisterComponent {
     }
 
     const { confirmPassword, ...payload } = this.form.getRawValue();
+    void confirmPassword;
 
     this.isSubmitting = true;
-    this.authService.register(payload as never).subscribe({
-      next: () => {
-        this.uiFeedback.success('Account created successfully.');
-        this.uiFeedback.showWelcome(this.authService.getCurrentUser()?.name);
-        this.router.navigateByUrl('/patient/appointments');
-      },
-      error: (error) => {
-        this.errorMessage = error?.error?.message || 'Unable to register';
-        this.isSubmitting = false;
-      },
-      complete: () => {
-        this.isSubmitting = false;
-      }
-    });
+    this.authService
+      .register(payload as never)
+      .pipe(
+        finalize(() => {
+          this.isSubmitting = false;
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: () => {
+          this.uiFeedback.success('Account created successfully.');
+          this.uiFeedback.showWelcome(this.authService.getCurrentUser()?.name);
+          this.router.navigateByUrl('/patient/appointments');
+        },
+        error: (error) => {
+          this.errorMessage = error?.error?.message || 'Unable to register';
+        }
+      });
   }
 
   togglePassword(): void {
