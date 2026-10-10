@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../constants/api-endpoints';
-import { Dentist } from '../models/dentist.model';
+import { Dentist, DentistAvailability } from '../models/dentist.model';
 import { ApiService } from './api.service';
 
 @Injectable({ providedIn: 'root' })
@@ -14,5 +14,9 @@ export class DentistService {
 
   getDentistById(id: string): Observable<Dentist> {
     return this.api.get<Dentist>(`${API_ENDPOINTS.dentists}/${id}`);
+  }
+
+  getDentistAvailability(id: string): Observable<DentistAvailability> {
+    return this.api.get<DentistAvailability>(`${API_ENDPOINTS.dentists}/${id}/availability`);
   }
 }

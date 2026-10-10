@@ -72,7 +72,33 @@
                     formControlName="sortOrder"
                   />
                 </div>
+                @if (isDentists) {
+                  <div class="form-field">
+                    <label>Specialization</label>
+                    <input
+                      formControlName="specialization"
+                      placeholder="e.g. Orthodontics"
+                    />
+                  </div>
+                }
               </div>
+              @if (isDentists) {
+                <div class="form-field">
+                  <label>Working days</label>
+                  <div class="day-toggles">
+                    @for (d of DAY_OPTIONS; track d.value) {
+                      <button
+                        type="button"
+                        class="day-btn"
+                        [class.selected]="isAddDaySelected(d.value)"
+                        (click)="toggleAddDay(d.value)"
+                      >
+                        {{ d.label }}
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
               <div class="form-actions">
                 <button
                   type="submit"
@@ -141,7 +167,30 @@
                                 style="width: auto; margin-top: 0.5rem"
                               />
                             </div>
+                            @if (isDentists) {
+                              <div class="form-field">
+                                <label>Specialization</label>
+                                <input formControlName="specialization" />
+                              </div>
+                            }
                           </div>
+                          @if (isDentists) {
+                            <div class="form-field">
+                              <label>Working days</label>
+                              <div class="day-toggles">
+                                @for (d of DAY_OPTIONS; track d.value) {
+                                  <button
+                                    type="button"
+                                    class="day-btn"
+                                    [class.selected]="isEditDaySelected(d.value)"
+                                    (click)="toggleEditDay(d.value)"
+                                  >
+                                    {{ d.label }}
+                                  </button>
+                                }
+                              </div>
+                            </div>
+                          }
                           <div class="form-actions">
                             <button
                               type="submit"

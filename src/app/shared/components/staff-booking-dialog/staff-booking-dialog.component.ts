@@ -21,7 +21,7 @@ import {
   switchMap,
   tap
 } from 'rxjs';
-import { Dentist } from '../../../core/models/dentist.model';
+import { Dentist, DentistSchedule } from '../../../core/models/dentist.model';
 import { MasterDataItem } from '../../../core/models/master-data.model';
 import { DentistService } from '../../../core/services/dentist.service';
 import {
@@ -60,6 +60,7 @@ export class StaffBookingDialogComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<StaffBookingDialogComponent>);
 
   readonly loading = signal(false);
+  readonly dentistSchedule = signal<DentistSchedule | null>(null);
   readonly branchOptions = signal<MasterDataItem[]>([]);
   readonly serviceOptions = signal<MasterDataItem[]>([]);
   readonly timeOptions = signal<MasterDataItem[]>([]);
@@ -147,7 +148,20 @@ export class StaffBookingDialogComponent implements OnInit {
     this.selectedDentist.set(dentist);
     this.form.controls.dentistId.setValue(dentist._id);
     this.dentistSearch.setValue(dentist.name, { emitEvent: false });
+    this.dentistSchedule.set(null);
+    this.form.controls.date.setValue(null);
+    this.dentistService
+      .getDentistAvailability(dentist._id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({ next: (r) => this.dentistSchedule.set(r.schedule), error: () => {} });
   }
+
+  isDateAvailable = (date: Date | null): boolean => {
+    const schedule = this.dentistSchedule();
+    if (!date) return true;
+    if (!schedule?.workingDays?.length) return true;
+    return schedule.workingDays.includes(date.getDay());
+  };
 
   submit(): void {
     if (this.form.invalid) {
