@@ -16,25 +16,75 @@
   } @else {
     <div class="stats-grid">
       <article class="card">
-        <strong>{{ bookingsToday() }}</strong
-        ><span>Bookings today</span>
+        <strong>{{ bookingsToday() }}</strong>
+        <span>Bookings today</span>
       </article>
       <article class="card">
-        <strong>{{ pendingCount() }}</strong
-        ><span>Pending bookings</span>
+        <strong>{{ pendingCount() }}</strong>
+        <span>Pending</span>
       </article>
       <article class="card">
-        <strong>{{ cancelledCount() }}</strong
-        ><span>Cancelled bookings</span>
+        <strong>{{ confirmedCount() }}</strong>
+        <span>Confirmed</span>
       </article>
       <article class="card">
-        <strong>{{ completedCount() }}</strong
-        ><span>Completed bookings</span>
+        <strong>{{ completedCount() }}</strong>
+        <span>Completed</span>
       </article>
       <article class="card">
-        <strong>{{ activeUsers() }}</strong
-        ><span>Active users</span>
+        <strong>{{ activeUsers() }}</strong>
+        <span>Active users</span>
       </article>
+    </div>
+
+    <div class="charts-row">
+      <div class="card chart-card">
+        <h2 class="chart-title">Bookings by status</h2>
+        @if (totalAppointments() === 0) {
+          <p class="no-data">No bookings yet.</p>
+        } @else {
+          <div class="bar-chart">
+            @for (bar of statusBars(); track bar.label) {
+              <div class="bar-row">
+                <span class="bar-label">{{ bar.label }}</span>
+                <div class="bar-track">
+                  <div
+                    class="bar-fill"
+                    [style.width.%]="bar.pct"
+                    [style.background]="bar.color"
+                  ></div>
+                </div>
+                <span class="bar-value"
+                  >{{ bar.count }} <small>({{ bar.pct }}%)</small></span
+                >
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="card chart-card">
+        <h2 class="chart-title">Recent bookings</h2>
+        @if (recentAppointments().length === 0) {
+          <p class="no-data">No bookings yet.</p>
+        } @else {
+          <ul class="recent-list">
+            @for (appt of recentAppointments(); track appt._id) {
+              <li class="recent-item">
+                <div class="recent-main">
+                  <span class="recent-service">{{ appt.serviceName }}</span>
+                  <span
+                    class="pill"
+                    [ngClass]="appt.status.toLowerCase().replace('_', '-')"
+                    >{{ appt.status }}</span
+                  >
+                </div>
+                <div class="recent-sub">{{ appt.date }} · {{ appt.dentistName }}</div>
+              </li>
+            }
+          </ul>
+        }
+      </div>
     </div>
   }
 </section>

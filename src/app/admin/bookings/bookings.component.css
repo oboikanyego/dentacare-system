@@ -5,6 +5,25 @@
 .section-header {
   margin: 24px 0;
 }
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.primary-button {
+  padding: 0.55rem 1.25rem;
+  background: var(--color-primary, #1e6be6);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.primary-button:hover {
+  opacity: 0.9;
+}
 .card,
 .table-card,
 .details-card {

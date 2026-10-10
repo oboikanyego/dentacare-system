@@ -30,4 +30,33 @@ export class MasterDataService {
       limit
     });
   }
+
+  addItem(
+    key: string,
+    item: { value: string; label: string; metadata?: Record<string, unknown>; sortOrder?: number }
+  ): Observable<MasterDataListResponse> {
+    return this.api.post<MasterDataListResponse>(`${API_ENDPOINTS.masterData}/${key}/items`, item);
+  }
+
+  updateItem(
+    key: string,
+    value: string,
+    updates: {
+      label?: string;
+      isActive?: boolean;
+      sortOrder?: number;
+      metadata?: Record<string, unknown>;
+    }
+  ): Observable<MasterDataListResponse> {
+    return this.api.patch<MasterDataListResponse>(
+      `${API_ENDPOINTS.masterData}/${key}/items/${encodeURIComponent(value)}`,
+      updates
+    );
+  }
+
+  deactivateItem(key: string, value: string): Observable<{ message: string; key: string }> {
+    return this.api.delete<{ message: string; key: string }>(
+      `${API_ENDPOINTS.masterData}/${key}/items/${encodeURIComponent(value)}`
+    );
+  }
 }

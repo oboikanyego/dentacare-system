@@ -1,0 +1,94 @@
+<section class="page-width profile-section">
+  <span class="eyebrow">Account</span>
+  <h1>My profile</h1>
+  <p class="lead">View and update your account details.</p>
+
+  @if (user(); as u) {
+    <div class="profile-grid">
+      <aside class="profile-card card">
+        <div class="avatar-circle">{{ u.name.charAt(0).toUpperCase() }}</div>
+        <h2>{{ u.name }}</h2>
+        <p class="role-pill">{{ u.role }}</p>
+        <dl>
+          <dt>Email</dt>
+          <dd>{{ u.email }}</dd>
+          @if (u.phone) {
+            <dt>Phone</dt>
+            <dd>{{ u.phone }}</dd>
+          }
+          @if (u.idNumber) {
+            <dt>ID Number</dt>
+            <dd>{{ u.idNumber }}</dd>
+          }
+        </dl>
+      </aside>
+
+      <div class="edit-card card">
+        <h2>Edit details</h2>
+
+        @if (successMessage()) {
+          <div class="alert success">{{ successMessage() }}</div>
+        }
+        @if (errorMessage()) {
+          <div class="alert error">{{ errorMessage() }}</div>
+        }
+
+        <form
+          [formGroup]="form"
+          (ngSubmit)="save()"
+          novalidate
+        >
+          <div
+            class="form-field"
+            [class.invalid]="isFieldInvalid('name')"
+          >
+            <label for="name">Full name <span class="required">*</span></label>
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              autocomplete="name"
+            />
+            @if (isFieldInvalid('name')) {
+              <span class="field-error">{{ getFieldError('name') }}</span>
+            }
+          </div>
+
+          <div
+            class="form-field"
+            [class.invalid]="isFieldInvalid('phone')"
+          >
+            <label for="phone">Mobile number</label>
+            <input
+              id="phone"
+              type="tel"
+              formControlName="phone"
+              autocomplete="tel"
+              placeholder="e.g. 0712345678"
+            />
+            @if (isFieldInvalid('phone')) {
+              <span class="field-error">{{ getFieldError('phone') }}</span>
+            }
+          </div>
+
+          <p class="readonly-note">
+            Email and ID number cannot be changed here. Contact your administrator if these need
+            updating.
+          </p>
+
+          <button
+            type="submit"
+            class="primary-button"
+            [disabled]="loading()"
+          >
+            @if (loading()) {
+              Saving…
+            } @else {
+              Save changes
+            }
+          </button>
+        </form>
+      </div>
+    </div>
+  }
+</section>

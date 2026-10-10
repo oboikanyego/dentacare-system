@@ -1,0 +1,80 @@
+.dialog-content {
+  padding: 1rem 1.5rem;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+.section-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #6b7280;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.section-label:first-child {
+  margin-top: 0;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0;
+}
+
+.form-field {
+  flex: 1 1 200px;
+  margin-bottom: 0.75rem;
+}
+
+.form-field.full {
+  flex: 1 1 100%;
+}
+
+.form-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.req {
+  color: #e53935;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: #1e6be6;
+}
+
+.form-field.invalid input,
+.form-field.invalid select {
+  border-color: #e53935;
+}
+
+.field-error {
+  display: block;
+  color: #e53935;
+  font-size: 0.78rem;
+  margin-top: 0.2rem;
+}

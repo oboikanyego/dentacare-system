@@ -1,0 +1,208 @@
+<section class="page-width master-data-section">
+  <span class="eyebrow">Administration</span>
+  <h1>Clinic data</h1>
+  <p class="lead">Manage services, branches, time slots, and dentists available for booking.</p>
+
+  @if (errorMessage()) {
+    <div class="alert error">{{ errorMessage() }}</div>
+  }
+
+  <div class="layout">
+    <nav class="collection-nav card">
+      @for (key of ['services', 'branches', 'timeSlots', 'dentists']; track key) {
+        <button
+          type="button"
+          class="nav-btn"
+          [class.active]="activeKey() === key"
+          (click)="selectKey(key)"
+        >
+          {{ collectionLabel(key) }}
+        </button>
+      }
+    </nav>
+
+    <div class="collection-panel">
+      @if (isLoading()) {
+        <div class="card skeleton-table"></div>
+      } @else if (activeCollection; as col) {
+        <div class="panel-header">
+          <h2>{{ collectionLabel(col.key) }}</h2>
+          <button
+            type="button"
+            class="primary-button"
+            (click)="startAdd()"
+          >
+            + Add item
+          </button>
+        </div>
+
+        @if (addingNew()) {
+          <div class="card form-card">
+            <h3>New item</h3>
+            <form
+              [formGroup]="addForm"
+              (ngSubmit)="submitAdd()"
+              novalidate
+            >
+              <div class="form-row">
+                <div class="form-field">
+                  <label>Value (slug) <span class="required">*</span></label>
+                  <input
+                    formControlName="value"
+                    placeholder="e.g. cleaning-pro"
+                  />
+                  @if (addForm.get('value')?.invalid && addForm.get('value')?.touched) {
+                    <span class="field-error">Lowercase letters, numbers, hyphens only.</span>
+                  }
+                </div>
+                <div class="form-field">
+                  <label>Label <span class="required">*</span></label>
+                  <input
+                    formControlName="label"
+                    placeholder="Display name"
+                  />
+                  @if (addForm.get('label')?.invalid && addForm.get('label')?.touched) {
+                    <span class="field-error">Required.</span>
+                  }
+                </div>
+                <div class="form-field narrow">
+                  <label>Sort order</label>
+                  <input
+                    type="number"
+                    formControlName="sortOrder"
+                  />
+                </div>
+              </div>
+              <div class="form-actions">
+                <button
+                  type="submit"
+                  class="primary-button"
+                  [disabled]="isSaving()"
+                >
+                  @if (isSaving()) {
+                    Saving…
+                  } @else {
+                    Add
+                  }
+                </button>
+                <button
+                  type="button"
+                  class="ghost-button"
+                  (click)="cancelAdd()"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        }
+
+        @if (col.items.length === 0) {
+          <div class="card empty-state">No items found.</div>
+        } @else {
+          <div class="table-card card">
+            <table class="items-table">
+              <thead>
+                <tr>
+                  <th>Label</th>
+                  <th>Value</th>
+                  <th>Sort</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of col.items; track item.value) {
+                  <tr>
+                    @if (editingItem()?.value === item.value) {
+                      <td colspan="5">
+                        <form
+                          [formGroup]="editForm"
+                          (ngSubmit)="submitEdit()"
+                          class="inline-edit"
+                        >
+                          <div class="form-row">
+                            <div class="form-field">
+                              <label>Label</label>
+                              <input formControlName="label" />
+                            </div>
+                            <div class="form-field narrow">
+                              <label>Sort</label>
+                              <input
+                                type="number"
+                                formControlName="sortOrder"
+                              />
+                            </div>
+                            <div class="form-field narrow">
+                              <label>Active</label>
+                              <input
+                                type="checkbox"
+                                formControlName="isActive"
+                                style="width: auto; margin-top: 0.5rem"
+                              />
+                            </div>
+                          </div>
+                          <div class="form-actions">
+                            <button
+                              type="submit"
+                              class="primary-button"
+                              [disabled]="isSaving()"
+                            >
+                              @if (isSaving()) {
+                                Saving…
+                              } @else {
+                                Save
+                              }
+                            </button>
+                            <button
+                              type="button"
+                              class="ghost-button"
+                              (click)="cancelEdit()"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </form>
+                      </td>
+                    } @else {
+                      <td>{{ item.label }}</td>
+                      <td class="mono">{{ item.value }}</td>
+                      <td>{{ item.sortOrder ?? '—' }}</td>
+                      <td>
+                        <span
+                          class="pill"
+                          [class.active]="item.isActive !== false"
+                          [class.inactive]="item.isActive === false"
+                        >
+                          {{ item.isActive !== false ? 'Active' : 'Inactive' }}
+                        </span>
+                      </td>
+                      <td class="action-row-cell">
+                        <button
+                          type="button"
+                          class="ghost-button"
+                          (click)="startEdit(item)"
+                        >
+                          Edit
+                        </button>
+                        @if (item.isActive !== false) {
+                          <button
+                            type="button"
+                            class="ghost-button danger"
+                            (click)="deactivate(item)"
+                          >
+                            Deactivate
+                          </button>
+                        }
+                      </td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    </div>
+  </div>
+</section>
