@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, Inject, OnInit, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,13 +11,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Appointment } from '../../../core/models/appointment.model';
+import { Appointment, AppointmentAuditEntry } from '../../../core/models/appointment.model';
 import { MasterDataItem } from '../../../core/models/master-data.model';
 import {
   formatLocalDate,
   notPastDateValidator,
   startOfLocalDay
 } from '../../../core/validators/date.validators';
+import { AppointmentService } from '../../../core/services/appointment.service';
 
 export interface AppointmentEditDialogData {
   title: string;
@@ -49,8 +51,13 @@ export interface AppointmentEditDialogData {
 export class AppointmentEditDialogComponent implements OnInit {
   form!: FormGroup;
   readonly minDate = startOfLocalDay(new Date());
+  activeTab: 'details' | 'history' = 'details';
+  readonly auditTrail = signal<AppointmentAuditEntry[]>([]);
+  readonly auditLoading = signal(false);
 
   private readonly fb = inject(FormBuilder);
+  private readonly appointmentService = inject(AppointmentService);
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public readonly data: AppointmentEditDialogData,
@@ -59,6 +66,29 @@ export class AppointmentEditDialogComponent implements OnInit {
 
   get historicalRecord(): boolean {
     return ['CANCELLED', 'COMPLETED', 'NO_SHOW'].includes(this.data.appointment?.status ?? '');
+  }
+
+  loadHistory(): void {
+    const id = this.data.appointment?._id;
+    if (!id) return;
+    this.auditLoading.set(true);
+    this.appointmentService
+      .getAppointment(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (appt) => {
+          this.auditTrail.set(appt.auditTrail ?? []);
+          this.auditLoading.set(false);
+        },
+        error: () => this.auditLoading.set(false)
+      });
+  }
+
+  switchTab(tab: 'details' | 'history'): void {
+    this.activeTab = tab;
+    if (tab === 'history' && this.auditTrail().length === 0) {
+      this.loadHistory();
+    }
   }
 
   ngOnInit(): void {
