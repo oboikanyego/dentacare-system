@@ -36,17 +36,64 @@ export class AdminMasterDataComponent implements OnInit {
   readonly addingNew = signal(false);
   readonly editingItem = signal<MasterDataItem | null>(null);
 
+  readonly DAY_OPTIONS = [
+    { value: 1, label: 'Mon' },
+    { value: 2, label: 'Tue' },
+    { value: 3, label: 'Wed' },
+    { value: 4, label: 'Thu' },
+    { value: 5, label: 'Fri' },
+    { value: 6, label: 'Sat' },
+    { value: 0, label: 'Sun' }
+  ];
+
   readonly addForm = this.fb.group({
     value: ['', [Validators.required, Validators.pattern(/^[a-z0-9-_]+$/)]],
     label: ['', Validators.required],
-    sortOrder: [0]
+    sortOrder: [0],
+    specialization: [''],
+    workingDays: [this.fb.array([])]
   });
 
   readonly editForm = this.fb.group({
     label: ['', Validators.required],
     isActive: [true],
-    sortOrder: [0]
+    sortOrder: [0],
+    specialization: [''],
+    workingDays: [this.fb.array([])]
   });
+
+  addWorkingDays: number[] = [1, 2, 3, 4, 5];
+  editWorkingDays: number[] = [1, 2, 3, 4, 5];
+
+  get isDentists(): boolean {
+    return this.activeKey() === 'dentists';
+  }
+
+  toggleAddDay(day: number): void {
+    const idx = this.addWorkingDays.indexOf(day);
+    if (idx >= 0) {
+      this.addWorkingDays = this.addWorkingDays.filter((d) => d !== day);
+    } else {
+      this.addWorkingDays = [...this.addWorkingDays, day].sort();
+    }
+  }
+
+  toggleEditDay(day: number): void {
+    const idx = this.editWorkingDays.indexOf(day);
+    if (idx >= 0) {
+      this.editWorkingDays = this.editWorkingDays.filter((d) => d !== day);
+    } else {
+      this.editWorkingDays = [...this.editWorkingDays, day].sort();
+    }
+  }
+
+  isAddDaySelected(day: number): boolean {
+    return this.addWorkingDays.includes(day);
+  }
+
+  isEditDaySelected(day: number): boolean {
+    return this.editWorkingDays.includes(day);
+  }
 
   get activeCollection(): CollectionView | undefined {
     return this.collections().find((c) => c.key === this.activeKey());
@@ -96,10 +143,12 @@ export class AdminMasterDataComponent implements OnInit {
   startAdd(): void {
     this.addingNew.set(true);
     this.editingItem.set(null);
+    this.addWorkingDays = [1, 2, 3, 4, 5];
     this.addForm.reset({
       value: '',
       label: '',
-      sortOrder: (this.activeCollection?.items.length ?? 0) + 1
+      sortOrder: (this.activeCollection?.items.length ?? 0) + 1,
+      specialization: ''
     });
   }
 
@@ -114,11 +163,21 @@ export class AdminMasterDataComponent implements OnInit {
       return;
     }
 
-    const { value, label, sortOrder } = this.addForm.getRawValue();
+    const { value, label, sortOrder, specialization } = this.addForm.getRawValue();
+    const metadata: Record<string, unknown> = {};
+    if (this.isDentists) {
+      if (specialization) metadata['specialization'] = specialization;
+      metadata['schedule'] = { workingDays: this.addWorkingDays };
+    }
     this.isSaving.set(true);
 
     this.masterDataService
-      .addItem(this.activeKey(), { value: value!, label: label!, sortOrder: sortOrder ?? 0 })
+      .addItem(this.activeKey(), {
+        value: value!,
+        label: label!,
+        sortOrder: sortOrder ?? 0,
+        metadata: Object.keys(metadata).length ? metadata : undefined
+      })
       .pipe(
         finalize(() => this.isSaving.set(false)),
         takeUntilDestroyed(this.destroyRef)
@@ -139,10 +198,13 @@ export class AdminMasterDataComponent implements OnInit {
   startEdit(item: MasterDataItem): void {
     this.editingItem.set(item);
     this.addingNew.set(false);
+    const existingDays: number[] = item.metadata?.['schedule']?.['workingDays'] ?? [1, 2, 3, 4, 5];
+    this.editWorkingDays = [...existingDays];
     this.editForm.patchValue({
       label: item.label,
       isActive: item.isActive !== false,
-      sortOrder: item.sortOrder ?? 0
+      sortOrder: item.sortOrder ?? 0,
+      specialization: (item.metadata?.['specialization'] as string) ?? ''
     });
   }
 
@@ -154,15 +216,22 @@ export class AdminMasterDataComponent implements OnInit {
     const item = this.editingItem();
     if (!item || this.editForm.invalid) return;
 
-    const { label, isActive, sortOrder } = this.editForm.getRawValue();
+    const { label, isActive, sortOrder, specialization } = this.editForm.getRawValue();
+    const updates: Parameters<typeof this.masterDataService.updateItem>[2] = {
+      label: label!,
+      isActive: isActive!,
+      sortOrder: sortOrder ?? 0
+    };
+    if (this.isDentists) {
+      const metadata: Record<string, unknown> = { ...(item.metadata as Record<string, unknown>) };
+      if (specialization) metadata['specialization'] = specialization;
+      metadata['schedule'] = { workingDays: this.editWorkingDays };
+      updates.metadata = metadata;
+    }
     this.isSaving.set(true);
 
     this.masterDataService
-      .updateItem(this.activeKey(), item.value, {
-        label: label!,
-        isActive: isActive!,
-        sortOrder: sortOrder ?? 0
-      })
+      .updateItem(this.activeKey(), item.value, updates)
       .pipe(
         finalize(() => this.isSaving.set(false)),
         takeUntilDestroyed(this.destroyRef)

@@ -148,7 +148,10 @@
           matIconSuffix
           [for]="picker"
         ></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
+        <mat-datepicker
+          #picker
+          [dateFilter]="isDateAvailable"
+        ></mat-datepicker>
         @if (isFieldInvalid('date')) {
           <span class="field-error">{{ getFieldError('date') }}</span>
         }

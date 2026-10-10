@@ -246,3 +246,31 @@
   color: #991b1b;
   border: 1px solid #fecaca;
 }
+
+.day-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.day-btn {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #374151;
+  transition:
+    background 0.12s,
+    border-color 0.12s,
+    color 0.12s;
+}
+
+.day-btn.selected {
+  background: #1e6be6;
+  border-color: #1e6be6;
+  color: #fff;
+}
