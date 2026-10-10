@@ -28,6 +28,10 @@ export class AppointmentService {
     return this.api.post<Appointment>(`${API_ENDPOINTS.appointments}/staff`, payload);
   }
 
+  getAppointment(id: string): Observable<Appointment> {
+    return this.api.get<Appointment>(`${API_ENDPOINTS.appointments}/${id}`);
+  }
+
   updateAppointment(
     id: string,
     payload: Partial<Appointment> & { auditNote?: string }

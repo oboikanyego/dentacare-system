@@ -1,6 +1,7 @@
 export interface AppointmentAuditEntry {
   action: string;
   byUserId?: string | null;
+  byUserName?: string | null;
   byRole?: string;
   note?: string;
   createdAt?: string;
