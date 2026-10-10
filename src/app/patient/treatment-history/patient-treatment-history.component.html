@@ -1,0 +1,77 @@
+<section class="history-section">
+  <div class="container">
+    <h1>My Treatment History</h1>
+    <p class="subtitle">A record of your past dental visits and treatment notes.</p>
+
+    @if (isLoading()) {
+      <div class="skeleton-list">
+        @for (i of [1, 2, 3]; track i) {
+          <div class="skeleton-card"></div>
+        }
+      </div>
+    } @else if (errorMessage()) {
+      <div class="alert error">{{ errorMessage() }}</div>
+    } @else if (notes().length === 0) {
+      <div class="empty-state">
+        <p>No treatment history yet. Your records will appear here after completed appointments.</p>
+      </div>
+    } @else {
+      <div class="notes-list">
+        @for (note of notes(); track note._id) {
+          <div
+            class="note-card"
+            [class.expanded]="expandedId() === note._id"
+          >
+            <button
+              type="button"
+              class="note-header"
+              (click)="toggle(note._id!)"
+            >
+              <div class="note-summary">
+                <span class="note-date">{{ note.date }}</span>
+                <span class="note-service">{{ note.serviceName }}</span>
+                <span class="note-dentist">Dr. {{ note.dentistName }}</span>
+              </div>
+              <span class="chevron">{{ expandedId() === note._id ? '▲' : '▼' }}</span>
+            </button>
+
+            @if (expandedId() === note._id) {
+              <div class="note-body">
+                @if (note.diagnosis) {
+                  <div class="note-field">
+                    <span class="field-label">Diagnosis</span>
+                    <span class="field-value">{{ note.diagnosis }}</span>
+                  </div>
+                }
+                @if (note.treatment) {
+                  <div class="note-field">
+                    <span class="field-label">Treatment</span>
+                    <span class="field-value">{{ note.treatment }}</span>
+                  </div>
+                }
+                @if (note.prescription) {
+                  <div class="note-field">
+                    <span class="field-label">Prescription</span>
+                    <span class="field-value">{{ note.prescription }}</span>
+                  </div>
+                }
+                @if (note.followUpDate) {
+                  <div class="note-field">
+                    <span class="field-label">Follow-up</span>
+                    <span class="field-value">{{ note.followUpDate }}</span>
+                  </div>
+                }
+                @if (note.notes) {
+                  <div class="note-field">
+                    <span class="field-label">Additional notes</span>
+                    <span class="field-value">{{ note.notes }}</span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

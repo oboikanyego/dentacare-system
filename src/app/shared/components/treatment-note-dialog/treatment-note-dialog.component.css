@@ -1,0 +1,59 @@
+.note-dialog {
+  min-width: min(640px, calc(100vw - 32px));
+  max-width: 100%;
+}
+
+.dialog-heading {
+  padding: 1.5rem 1.5rem 0.65rem;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.dialog-kicker {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  color: #0f766e;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dialog-heading h2 {
+  margin: 0 0 0.2rem;
+  font-size: 1.1rem;
+}
+
+.dialog-heading p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.dialog-content {
+  padding: 1.25rem 1.5rem !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .half {
+  flex: 1 1 200px;
+}
+
+.req {
+  color: #e53935;
+}
+
+.dialog-actions {
+  padding: 0.75rem 1.5rem 1.25rem !important;
+  gap: 0.5rem;
+}

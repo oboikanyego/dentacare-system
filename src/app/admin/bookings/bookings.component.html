@@ -102,6 +102,15 @@
                   >
                     Edit / Reschedule
                   </button>
+                  @if (appointment.status === 'COMPLETED') {
+                    <button
+                      type="button"
+                      class="ghost-button accent"
+                      (click)="addTreatmentNote(appointment)"
+                    >
+                      + Note
+                    </button>
+                  }
                   @if (canCancel(appointment.status)) {
                     <button
                       type="button"

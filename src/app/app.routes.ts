@@ -14,6 +14,7 @@ import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-
 import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
 import { ProfileComponent } from './features/profile/profile.component';
 import { PatientAppointmentsComponent } from './patient/appointments/patient-appointments.component';
+import { PatientTreatmentHistoryComponent } from './patient/treatment-history/patient-treatment-history.component';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 
@@ -39,6 +40,13 @@ export const routes: Routes = [
     path: 'patient/appointments',
     component: PatientAppointmentsComponent,
     title: 'DentaCare | My Appointments',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['PATIENT'] }
+  },
+  {
+    path: 'patient/treatment-history',
+    component: PatientTreatmentHistoryComponent,
+    title: 'DentaCare | My Treatment History',
     canActivate: [authGuard, roleGuard],
     data: { roles: ['PATIENT'] }
   },

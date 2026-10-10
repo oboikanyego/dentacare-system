@@ -1,0 +1,103 @@
+<div class="note-dialog">
+  <div class="dialog-heading">
+    <span class="dialog-kicker">Treatment Note</span>
+    <h2 mat-dialog-title>Record treatment for {{ data.appointment.patientName }}</h2>
+    <p>
+      {{ data.appointment.serviceName }} &middot; {{ data.appointment.dentistName }} &middot;
+      {{ data.appointment.date }}
+    </p>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <form
+      [formGroup]="form"
+      novalidate
+    >
+      <mat-form-field appearance="outline">
+        <mat-label>Diagnosis <span class="req">*</span></mat-label>
+        <textarea
+          matInput
+          rows="3"
+          formControlName="diagnosis"
+          placeholder="Clinical findings and diagnosis"
+        ></textarea>
+        @if (isFieldInvalid('diagnosis')) {
+          <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Treatment performed <span class="req">*</span></mat-label>
+        <textarea
+          matInput
+          rows="3"
+          formControlName="treatment"
+          placeholder="Procedures carried out"
+        ></textarea>
+        @if (isFieldInvalid('treatment')) {
+          <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Prescription</mat-label>
+        <textarea
+          matInput
+          rows="2"
+          formControlName="prescription"
+          placeholder="Medications prescribed (optional)"
+        ></textarea>
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field
+          appearance="outline"
+          class="half"
+        >
+          <mat-label>Follow-up date</mat-label>
+          <input
+            matInput
+            type="date"
+            formControlName="followUpDate"
+          />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Additional notes</mat-label>
+        <textarea
+          matInput
+          rows="2"
+          formControlName="notes"
+          placeholder="Anything else relevant"
+        ></textarea>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions
+    class="dialog-actions"
+    align="end"
+  >
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="dialogRef.close()"
+    >
+      Cancel
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      [disabled]="loading()"
+      (click)="save()"
+    >
+      @if (loading()) {
+        Saving…
+      } @else {
+        Save note
+      }
+    </button>
+  </mat-dialog-actions>
+</div>
