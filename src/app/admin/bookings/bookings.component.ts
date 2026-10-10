@@ -159,8 +159,6 @@ export class BookingsComponent implements OnInit {
       });
   }
 
-  saveDetails(): void {}
-
   reschedule(appointment: Appointment): void {
     if (!appointment._id) return;
 
