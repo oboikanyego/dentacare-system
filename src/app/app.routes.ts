@@ -3,6 +3,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { BookingsComponent } from './admin/bookings/bookings.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { UsersComponent } from './admin/users/users.component';
+import { AdminMasterDataComponent } from './admin/master-data/master-data.component';
 import { AppointmentComponent } from './pages/appointment/appointment.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -11,6 +12,7 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
+import { ProfileComponent } from './features/profile/profile.component';
 import { PatientAppointmentsComponent } from './patient/appointments/patient-appointments.component';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
@@ -60,6 +62,19 @@ export const routes: Routes = [
     title: 'DentaCare | User Management',
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ADMIN'] }
+  },
+  {
+    path: 'admin/master-data',
+    component: AdminMasterDataComponent,
+    title: 'DentaCare | Clinic Data',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMIN'] }
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    title: 'DentaCare | My Profile',
+    canActivate: [authGuard]
   },
   { path: '**', redirectTo: '' }
 ];

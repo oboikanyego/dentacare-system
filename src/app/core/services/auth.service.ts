@@ -46,6 +46,20 @@ export class AuthService {
     );
   }
 
+  updateProfile(payload: {
+    name?: string;
+    phone?: string;
+  }): Observable<{ message: string; user: AuthUser }> {
+    return this.api
+      .patch<{ message: string; user: AuthUser }>(API_ENDPOINTS.auth.profile, payload)
+      .pipe(
+        tap((res) => {
+          localStorage.setItem('user', JSON.stringify(res.user));
+          this.currentUser.set(res.user);
+        })
+      );
+  }
+
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

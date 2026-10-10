@@ -68,6 +68,11 @@
         routerLinkActive="active"
         >Users</a
       >
+      <a
+        routerLink="/admin/master-data"
+        routerLinkActive="active"
+        >Clinic Data</a
+      >
     }
   </nav>
 
@@ -88,7 +93,7 @@
 
         @if (profileOpen()) {
           <div class="profile-dropdown">
-            <strong>Account</strong>
+            <strong>{{ user()?.name }}</strong>
             <span><b>Role:</b> {{ user()?.role }}</span>
             <button
               class="ghost-button"
@@ -97,6 +102,12 @@
             >
               Open dashboard
             </button>
+            <a
+              class="ghost-button"
+              routerLink="/profile"
+              (click)="closeProfile()"
+              >My profile</a
+            >
             <button
               class="cta-button"
               type="button"
@@ -189,11 +200,21 @@
         (click)="closeMenu()"
         >Users</a
       >
+      <a
+        routerLink="/admin/master-data"
+        (click)="closeMenu()"
+        >Clinic Data</a
+      >
     }
 
     @if (user()) {
+      <a
+        routerLink="/profile"
+        (click)="closeMenu()"
+        >My profile</a
+      >
       <div class="mobile-user-card">
-        <strong>Signed in</strong>
+        <strong>{{ user()?.name }}</strong>
         <span><b>Role:</b> {{ user()?.role }}</span>
       </div>
       <button

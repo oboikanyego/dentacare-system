@@ -10,4 +10,4 @@ export const API_ENDPOINTS = {
   users: '/users',
   masterData: '/master-data',
   dentists: '/dentists'
-};
+} as const;

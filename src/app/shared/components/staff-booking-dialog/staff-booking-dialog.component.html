@@ -1,0 +1,259 @@
+<h2 mat-dialog-title>New booking</h2>
+
+<mat-dialog-content class="dialog-content">
+  <form
+    [formGroup]="form"
+    novalidate
+  >
+    <p class="section-label">Patient details</p>
+    <div class="form-row">
+      <div
+        class="form-field"
+        [class.invalid]="isFieldInvalid('patientName')"
+      >
+        <label>Full name <span class="req">*</span></label>
+        <input
+          formControlName="patientName"
+          type="text"
+        />
+        @if (isFieldInvalid('patientName')) {
+          <span class="field-error">{{ getFieldError('patientName') }}</span>
+        }
+      </div>
+      <div
+        class="form-field"
+        [class.invalid]="isFieldInvalid('idNumber')"
+      >
+        <label>ID number <span class="req">*</span></label>
+        <input
+          formControlName="idNumber"
+          type="text"
+        />
+        @if (isFieldInvalid('idNumber')) {
+          <span class="field-error">{{ getFieldError('idNumber') }}</span>
+        }
+      </div>
+    </div>
+    <div class="form-row">
+      <div
+        class="form-field"
+        [class.invalid]="isFieldInvalid('email')"
+      >
+        <label>Email <span class="req">*</span></label>
+        <input
+          formControlName="email"
+          type="email"
+        />
+        @if (isFieldInvalid('email')) {
+          <span class="field-error">{{ getFieldError('email') }}</span>
+        }
+      </div>
+      <div
+        class="form-field"
+        [class.invalid]="isFieldInvalid('phone')"
+      >
+        <label>Phone <span class="req">*</span></label>
+        <input
+          formControlName="phone"
+          type="tel"
+        />
+        @if (isFieldInvalid('phone')) {
+          <span class="field-error">{{ getFieldError('phone') }}</span>
+        }
+      </div>
+    </div>
+
+    <p class="section-label">Appointment details</p>
+    <div class="form-row">
+      <div
+        class="form-field"
+        [class.invalid]="isFieldInvalid('serviceId')"
+      >
+        <label>Service <span class="req">*</span></label>
+        <input
+          [formControl]="serviceSearch"
+          [matAutocomplete]="serviceAuto"
+          placeholder="Search service…"
+        />
+        <mat-autocomplete
+          #serviceAuto
+          (optionSelected)="selectService($event.option.value)"
+        >
+          @for (opt of serviceOptions(); track opt.value) {
+            <mat-option [value]="opt">{{ opt.label }}</mat-option>
+          }
+        </mat-autocomplete>
+        @if (isFieldInvalid('serviceId')) {
+          <span class="field-error">{{ getFieldError('serviceId') }}</span>
+        }
+      </div>
+      <div
+        class="form-field"
+        [class.invalid]="isFieldInvalid('dentistId')"
+      >
+        <label>Dentist <span class="req">*</span></label>
+        <input
+          [formControl]="dentistSearch"
+          [matAutocomplete]="dentistAuto"
+          placeholder="Search dentist…"
+        />
+        <mat-autocomplete
+          #dentistAuto
+          (optionSelected)="selectDentist($event.option.value)"
+        >
+          @for (opt of dentistOptions(); track opt._id) {
+            <mat-option [value]="opt">{{ opt.name }}</mat-option>
+          }
+        </mat-autocomplete>
+        @if (isFieldInvalid('dentistId')) {
+          <span class="field-error">{{ getFieldError('dentistId') }}</span>
+        }
+      </div>
+    </div>
+    <div class="form-row">
+      <div
+        class="form-field"
+        [class.invalid]="isFieldInvalid('branchId')"
+      >
+        <label>Branch <span class="req">*</span></label>
+        <input
+          [formControl]="branchSearch"
+          [matAutocomplete]="branchAuto"
+          placeholder="Search branch…"
+        />
+        <mat-autocomplete
+          #branchAuto
+          (optionSelected)="selectBranch($event.option.value)"
+        >
+          @for (opt of branchOptions(); track opt.value) {
+            <mat-option [value]="opt">{{ opt.label }}</mat-option>
+          }
+        </mat-autocomplete>
+        @if (isFieldInvalid('branchId')) {
+          <span class="field-error">{{ getFieldError('branchId') }}</span>
+        }
+      </div>
+      <div
+        class="form-field"
+        [class.invalid]="isFieldInvalid('date')"
+      >
+        <label>Date <span class="req">*</span></label>
+        <input
+          formControlName="date"
+          [matDatepicker]="picker"
+          [min]="minDate"
+          readonly
+        />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        @if (isFieldInvalid('date')) {
+          <span class="field-error">{{ getFieldError('date') }}</span>
+        }
+      </div>
+    </div>
+    <div class="form-row">
+      <div
+        class="form-field"
+        [class.invalid]="isFieldInvalid('slotId')"
+      >
+        <label>Time slot <span class="req">*</span></label>
+        <input
+          [formControl]="timeSearch"
+          [matAutocomplete]="timeAuto"
+          placeholder="Search time…"
+        />
+        <mat-autocomplete
+          #timeAuto
+          (optionSelected)="selectTime($event.option.value)"
+        >
+          @for (opt of timeOptions(); track opt.value) {
+            <mat-option [value]="opt">{{ opt.label }}</mat-option>
+          }
+        </mat-autocomplete>
+        @if (isFieldInvalid('slotId')) {
+          <span class="field-error">{{ getFieldError('slotId') }}</span>
+        }
+      </div>
+      <div class="form-field">
+        <label>Duration (min)</label>
+        <select formControlName="durationMinutes">
+          <option [value]="30">30</option>
+          <option [value]="45">45</option>
+          <option [value]="60">60</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div
+        class="form-field"
+        [class.invalid]="isFieldInvalid('status')"
+      >
+        <label>Status <span class="req">*</span></label>
+        <select formControlName="status">
+          @for (s of statusOptions(); track s.value) {
+            <option [value]="s.value">{{ s.label }}</option>
+          }
+          @if (!statusOptions().length) {
+            <option value="PENDING">Pending</option>
+            <option value="CONFIRMED">Confirmed</option>
+          }
+        </select>
+      </div>
+      <div
+        class="form-field"
+        [class.invalid]="isFieldInvalid('reason')"
+      >
+        <label>Reason <span class="req">*</span></label>
+        <input
+          formControlName="reason"
+          type="text"
+        />
+        @if (isFieldInvalid('reason')) {
+          <span class="field-error">{{ getFieldError('reason') }}</span>
+        }
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field full">
+        <label>Patient notes</label>
+        <textarea
+          formControlName="notes"
+          rows="2"
+        ></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field full">
+        <label>Internal notes (staff only)</label>
+        <textarea
+          formControlName="internalNotes"
+          rows="2"
+        ></textarea>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button
+    mat-button
+    (click)="cancel()"
+  >
+    Cancel
+  </button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="loading()"
+    (click)="submit()"
+  >
+    @if (loading()) {
+      Creating…
+    } @else {
+      Create booking
+    }
+  </button>
+</mat-dialog-actions>

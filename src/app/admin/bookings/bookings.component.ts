@@ -11,6 +11,7 @@ import { MasterDataService } from '../../core/services/master-data.service';
 import { UiFeedbackService } from '../../core/services/ui-feedback.service';
 import { AppointmentEditDialogComponent } from '../../shared/components/appointment-edit-dialog/appointment-edit-dialog.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
+import { StaffBookingDialogComponent } from '../../shared/components/staff-booking-dialog/staff-booking-dialog.component';
 
 @Component({
   selector: 'app-bookings-page',
@@ -158,6 +159,34 @@ export class BookingsComponent implements OnInit {
         }
       });
   }
+
+  newBooking(): void {
+    this.dialog
+      .open(StaffBookingDialogComponent, {
+        width: '860px',
+        maxWidth: '96vw',
+        autoFocus: false
+      })
+      .afterClosed()
+      .pipe(
+        switchMap((payload) =>
+          payload ? this.appointmentService.createStaffAppointment(payload) : EMPTY
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: () => {
+          this.successMessage = 'Appointment created successfully';
+          this.uiFeedback.success(this.successMessage);
+          this.load();
+        },
+        error: (error) => {
+          this.errorMessage = error?.error?.message || 'Unable to create appointment';
+          this.uiFeedback.error(this.errorMessage);
+        }
+      });
+  }
+
 
   reschedule(appointment: Appointment): void {
     if (!appointment._id) return;

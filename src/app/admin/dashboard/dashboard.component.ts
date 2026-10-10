@@ -38,7 +38,34 @@ export class DashboardComponent implements OnInit {
   readonly completedCount = computed(
     () => this.appointments().filter((appointment) => appointment.status === 'COMPLETED').length
   );
+  readonly confirmedCount = computed(
+    () => this.appointments().filter((appointment) => appointment.status === 'CONFIRMED').length
+  );
+  readonly noShowCount = computed(
+    () => this.appointments().filter((appointment) => appointment.status === 'NO_SHOW').length
+  );
   readonly activeUsers = computed(() => this.users().filter((user) => user.isActive).length);
+
+  readonly totalAppointments = computed(() => this.appointments().length);
+
+  readonly statusBars = computed(() => {
+    const total = this.totalAppointments();
+    if (total === 0) return [];
+    const statuses = [
+      { label: 'Confirmed', count: this.confirmedCount(), color: '#22c55e' },
+      { label: 'Pending', count: this.pendingCount(), color: '#f59e0b' },
+      { label: 'Completed', count: this.completedCount(), color: '#3b82f6' },
+      { label: 'Cancelled', count: this.cancelledCount(), color: '#ef4444' },
+      { label: 'No show', count: this.noShowCount(), color: '#a855f7' }
+    ];
+    return statuses.map((s) => ({ ...s, pct: Math.round((s.count / total) * 100) }));
+  });
+
+  readonly recentAppointments = computed(() =>
+    [...this.appointments()]
+      .sort((a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? ''))
+      .slice(0, 5)
+  );
 
   ngOnInit(): void {
     this.load();
