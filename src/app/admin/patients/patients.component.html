@@ -1,0 +1,170 @@
+<section class="page-width">
+  <div class="section-header">
+    <span class="eyebrow">Staff</span>
+    <div class="header-row">
+      <h1>Patients</h1>
+    </div>
+    <p>Browse all patients from appointment records. Click a patient to see their full history.</p>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert error">{{ errorMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="skeleton-list">
+      @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+        <div class="patient-card skeleton-card"></div>
+      }
+    </div>
+  } @else if (patients().length === 0) {
+    <div class="empty-state card">No patients found — appointment data may still be loading.</div>
+  } @else {
+    <div class="search-row">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Search by name, email, phone or ID number"
+        class="search-input"
+      />
+      <span class="results-count"
+        >{{ filtered().length }} patient{{ filtered().length !== 1 ? 's' : '' }}</span
+      >
+    </div>
+
+    @if (filtered().length === 0) {
+      <div class="empty-state card">No patients match your search.</div>
+    } @else {
+      <div class="patients-grid">
+        @for (p of filtered(); track p.key) {
+          <button
+            type="button"
+            class="patient-card"
+            [class.selected]="selectedPatient()?.key === p.key"
+            (click)="openPatient(p)"
+          >
+            <div class="patient-avatar">{{ p.patientName.charAt(0).toUpperCase() }}</div>
+            <div class="patient-body">
+              <span class="patient-name">{{ maskName(p.patientName) }}</span>
+              <span class="patient-contact"
+                >{{ maskEmail(p.email) }} · {{ maskPhone(p.phone) }}</span
+              >
+              <div class="patient-stats">
+                <span class="stat-chip total"
+                  >{{ p.total }} visit{{ p.total !== 1 ? 's' : '' }}</span
+                >
+                @if (p.pending > 0) {
+                  <span class="stat-chip upcoming">{{ p.pending }} upcoming</span>
+                }
+                @if (p.completed > 0) {
+                  <span class="stat-chip done">{{ p.completed }} completed</span>
+                }
+              </div>
+            </div>
+            <div class="patient-meta">
+              @if (p.nextVisit) {
+                <span class="meta-label">Next</span>
+                <span class="meta-value next">{{ p.nextVisit }}</span>
+                <span class="meta-service">{{ p.nextService }}</span>
+              } @else if (p.lastVisit) {
+                <span class="meta-label">Last visit</span>
+                <span class="meta-value">{{ p.lastVisit }}</span>
+              } @else {
+                <span class="meta-value muted">No visits yet</span>
+              }
+            </div>
+          </button>
+        }
+      </div>
+    }
+  }
+
+  @if (selectedPatient()) {
+    <div class="detail-panel card">
+      <div class="detail-header">
+        <div class="detail-title-row">
+          <div class="detail-avatar large">
+            {{ selectedPatient()!.patientName.charAt(0).toUpperCase() }}
+          </div>
+          <div class="detail-info">
+            <h2 class="detail-name">{{ maskName(selectedPatient()!.patientName) }}</h2>
+            <div class="detail-contacts">
+              <span>{{ maskEmail(selectedPatient()!.email) }}</span>
+              <span class="sep">·</span>
+              <span>{{ maskPhone(selectedPatient()!.phone) }}</span>
+              @if (selectedPatient()!.idNumber) {
+                <span class="sep">·</span>
+                <span>ID: {{ selectedPatient()!.idNumber.slice(0, 3) }}•••••••</span>
+              }
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="ghost-button"
+          (click)="closePatient()"
+        >
+          Close
+        </button>
+      </div>
+
+      <div class="detail-kpis">
+        <div class="kpi">
+          <span class="kpi-val">{{ selectedPatient()!.total }}</span>
+          <span class="kpi-lbl">Total</span>
+        </div>
+        <div class="kpi">
+          <span class="kpi-val completed">{{ selectedPatient()!.completed }}</span>
+          <span class="kpi-lbl">Completed</span>
+        </div>
+        <div class="kpi">
+          <span class="kpi-val pending">{{ selectedPatient()!.pending }}</span>
+          <span class="kpi-lbl">Upcoming</span>
+        </div>
+        <div class="kpi">
+          <span class="kpi-val cancelled">{{ selectedPatient()!.cancelled }}</span>
+          <span class="kpi-lbl">Cancelled</span>
+        </div>
+      </div>
+
+      <div class="appt-sort-row">
+        <span class="appt-section-title">Appointment history</span>
+        <select
+          class="sort-select"
+          [(ngModel)]="apptSortKey"
+        >
+          <option value="date">Newest first</option>
+          <option value="status">Sort by status</option>
+        </select>
+      </div>
+
+      <div class="appt-list">
+        @for (a of sortedPatientAppointments(); track a._id) {
+          <div class="appt-row">
+            <div class="appt-date-col">
+              <span class="appt-date">{{ a.date }}</span>
+              <span class="appt-time">{{ a.time }}</span>
+            </div>
+            <div class="appt-main">
+              <span class="appt-service">{{ a.serviceName }}</span>
+              <span class="appt-dentist">{{ a.dentistName }}</span>
+              @if (a.branchName) {
+                <span class="appt-branch">{{ a.branchName }}</span>
+              }
+            </div>
+            <div class="appt-right">
+              <span
+                class="pill"
+                [ngClass]="statusClass(a.status)"
+                >{{ a.status }}</span
+              >
+              @if (a.durationMinutes) {
+                <span class="appt-dur">{{ a.durationMinutes }} min</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</section>
