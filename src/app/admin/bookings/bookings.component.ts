@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EMPTY, finalize, switchMap } from 'rxjs';
 import { Appointment } from '../../core/models/appointment.model';
 import { MasterDataItem } from '../../core/models/master-data.model';
+import { TreatmentNote } from '../../core/models/treatment-note.model';
 import { AppointmentService } from '../../core/services/appointment.service';
 import { MasterDataService } from '../../core/services/master-data.service';
+import { TreatmentNoteService } from '../../core/services/treatment-note.service';
 import { UiFeedbackService } from '../../core/services/ui-feedback.service';
 import { AppointmentEditDialogComponent } from '../../shared/components/appointment-edit-dialog/appointment-edit-dialog.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -25,6 +27,7 @@ export class BookingsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly appointmentService = inject(AppointmentService);
   private readonly masterDataService = inject(MasterDataService);
+  private readonly treatmentNoteService = inject(TreatmentNoteService);
   private readonly dialog = inject(MatDialog);
   private readonly uiFeedback = inject(UiFeedbackService);
 
@@ -40,6 +43,9 @@ export class BookingsComponent implements OnInit {
   page = 1;
   readonly pageSize = 10;
   selectedAppointment: Appointment | null = null;
+  detailTab: 'details' | 'history' = 'details';
+  readonly patientNotes = signal<TreatmentNote[]>([]);
+  readonly patientNotesLoading = signal(false);
 
   ngOnInit(): void {
     this.masterDataService
@@ -120,10 +126,34 @@ export class BookingsComponent implements OnInit {
 
   openDetails(appointment: Appointment): void {
     this.selectedAppointment = { ...appointment };
+    this.detailTab = 'details';
+    this.patientNotes.set([]);
   }
 
   closeDetails(): void {
     this.selectedAppointment = null;
+    this.patientNotes.set([]);
+  }
+
+  switchDetailTab(tab: 'details' | 'history'): void {
+    this.detailTab = tab;
+    if (tab === 'history' && this.selectedAppointment?.email && !this.patientNotes().length) {
+      this.loadPatientHistory(this.selectedAppointment.email);
+    }
+  }
+
+  loadPatientHistory(email: string): void {
+    this.patientNotesLoading.set(true);
+    this.treatmentNoteService
+      .listByEmail(email)
+      .pipe(
+        finalize(() => this.patientNotesLoading.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (notes) => this.patientNotes.set(notes),
+        error: () => this.patientNotes.set([])
+      });
   }
 
   cancel(appointment: Appointment): void {

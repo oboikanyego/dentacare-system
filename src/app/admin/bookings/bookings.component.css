@@ -149,11 +149,125 @@
 .full-width {
   grid-column: 1 / -1;
 }
+.detail-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid var(--border, #e2e8f0);
+  margin: 12px 0 0;
+}
+
+.tab-btn {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary, #64748b);
+  border-radius: 4px 4px 0 0;
+  transition: color 0.15s;
+}
+
+.tab-btn.active {
+  color: var(--color-primary, #1e6be6);
+  border-bottom-color: var(--color-primary, #1e6be6);
+}
+
+.detail-body {
+  padding-top: 16px;
+}
+
 .audit-box {
   margin-top: 16px;
   padding: 12px;
   border-radius: 16px;
   background: #f8fafc;
+}
+
+.audit-entry {
+  display: flex;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.audit-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-primary, #1e6be6);
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.audit-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.audit-action {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary, #1e293b);
+}
+
+.audit-meta {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.audit-note {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #64748b);
+  font-style: italic;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.history-note {
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.85rem;
+}
+
+.history-note-header {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.history-service {
+  background: #f0f9ff;
+  color: #0369a1;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 0.78rem;
+}
+
+.history-dentist {
+  font-size: 0.78rem;
+  color: var(--text-secondary, #64748b);
+}
+
+.note-label {
+  font-weight: 600;
+  color: var(--text-secondary, #64748b);
+}
+
+.loading-text,
+.no-data {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.875rem;
+  padding: 12px 0;
 }
 .skeleton-table {
   min-height: 220px;
