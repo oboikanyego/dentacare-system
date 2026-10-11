@@ -73,6 +73,9 @@
 .toolbar-4 {
   grid-template-columns: 1.5fr 200px 200px 180px;
 }
+.toolbar-5 {
+  grid-template-columns: 1.5fr 180px 180px 180px 160px;
+}
 .toolbar-dates {
   display: flex;
   align-items: center;
@@ -344,6 +347,7 @@
 @media (max-width: 768px) {
   .toolbar-3,
   .toolbar-4,
+  .toolbar-5,
   .details-grid {
     grid-template-columns: 1fr;
   }

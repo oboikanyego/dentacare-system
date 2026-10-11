@@ -62,9 +62,18 @@ export class BookingsComponent implements OnInit {
   searchTerm = '';
   statusFilter = 'ALL';
   branchFilter = 'ALL';
+  dentistFilter = 'ALL';
   dateFrom = '';
   dateTo = '';
   sortKey: 'date' | 'patientName' | 'status' = 'date';
+
+  get dentistOptions(): string[] {
+    const names = new Set<string>();
+    for (const a of this.appointments) {
+      if (a.dentistName) names.add(a.dentistName);
+    }
+    return [...names].sort();
+  }
   page = 1;
   readonly pageSize = 10;
   selectedAppointment: Appointment | null = null;
@@ -140,6 +149,8 @@ export class BookingsComponent implements OnInit {
           this.statusFilter === 'ALL' || appointment.status === this.statusFilter;
         const matchesBranch =
           this.branchFilter === 'ALL' || appointment.branchName === this.branchFilter;
+        const matchesDentist =
+          this.dentistFilter === 'ALL' || appointment.dentistName === this.dentistFilter;
         const matchesDateFrom = !this.dateFrom || appointment.date >= this.dateFrom;
         const matchesDateTo = !this.dateTo || appointment.date <= this.dateTo;
         const haystack = [
@@ -159,6 +170,7 @@ export class BookingsComponent implements OnInit {
         return (
           matchesStatus &&
           matchesBranch &&
+          matchesDentist &&
           matchesDateFrom &&
           matchesDateTo &&
           (!term || haystack.includes(term))
