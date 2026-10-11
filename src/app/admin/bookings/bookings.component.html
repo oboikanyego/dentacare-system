@@ -21,6 +21,41 @@
     <div class="alert error">{{ errorMessage }}</div>
   }
 
+  @if (isDentist()) {
+    <div class="today-panel">
+      <div class="today-panel-header">
+        <span class="today-label">Today's schedule</span>
+        <span class="today-date">{{ '' | date: 'EEEE, d MMMM' }}</span>
+      </div>
+      @if (todaySchedule().length === 0) {
+        <p class="today-empty">No appointments scheduled for you today.</p>
+      } @else {
+        <div class="today-list">
+          @for (appt of todaySchedule(); track appt._id) {
+            <div
+              class="today-slot"
+              (click)="openDetails(appt)"
+              (keydown.enter)="openDetails(appt)"
+              tabindex="0"
+              role="button"
+            >
+              <span class="today-time">{{ appt.time }}</span>
+              <div class="today-info">
+                <span class="today-patient">{{ maskName(appt.patientName) }}</span>
+                <span class="today-service">{{ appt.serviceName }}</span>
+              </div>
+              <span
+                class="status-badge"
+                [class]="statusClass(appt.status)"
+                >{{ appt.status }}</span
+              >
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
   @if (isLoading) {
     <div class="card skeleton-table"></div>
   } @else if (!appointments.length) {

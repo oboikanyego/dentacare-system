@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -8,6 +8,7 @@ import { Appointment } from '../../core/models/appointment.model';
 import { MasterDataItem } from '../../core/models/master-data.model';
 import { TreatmentNote } from '../../core/models/treatment-note.model';
 import { AppointmentService } from '../../core/services/appointment.service';
+import { AuthService } from '../../core/services/auth.service';
 import { MasterDataService } from '../../core/services/master-data.service';
 import { TreatmentNoteService } from '../../core/services/treatment-note.service';
 import { UiFeedbackService } from '../../core/services/ui-feedback.service';
@@ -19,7 +20,7 @@ import { TreatmentNoteDialogComponent } from '../../shared/components/treatment-
 @Component({
   selector: 'app-bookings-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatDialogModule],
+  imports: [CommonModule, DatePipe, FormsModule, MatDialogModule],
   templateUrl: './bookings.component.html',
   styleUrl: './bookings.component.css'
 })
@@ -28,8 +29,28 @@ export class BookingsComponent implements OnInit {
   private readonly appointmentService = inject(AppointmentService);
   private readonly masterDataService = inject(MasterDataService);
   private readonly treatmentNoteService = inject(TreatmentNoteService);
+  private readonly authService = inject(AuthService);
   private readonly dialog = inject(MatDialog);
   private readonly uiFeedback = inject(UiFeedbackService);
+
+  private readonly currentUser = this.authService.currentUser;
+  readonly isDentist = computed(() => this.currentUser()?.role === 'DENTIST');
+
+  private readonly allAppointments = signal<Appointment[]>([]);
+
+  readonly todaySchedule = computed(() => {
+    if (!this.isDentist()) return [];
+    const today = new Date().toISOString().slice(0, 10);
+    const name = this.currentUser()?.name?.toLowerCase() ?? '';
+    return this.allAppointments()
+      .filter(
+        (a) =>
+          a.date === today &&
+          !['CANCELLED', 'NO_SHOW'].includes(a.status) &&
+          (a.dentistName ?? '').toLowerCase().includes(name)
+      )
+      .sort((a, b) => a.time.localeCompare(b.time));
+  });
 
   appointments: Appointment[] = [];
   filteredAppointments: Appointment[] = [];
@@ -78,6 +99,7 @@ export class BookingsComponent implements OnInit {
       .subscribe({
         next: (appointments) => {
           this.appointments = appointments;
+          this.allAppointments.set(appointments);
           this.applyFilters();
         },
         error: (error) => {
