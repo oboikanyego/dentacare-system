@@ -60,6 +60,9 @@
 .toolbar-3 {
   grid-template-columns: 1.5fr 220px 200px;
 }
+.toolbar-4 {
+  grid-template-columns: 1.5fr 200px 200px 180px;
+}
 .toolbar input,
 .toolbar select,
 .details-card input,
@@ -285,6 +288,7 @@
 }
 @media (max-width: 768px) {
   .toolbar-3,
+  .toolbar-4,
   .details-grid {
     grid-template-columns: 1fr;
   }
