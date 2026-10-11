@@ -131,6 +131,19 @@
                       No-show
                     </button>
                   }
+                  @if (canAddNote(a)) {
+                    <button
+                      type="button"
+                      class="action-btn add-note"
+                      (click)="addTreatmentNote(a)"
+                      title="Add treatment note"
+                    >
+                      + Note
+                    </button>
+                  }
+                  @if (hasNote(a._id)) {
+                    <span class="note-added-chip">Note ✓</span>
+                  }
                 }
               </div>
             </div>

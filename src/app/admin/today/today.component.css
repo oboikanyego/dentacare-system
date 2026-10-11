@@ -332,6 +332,28 @@ h1 {
   background: #e2e8f0;
 }
 
+.action-btn.add-note {
+  background: #f0fdf4;
+  color: #16a34a;
+  border-color: #bbf7d0;
+}
+
+.action-btn.add-note:hover {
+  background: #dcfce7;
+}
+
+.note-added-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  background: #dcfce7;
+  color: #15803d;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
 .updating-indicator {
   font-size: 0.75rem;
   color: #94a3b8;
