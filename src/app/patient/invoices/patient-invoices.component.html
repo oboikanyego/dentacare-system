@@ -1,0 +1,112 @@
+<section class="page-width">
+  <div class="section-header">
+    <span class="eyebrow">My Account</span>
+    <h1>My Invoices</h1>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert error">{{ errorMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="skeleton-stack">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="row-skeleton"></div>
+      }
+    </div>
+  } @else if (invoices().length === 0) {
+    <div class="empty-state card">You have no invoices yet.</div>
+  } @else {
+    <div class="invoices-list">
+      @for (inv of invoices(); track inv._id) {
+        <div
+          class="invoice-card card"
+          [class.expanded]="expandedId() === inv._id"
+        >
+          <div
+            class="card-summary"
+            (click)="toggleExpand(inv._id)"
+          >
+            <div class="inv-left">
+              <span class="inv-number">{{ inv.invoiceNumber }}</span>
+              <span class="inv-date">{{ inv.date }}</span>
+            </div>
+            <div class="inv-center">
+              <span class="inv-service">{{ inv.serviceName }}</span>
+              @if (inv.dentistName) {
+                <span class="inv-dentist">{{ inv.dentistName }}</span>
+              }
+            </div>
+            <div class="inv-right">
+              <span class="inv-total">{{ formatCurrency(inv.total) }}</span>
+              <span
+                class="pill"
+                [ngClass]="statusClass(inv.status)"
+                >{{ inv.status }}</span
+              >
+              <span class="chevron">{{ expandedId() === inv._id ? '▲' : '▼' }}</span>
+            </div>
+          </div>
+
+          @if (expandedId() === inv._id) {
+            <div class="card-detail">
+              <div class="detail-section">
+                <h4>Line Items</h4>
+                <div class="items-table">
+                  <div class="items-header">
+                    <span>Description</span>
+                    <span>Qty</span>
+                    <span>Unit Price</span>
+                    <span>Total</span>
+                  </div>
+                  @for (item of inv.items; track item.description) {
+                    <div class="items-row">
+                      <span>{{ item.description }}</span>
+                      <span>{{ item.quantity }}</span>
+                      <span>{{ formatCurrency(item.unitPrice) }}</span>
+                      <span>{{ formatCurrency(item.total) }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="totals-block">
+                <div class="totals-row">
+                  <span>Subtotal</span>
+                  <span>{{ formatCurrency(inv.subtotal) }}</span>
+                </div>
+                @if (inv.taxRate) {
+                  <div class="totals-row">
+                    <span>Tax ({{ inv.taxRate }}%)</span>
+                    <span>{{ formatCurrency(inv.taxAmount ?? 0) }}</span>
+                  </div>
+                }
+                <div class="totals-row grand">
+                  <strong>Total</strong>
+                  <strong>{{ formatCurrency(inv.total) }}</strong>
+                </div>
+              </div>
+
+              @if (inv.status === 'PAID' && inv.paidAt) {
+                <div class="paid-badge">
+                  ✓ Paid on {{ inv.paidAt | date: 'dd MMM yyyy' }}
+                  @if (inv.paymentMethod) {
+                    · {{ inv.paymentMethod }}
+                  }
+                </div>
+              }
+
+              @if (inv.dueDate && inv.status === 'UNPAID') {
+                <p class="due-date">Due by {{ inv.dueDate }}</p>
+              }
+
+              @if (inv.notes) {
+                <p class="inv-notes">{{ inv.notes }}</p>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</section>

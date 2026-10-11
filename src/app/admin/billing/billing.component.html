@@ -1,0 +1,346 @@
+<section class="page-width">
+  <div class="section-header">
+    <span class="eyebrow">Finance</span>
+    <div class="header-row">
+      <h1>Billing</h1>
+      <button
+        type="button"
+        class="create-btn"
+        (click)="openCreateModal()"
+      >
+        + New Invoice
+      </button>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert error">{{ errorMessage() }}</div>
+  }
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <span class="kpi-val">{{ kpiTotal() }}</span>
+      <span class="kpi-lbl">Total Invoices</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-val unpaid">{{ kpiUnpaid() }}</span>
+      <span class="kpi-lbl">Unpaid</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-val paid">{{ kpiPaid() }}</span>
+      <span class="kpi-lbl">Paid</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-val revenue">{{ formatCurrency(kpiRevenue()) }}</span>
+      <span class="kpi-lbl">Revenue Collected</span>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="filter-chips">
+      <button
+        type="button"
+        class="chip"
+        [class.active]="statusFilter() === 'ALL'"
+        (click)="setStatusFilter('ALL')"
+      >
+        All
+      </button>
+      <button
+        type="button"
+        class="chip"
+        [class.active]="statusFilter() === 'UNPAID'"
+        (click)="setStatusFilter('UNPAID')"
+      >
+        Unpaid
+      </button>
+      <button
+        type="button"
+        class="chip"
+        [class.active]="statusFilter() === 'PAID'"
+        (click)="setStatusFilter('PAID')"
+      >
+        Paid
+      </button>
+      <button
+        type="button"
+        class="chip"
+        [class.active]="statusFilter() === 'CANCELLED'"
+        (click)="setStatusFilter('CANCELLED')"
+      >
+        Cancelled
+      </button>
+    </div>
+    <input
+      class="search-input"
+      type="text"
+      placeholder="Search by patient name or email…"
+      [(ngModel)]="searchEmail"
+    />
+  </div>
+
+  @if (isLoading()) {
+    <div class="skeleton-stack">
+      @for (i of [1, 2, 3, 4, 5]; track i) {
+        <div class="row-skeleton"></div>
+      }
+    </div>
+  } @else if (filtered().length === 0) {
+    <div class="empty-state card">No invoices found.</div>
+  } @else {
+    <div class="invoice-table card">
+      <div class="table-header">
+        <span>Invoice #</span>
+        <span>Patient</span>
+        <span>Service</span>
+        <span>Date</span>
+        <span>Total</span>
+        <span>Status</span>
+        <span>Actions</span>
+      </div>
+      @for (inv of filtered(); track inv._id) {
+        <div class="table-row">
+          <span class="inv-number">{{ inv.invoiceNumber }}</span>
+          <div class="patient-col">
+            <span class="patient-name">{{ inv.patientName }}</span>
+            <span class="patient-email">{{ inv.patientEmail }}</span>
+          </div>
+          <span class="service-col">{{ inv.serviceName }}</span>
+          <span class="date-col">{{ inv.date }}</span>
+          <span class="amount-col">{{ formatCurrency(inv.total) }}</span>
+          <span class="status-col">
+            <span
+              class="pill"
+              [ngClass]="statusClass(inv.status)"
+              >{{ inv.status }}</span
+            >
+          </span>
+          <div class="actions-col">
+            @if (actionId() === inv._id) {
+              <span class="updating">updating…</span>
+            } @else {
+              @if (inv.status === 'UNPAID') {
+                <button
+                  type="button"
+                  class="action-btn pay"
+                  (click)="openPayModal(inv)"
+                >
+                  Mark Paid
+                </button>
+                <button
+                  type="button"
+                  class="action-btn cancel"
+                  (click)="cancelInvoice(inv)"
+                >
+                  Cancel
+                </button>
+              }
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</section>
+
+@if (showCreateModal) {
+  <div
+    class="modal-overlay"
+    (click)="closeCreateModal()"
+  >
+    <div
+      class="modal"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-header">
+        <h2>New Invoice</h2>
+        <button
+          type="button"
+          class="close-btn"
+          (click)="closeCreateModal()"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <label class="field-label">Appointment (completed)</label>
+        @if (appointmentsLoading()) {
+          <div class="field-loading">Loading appointments…</div>
+        } @else {
+          <select
+            class="field-select"
+            [(ngModel)]="selectedAppointmentId"
+            (ngModelChange)="onAppointmentChange()"
+          >
+            <option value="">— Select appointment —</option>
+            @for (a of appointments(); track a._id) {
+              <option [value]="a._id">
+                {{ a.date }} · {{ a.patientName }} · {{ a.serviceName }}
+              </option>
+            }
+          </select>
+        }
+
+        <label class="field-label">Line Items</label>
+        <div class="items-grid">
+          <span class="col-head">Description</span>
+          <span class="col-head">Qty</span>
+          <span class="col-head">Unit Price (R)</span>
+          <span class="col-head">Total</span>
+          <span></span>
+          @for (item of draftItems; track trackByIndex($index)) {
+            <input
+              class="field-input"
+              type="text"
+              placeholder="e.g. Consultation"
+              [(ngModel)]="item.description"
+            />
+            <input
+              class="field-input num"
+              type="number"
+              min="1"
+              [(ngModel)]="item.quantity"
+            />
+            <input
+              class="field-input num"
+              type="number"
+              min="0"
+              step="0.01"
+              [(ngModel)]="item.unitPrice"
+            />
+            <span class="line-total">{{ formatCurrency(lineTotal(item)) }}</span>
+            <button
+              type="button"
+              class="remove-line"
+              (click)="removeLine($index)"
+              [disabled]="draftItems.length === 1"
+            >
+              ✕
+            </button>
+          }
+        </div>
+        <button
+          type="button"
+          class="add-line-btn"
+          (click)="addLine()"
+        >
+          + Add line
+        </button>
+
+        <div class="totals-row">
+          <span>Subtotal</span>
+          <span>{{ formatCurrency(draftSubtotal) }}</span>
+        </div>
+
+        <label class="field-label">Tax Rate (%)</label>
+        <input
+          class="field-input"
+          type="number"
+          min="0"
+          max="100"
+          step="0.5"
+          [(ngModel)]="draftTaxRate"
+        />
+
+        <div class="totals-row">
+          <span>Tax</span>
+          <span>{{ formatCurrency(draftTaxAmount) }}</span>
+        </div>
+        <div class="totals-row total">
+          <strong>Total</strong>
+          <strong>{{ formatCurrency(draftTotal) }}</strong>
+        </div>
+
+        <label class="field-label">Due Date (optional)</label>
+        <input
+          class="field-input"
+          type="date"
+          [(ngModel)]="draftDueDate"
+        />
+
+        <label class="field-label">Notes (optional)</label>
+        <textarea
+          class="field-textarea"
+          rows="2"
+          [(ngModel)]="draftNotes"
+        ></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="ghost-button"
+          (click)="closeCreateModal()"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="cta-button"
+          (click)="submitCreate()"
+          [disabled]="createLoading"
+        >
+          {{ createLoading ? 'Creating…' : 'Create Invoice' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (showPayModal && payingInvoice) {
+  <div
+    class="modal-overlay"
+    (click)="closePayModal()"
+  >
+    <div
+      class="modal modal--sm"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-header">
+        <h2>Record Payment</h2>
+        <button
+          type="button"
+          class="close-btn"
+          (click)="closePayModal()"
+        >
+          ✕
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="pay-summary">
+          Invoice <strong>{{ payingInvoice.invoiceNumber }}</strong> —
+          <strong>{{ formatCurrency(payingInvoice.total) }}</strong>
+        </p>
+        <label class="field-label">Payment Method</label>
+        <select
+          class="field-select"
+          [(ngModel)]="paymentMethod"
+        >
+          <option value="CASH">Cash</option>
+          <option value="CARD">Card</option>
+          <option value="EFT">EFT</option>
+          <option value="INSURANCE">Insurance</option>
+          <option value="OTHER">Other</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="ghost-button"
+          (click)="closePayModal()"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="cta-button"
+          (click)="confirmPay()"
+          [disabled]="actionId() !== null"
+        >
+          Confirm Payment
+        </button>
+      </div>
+    </div>
+  </div>
+}

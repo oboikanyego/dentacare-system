@@ -52,6 +52,11 @@
         routerLinkActive="active"
         >My History</a
       >
+      <a
+        routerLink="/patient/invoices"
+        routerLinkActive="active"
+        >My Invoices</a
+      >
     }
 
     @if (isStaff()) {
@@ -99,6 +104,11 @@
         routerLink="/admin/master-data"
         routerLinkActive="active"
         >Clinic Data</a
+      >
+      <a
+        routerLink="/admin/billing"
+        routerLinkActive="active"
+        >Billing</a
       >
       <a
         routerLink="/admin/reports"
@@ -216,6 +226,11 @@
         (click)="closeMenu()"
         >My History</a
       >
+      <a
+        routerLink="/patient/invoices"
+        (click)="closeMenu()"
+        >My Invoices</a
+      >
     }
 
     @if (isStaff()) {
@@ -263,6 +278,11 @@
         routerLink="/admin/master-data"
         (click)="closeMenu()"
         >Clinic Data</a
+      >
+      <a
+        routerLink="/admin/billing"
+        (click)="closeMenu()"
+        >Billing</a
       >
       <a
         routerLink="/admin/reports"
