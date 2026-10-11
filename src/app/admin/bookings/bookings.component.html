@@ -72,7 +72,7 @@
   } @else if (!appointments.length) {
     <div class="card">No bookings found.</div>
   } @else {
-    <div class="toolbar toolbar-4">
+    <div class="toolbar toolbar-5">
       <input
         type="text"
         [(ngModel)]="searchTerm"
@@ -97,6 +97,15 @@
         <option value="ALL">All branches</option>
         @for (branch of branches; track branch.value) {
           <option [value]="branch.label">{{ branch.label }}</option>
+        }
+      </select>
+      <select
+        [(ngModel)]="dentistFilter"
+        (ngModelChange)="applyFilters()"
+      >
+        <option value="ALL">All dentists</option>
+        @for (name of dentistOptions; track name) {
+          <option [value]="name">{{ name }}</option>
         }
       </select>
       <select
