@@ -1,8 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiService } from './api.service';
 import { API_ENDPOINTS } from '../constants/api-endpoints';
 import { Appointment } from '../models/appointment.model';
+import { ApiService } from './api.service';
+
+export interface AvailableSlot {
+  slotId: string;
+  time: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentService {
@@ -69,6 +74,17 @@ export class AppointmentService {
     return this.api.patch<{ message: string; appointment: Appointment }>(
       `${API_ENDPOINTS.appointments}/${id}/cancel`,
       { cancelReason }
+    );
+  }
+
+  getAvailableSlots(
+    dentistId: string,
+    date: string,
+    duration: number
+  ): Observable<{ slots: AvailableSlot[] }> {
+    return this.api.get<{ slots: AvailableSlot[] }>(
+      `${API_ENDPOINTS.appointments}/available-slots`,
+      { dentistId, date, duration }
     );
   }
 }

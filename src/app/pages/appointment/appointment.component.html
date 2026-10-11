@@ -18,7 +18,7 @@
       <article><strong>Step 3:</strong><span>Confirm the appointment details</span></article>
     </div>
     <ul>
-      <li>Search results are refreshed from the API as you type</li>
+      <li>Available time slots load automatically once you pick a dentist and date</li>
       <li>Signed-in patients can track and cancel their bookings</li>
       <li>Overlapping bookings and out-of-hours bookings are blocked</li>
     </ul>
@@ -215,10 +215,29 @@
                 {{ slot.label }}
               </mat-option>
             } @empty {
-              <mat-option disabled>No matching time slots</mat-option>
+              <mat-option disabled>
+                @if (!bookingForm.controls.dentistId.value || !bookingForm.controls.date.value) {
+                  Select a dentist and date first
+                } @else {
+                  No available slots for this date
+                }
+              </mat-option>
             }
           </mat-autocomplete>
-          <mat-hint>Type a time such as 09:00</mat-hint>
+          @if (!bookingForm.controls.dentistId.value || !bookingForm.controls.date.value) {
+            <mat-hint>Select a dentist and date first to see available times</mat-hint>
+          } @else if (timeLoading()) {
+            <mat-hint>Loading available slots…</mat-hint>
+          } @else if (timeOptions().length === 0) {
+            <mat-hint>No slots available for the selected date</mat-hint>
+          } @else {
+            <mat-hint
+              >{{ timeOptions().length }} slot{{
+                timeOptions().length !== 1 ? 's' : ''
+              }}
+              available</mat-hint
+            >
+          }
           @if (isFieldInvalid('slotId')) {
             <mat-error>{{ getFieldError('slotId') }}</mat-error>
           }
