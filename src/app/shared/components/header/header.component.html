@@ -75,6 +75,11 @@
         routerLinkActive="active"
         >Patients</a
       >
+      <a
+        routerLink="/staff/recall"
+        routerLinkActive="active"
+        >Recall</a
+      >
       @if (isDentist()) {
         <a
           routerLink="/staff/my-schedule"
@@ -88,7 +93,7 @@
       <a
         routerLink="/admin/dashboard"
         routerLinkActive="active"
-        >Dashboard</a
+        >Dashboard</
       >
       <a
         routerLink="/staff/bookings"
@@ -299,6 +304,11 @@
         routerLink="/staff/patients"
         (click)="closeMenu()"
         >Patients</a
+      >
+      <a
+        routerLink="/staff/recall"
+        (click)="closeMenu()"
+        >Recall</a
       >
       @if (isDentist()) {
         <a
