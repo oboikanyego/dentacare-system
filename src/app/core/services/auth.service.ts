@@ -60,6 +60,13 @@ export class AuthService {
       );
   }
 
+  changePassword(payload: {
+    currentPassword: string;
+    newPassword: string;
+  }): Observable<{ message: string }> {
+    return this.api.patch<{ message: string }>(API_ENDPOINTS.auth.changePassword, payload);
+  }
+
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

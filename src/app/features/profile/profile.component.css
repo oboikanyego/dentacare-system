@@ -9,6 +9,12 @@
   margin-top: 2rem;
 }
 
+.edit-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 @media (min-width: 768px) {
   .profile-grid {
     grid-template-columns: 280px 1fr;
