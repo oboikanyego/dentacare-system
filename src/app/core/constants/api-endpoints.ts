@@ -12,5 +12,6 @@ export const API_ENDPOINTS = {
   masterData: '/master-data',
   dentists: '/dentists',
   treatmentNotes: '/treatment-notes',
-  invoices: '/invoices'
+  invoices: '/invoices',
+  notifications: '/notifications'
 } as const;
