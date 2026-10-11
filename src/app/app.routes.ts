@@ -19,6 +19,8 @@ import { ResetPasswordComponent } from './features/auth/reset-password/reset-pas
 import { ProfileComponent } from './features/profile/profile.component';
 import { PatientAppointmentsComponent } from './patient/appointments/patient-appointments.component';
 import { PatientTreatmentHistoryComponent } from './patient/treatment-history/patient-treatment-history.component';
+import { PatientInvoicesComponent } from './patient/invoices/patient-invoices.component';
+import { BillingComponent } from './admin/billing/billing.component';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 
@@ -51,6 +53,13 @@ export const routes: Routes = [
     path: 'patient/treatment-history',
     component: PatientTreatmentHistoryComponent,
     title: 'DentaCare | My Treatment History',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['PATIENT'] }
+  },
+  {
+    path: 'patient/invoices',
+    component: PatientInvoicesComponent,
+    title: 'DentaCare | My Invoices',
     canActivate: [authGuard, roleGuard],
     data: { roles: ['PATIENT'] }
   },
@@ -109,6 +118,13 @@ export const routes: Routes = [
     title: 'DentaCare | Reports',
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ADMIN'] }
+  },
+  {
+    path: 'admin/billing',
+    component: BillingComponent,
+    title: 'DentaCare | Billing',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['RECEPTIONIST', 'ADMIN'] }
   },
   {
     path: 'profile',
