@@ -60,6 +60,11 @@
         routerLinkActive="active"
         >Staff Bookings</a
       >
+      <a
+        routerLink="/staff/patients"
+        routerLinkActive="active"
+        >Patients</a
+      >
     }
 
     @if (isAdmin()) {
@@ -206,6 +211,11 @@
         routerLink="/staff/bookings"
         (click)="closeMenu()"
         >Staff Bookings</a
+      >
+      <a
+        routerLink="/staff/patients"
+        (click)="closeMenu()"
+        >Patients</a
       >
     }
 
