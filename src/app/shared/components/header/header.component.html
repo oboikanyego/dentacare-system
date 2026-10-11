@@ -121,6 +121,57 @@
   <div class="action-row desktop-only">
     @if (user()) {
       <div
+        class="notif-menu"
+        (click)="stopPropagation($event)"
+      >
+        <button
+          class="notif-button"
+          type="button"
+          (click)="toggleNotif()"
+          aria-label="Notifications"
+        >
+          <span class="notif-icon">🔔</span>
+          @if (unreadCount() > 0) {
+            <span class="notif-badge">{{ unreadCount() > 99 ? '99+' : unreadCount() }}</span>
+          }
+        </button>
+
+        @if (notifOpen()) {
+          <div class="notif-dropdown">
+            <div class="notif-header">
+              <strong>Notifications</strong>
+              @if (unreadCount() > 0) {
+                <button
+                  type="button"
+                  class="notif-mark-all"
+                  (click)="markAllRead()"
+                >
+                  Mark all read
+                </button>
+              }
+            </div>
+            @if (notifications().length === 0) {
+              <p class="notif-empty">No notifications yet.</p>
+            } @else {
+              <ul class="notif-list">
+                @for (notif of notifications(); track notif._id) {
+                  <li
+                    class="notif-item"
+                    [class.unread]="!notif.isRead"
+                    (click)="onNotifClick(notif)"
+                  >
+                    <span class="notif-title">{{ notif.title }}</span>
+                    <span class="notif-msg">{{ notif.message }}</span>
+                    <span class="notif-time">{{ notif.createdAt | date: 'dd MMM · HH:mm' }}</span>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+        }
+      </div>
+
+      <div
         class="profile-menu"
         (click)="stopPropagation($event)"
       >
