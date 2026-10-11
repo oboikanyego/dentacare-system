@@ -12,6 +12,7 @@ import { UiFeedbackService } from '../../core/services/ui-feedback.service';
 import { AppointmentEditDialogComponent } from '../../shared/components/appointment-edit-dialog/appointment-edit-dialog.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { StaffBookingDialogComponent } from '../../shared/components/staff-booking-dialog/staff-booking-dialog.component';
+import { TreatmentNoteDialogComponent } from '../../shared/components/treatment-note-dialog/treatment-note-dialog.component';
 
 @Component({
   selector: 'app-bookings-page',
@@ -187,6 +188,18 @@ export class BookingsComponent implements OnInit {
       });
   }
 
+  addTreatmentNote(appointment: Appointment): void {
+    this.dialog
+      .open(TreatmentNoteDialogComponent, {
+        data: { appointment },
+        width: '680px',
+        maxWidth: '96vw',
+        autoFocus: false
+      })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
+  }
 
   reschedule(appointment: Appointment): void {
     if (!appointment._id) return;

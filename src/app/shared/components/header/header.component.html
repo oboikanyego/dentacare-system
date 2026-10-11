@@ -47,6 +47,11 @@
         routerLinkActive="active"
         >My Appointments</a
       >
+      <a
+        routerLink="/patient/treatment-history"
+        routerLinkActive="active"
+        >My History</a
+      >
     }
 
     @if (isStaff()) {
@@ -178,6 +183,11 @@
         routerLink="/patient/appointments"
         (click)="closeMenu()"
         >My Appointments</a
+      >
+      <a
+        routerLink="/patient/treatment-history"
+        (click)="closeMenu()"
+        >My History</a
       >
     }
 

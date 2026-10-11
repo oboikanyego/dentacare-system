@@ -119,6 +119,10 @@
   color: #b91c1c;
   border-color: #fecaca;
 }
+.ghost-button.accent {
+  color: #0f766e;
+  border-color: #99f6e4;
+}
 .pagination-row {
   display: flex;
   justify-content: flex-end;
