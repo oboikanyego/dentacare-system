@@ -637,6 +637,69 @@ h1 {
   }
 }
 
+.med-dl {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+}
+.med-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 0.5rem 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid #f1f5f9;
+  align-items: start;
+}
+.med-row:last-child {
+  border-bottom: none;
+}
+.med-row dt {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-top: 2px;
+}
+.med-row dd {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+.med-notes-text {
+  white-space: pre-wrap;
+  line-height: 1.55;
+  color: #334155;
+}
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.tag.allergy {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+.tag.condition {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+.tag.medication {
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
 @media (max-width: 640px) {
   .patients-grid,
   .skeleton-list {
@@ -645,5 +708,10 @@ h1 {
 
   .patient-meta {
     display: none;
+  }
+
+  .med-row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
   }
 }

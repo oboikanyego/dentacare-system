@@ -145,6 +145,14 @@
         >
           Clinical Notes
         </button>
+        <button
+          type="button"
+          class="tab-btn"
+          [class.active]="activeTab() === 'medical'"
+          (click)="switchTab('medical')"
+        >
+          Medical
+        </button>
       </div>
 
       @if (activeTab() === 'appointments') {
@@ -263,6 +271,74 @@
               </div>
             }
           </div>
+        }
+      }
+      @if (activeTab() === 'medical') {
+        @if (medicalLoading()) {
+          <div class="notes-loading">
+            @for (i of [1, 2, 3]; track i) {
+              <div class="note-skeleton"></div>
+            }
+          </div>
+        } @else if (medicalError()) {
+          <div class="alert error">{{ medicalError() }}</div>
+        } @else if (medicalProfile()) {
+          <dl class="med-dl">
+            <div class="med-row">
+              <dt>Blood type</dt>
+              <dd>{{ medicalProfile()!.bloodType || '—' }}</dd>
+            </div>
+            <div class="med-row">
+              <dt>Allergies</dt>
+              <dd>
+                @if (medicalProfile()!.allergies?.length) {
+                  <div class="tag-list">
+                    @for (tag of medicalProfile()!.allergies!; track tag) {
+                      <span class="tag allergy">{{ tag }}</span>
+                    }
+                  </div>
+                } @else {
+                  None on record
+                }
+              </dd>
+            </div>
+            <div class="med-row">
+              <dt>Conditions</dt>
+              <dd>
+                @if (medicalProfile()!.conditions?.length) {
+                  <div class="tag-list">
+                    @for (tag of medicalProfile()!.conditions!; track tag) {
+                      <span class="tag condition">{{ tag }}</span>
+                    }
+                  </div>
+                } @else {
+                  None on record
+                }
+              </dd>
+            </div>
+            <div class="med-row">
+              <dt>Medications</dt>
+              <dd>
+                @if (medicalProfile()!.medications?.length) {
+                  <div class="tag-list">
+                    @for (tag of medicalProfile()!.medications!; track tag) {
+                      <span class="tag medication">{{ tag }}</span>
+                    }
+                  </div>
+                } @else {
+                  None on record
+                }
+              </dd>
+            </div>
+            @if (medicalProfile()!.notes) {
+              <div class="med-row">
+                <dt>Notes</dt>
+                <dd class="med-notes-text">{{ medicalProfile()!.notes }}</dd>
+              </div>
+            }
+          </dl>
+        } @else {
+          <div class="empty-state">No medical profile loaded yet.</div>
         }
       }
     </div>

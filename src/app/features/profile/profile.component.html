@@ -92,6 +92,96 @@
         </div>
 
         <div class="edit-card card">
+          <h2>Medical history</h2>
+          <p class="form-hint">Shared with your dental care team to ensure safe treatment.</p>
+
+          @if (medLoading()) {
+            <div class="med-skeleton">
+              @for (i of [1, 2, 3]; track i) {
+                <div class="skel-row"></div>
+              }
+            </div>
+          } @else {
+            @if (medSuccess()) {
+              <div class="alert success">{{ medSuccess() }}</div>
+            }
+            @if (medError()) {
+              <div class="alert error">{{ medError() }}</div>
+            }
+
+            <form
+              [formGroup]="medForm"
+              (ngSubmit)="saveMedical()"
+              novalidate
+            >
+              <div class="form-field">
+                <label for="bloodType">Blood type</label>
+                <select
+                  id="bloodType"
+                  formControlName="bloodType"
+                >
+                  @for (bt of bloodTypes; track bt) {
+                    <option [value]="bt">{{ bt || '— not set —' }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="allergies">Allergies</label>
+                <input
+                  id="allergies"
+                  type="text"
+                  formControlName="allergies"
+                  placeholder="e.g. Penicillin, Latex (comma-separated)"
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="conditions">Medical conditions</label>
+                <input
+                  id="conditions"
+                  type="text"
+                  formControlName="conditions"
+                  placeholder="e.g. Diabetes, Hypertension (comma-separated)"
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="medications">Current medications</label>
+                <input
+                  id="medications"
+                  type="text"
+                  formControlName="medications"
+                  placeholder="e.g. Metformin 500mg (comma-separated)"
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="medNotes">Additional notes</label>
+                <textarea
+                  id="medNotes"
+                  formControlName="notes"
+                  rows="3"
+                  placeholder="Any other information relevant to your dental care"
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                class="primary-button"
+                [disabled]="medSaving()"
+              >
+                @if (medSaving()) {
+                  Saving…
+                } @else {
+                  Save medical history
+                }
+              </button>
+            </form>
+          }
+        </div>
+
+        <div class="edit-card card">
           <h2>Change password</h2>
 
           @if (pwSuccess()) {

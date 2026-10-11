@@ -3,7 +3,9 @@ import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
+import { BloodType } from '../../core/models/medical-profile.model';
 import { AuthService } from '../../core/services/auth.service';
+import { MedicalProfileService } from '../../core/services/medical-profile.service';
 import { UiFeedbackService } from '../../core/services/ui-feedback.service';
 
 @Component({
@@ -16,6 +18,7 @@ import { UiFeedbackService } from '../../core/services/ui-feedback.service';
 export class ProfileComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  private readonly medicalProfileService = inject(MedicalProfileService);
   private readonly uiFeedback = inject(UiFeedbackService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -25,11 +28,25 @@ export class ProfileComponent implements OnInit {
   readonly pwLoading = signal(false);
   readonly pwSuccess = signal('');
   readonly pwError = signal('');
+  readonly medLoading = signal(false);
+  readonly medSaving = signal(false);
+  readonly medSuccess = signal('');
+  readonly medError = signal('');
   readonly user = this.authService.currentUser;
+
+  readonly bloodTypes: BloodType[] = ['', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
   readonly form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
     phone: ['', [Validators.pattern(/^(?:\+27|0)[6-8][0-9]{8}$/)]]
+  });
+
+  readonly medForm = this.fb.group({
+    bloodType: ['' as BloodType],
+    allergies: [''],
+    conditions: [''],
+    medications: [''],
+    notes: ['']
   });
 
   readonly pwForm = this.fb.group(
@@ -53,7 +70,66 @@ export class ProfileComponent implements OnInit {
     const current = this.user();
     if (current) {
       this.form.patchValue({ name: current.name, phone: current.phone ?? '' });
+      this.loadMedicalProfile();
     }
+  }
+
+  private loadMedicalProfile(): void {
+    this.medLoading.set(true);
+    this.medicalProfileService
+      .getOwn()
+      .pipe(
+        finalize(() => this.medLoading.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (data) => {
+          this.medForm.patchValue({
+            bloodType: (data.bloodType ?? '') as BloodType,
+            allergies: (data.allergies ?? []).join(', '),
+            conditions: (data.conditions ?? []).join(', '),
+            medications: (data.medications ?? []).join(', '),
+            notes: data.notes ?? ''
+          });
+        },
+        error: () => {}
+      });
+  }
+
+  saveMedical(): void {
+    this.medSuccess.set('');
+    this.medError.set('');
+    const raw = this.medForm.getRawValue();
+    const splitTrim = (v: string) =>
+      v
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+    this.medSaving.set(true);
+    this.medicalProfileService
+      .updateOwn({
+        bloodType: raw.bloodType as BloodType,
+        allergies: splitTrim(raw.allergies ?? ''),
+        conditions: splitTrim(raw.conditions ?? ''),
+        medications: splitTrim(raw.medications ?? ''),
+        notes: raw.notes ?? ''
+      })
+      .pipe(
+        finalize(() => this.medSaving.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: () => {
+          this.medSuccess.set('Medical history saved');
+          this.uiFeedback.success('Medical history saved');
+        },
+        error: (err) => {
+          const msg = err?.error?.message || 'Unable to save medical history';
+          this.medError.set(msg);
+          this.uiFeedback.error(msg);
+        }
+      });
   }
 
   save(): void {

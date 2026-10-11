@@ -4,13 +4,16 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { Appointment } from '../../core/models/appointment.model';
+import { MedicalProfile } from '../../core/models/medical-profile.model';
 import { TreatmentNote } from '../../core/models/treatment-note.model';
 import { AppointmentService } from '../../core/services/appointment.service';
+import { MedicalProfileService } from '../../core/services/medical-profile.service';
 import { TreatmentNoteService } from '../../core/services/treatment-note.service';
 import { UiFeedbackService } from '../../core/services/ui-feedback.service';
 
 export interface PatientSummary {
   key: string;
+  patientId: string | null;
   patientName: string;
   email: string;
   phone: string;
@@ -25,7 +28,7 @@ export interface PatientSummary {
   appointments: Appointment[];
 }
 
-type DetailTab = 'appointments' | 'notes';
+type DetailTab = 'appointments' | 'notes' | 'medical';
 
 @Component({
   selector: 'app-patients-page',
@@ -38,6 +41,7 @@ export class PatientsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly appointmentService = inject(AppointmentService);
   private readonly treatmentNoteService = inject(TreatmentNoteService);
+  private readonly medicalProfileService = inject(MedicalProfileService);
   private readonly uiFeedback = inject(UiFeedbackService);
 
   private readonly allAppointments = signal<Appointment[]>([]);
@@ -54,6 +58,10 @@ export class PatientsComponent implements OnInit {
   readonly notesError = signal('');
   expandedNoteId = signal<string | null>(null);
   private loadedNotesForKey = '';
+  readonly medicalProfile = signal<MedicalProfile | null>(null);
+  readonly medicalLoading = signal(false);
+  readonly medicalError = signal('');
+  private loadedMedicalForKey = '';
 
   readonly patients = computed((): PatientSummary[] => {
     const today = new Date().toISOString().slice(0, 10);
@@ -64,6 +72,7 @@ export class PatientsComponent implements OnInit {
       if (!map.has(key)) {
         map.set(key, {
           key,
+          patientId: (a as any).patientId ?? null,
           patientName: a.patientName ?? '',
           email: a.email ?? '',
           phone: a.phone ?? '',
@@ -151,6 +160,9 @@ export class PatientsComponent implements OnInit {
     this.notesError.set('');
     this.expandedNoteId.set(null);
     this.loadedNotesForKey = '';
+    this.medicalProfile.set(null);
+    this.medicalError.set('');
+    this.loadedMedicalForKey = '';
   }
 
   closePatient(): void {
@@ -161,6 +173,8 @@ export class PatientsComponent implements OnInit {
     this.activeTab.set(tab);
     if (tab === 'notes') {
       this.loadNotes();
+    } else if (tab === 'medical') {
+      this.loadMedical();
     }
   }
 
@@ -184,6 +198,34 @@ export class PatientsComponent implements OnInit {
         },
         error: () => {
           this.notesError.set('Unable to load clinical notes.');
+        }
+      });
+  }
+
+  private loadMedical(): void {
+    const p = this.selectedPatient();
+    if (!p) return;
+    if (this.loadedMedicalForKey === p.key) return;
+    if (!p.patientId) {
+      this.medicalError.set('Medical profile unavailable — patient has no registered account.');
+      return;
+    }
+
+    this.medicalLoading.set(true);
+    this.medicalError.set('');
+    this.medicalProfileService
+      .getForPatient(p.patientId)
+      .pipe(
+        finalize(() => this.medicalLoading.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (data) => {
+          this.medicalProfile.set(data);
+          this.loadedMedicalForKey = p.key;
+        },
+        error: () => {
+          this.medicalError.set('Unable to load medical profile.');
         }
       });
   }
