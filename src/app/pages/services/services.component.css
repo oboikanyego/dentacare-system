@@ -141,3 +141,66 @@ span {
     grid-template-columns: 1fr;
   }
 }
+
+.pricing-section {
+  margin-bottom: 48px;
+}
+
+.section-heading {
+  margin-bottom: 1.5rem;
+}
+
+.section-heading h2 {
+  margin-top: 0.5rem;
+}
+
+.section-sub {
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.pricing-table {
+  border: 1px solid rgba(18, 63, 82, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 640px;
+}
+
+.pricing-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1.25rem;
+  gap: 1rem;
+}
+
+.pricing-row:not(:last-child) {
+  border-bottom: 1px solid rgba(18, 63, 82, 0.07);
+}
+
+.pricing-row:nth-child(odd) {
+  background: rgba(14, 108, 132, 0.03);
+}
+
+.pricing-service {
+  font-size: 0.95rem;
+  color: #12313d;
+  font-weight: 500;
+}
+
+.pricing-price {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0e6c84;
+  white-space: nowrap;
+}
+
+.pricing-on-request {
+  font-weight: 400;
+  color: #52717c;
+}
+
+.loading-text {
+  color: #52717c;
+  font-size: 0.9rem;
+}

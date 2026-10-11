@@ -27,6 +27,40 @@
   }
 </section>
 
+<section class="page-width pricing-section">
+  <div class="section-heading">
+    <span class="eyebrow">Pricing guide</span>
+    <h2>Current service pricing from our clinic.</h2>
+    <p class="section-sub">Prices are managed by the clinic and updated in real time.</p>
+  </div>
+
+  @if (!liveServicesLoaded()) {
+    <p class="loading-text">Loading pricing…</p>
+  } @else if (liveServices().length > 0) {
+    <div class="pricing-table">
+      @for (item of liveServices(); track item.value) {
+        <div class="pricing-row">
+          <span class="pricing-service">{{ item.label }}</span>
+          @if (getPrice(item)) {
+            <span class="pricing-price">{{ getPrice(item) }}</span>
+          } @else {
+            <span class="pricing-price pricing-on-request">Quote on consultation</span>
+          }
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="pricing-table">
+      @for (item of data.pricing; track item.service) {
+        <div class="pricing-row">
+          <span class="pricing-service">{{ item.service }}</span>
+          <span class="pricing-price">{{ item.price }}</span>
+        </div>
+      }
+    </div>
+  }
+</section>
+
 <section class="page-width gallery-section">
   <div class="section-heading">
     <span class="eyebrow">Treatment gallery</span>
