@@ -62,6 +62,8 @@ export class BookingsComponent implements OnInit {
   searchTerm = '';
   statusFilter = 'ALL';
   branchFilter = 'ALL';
+  dateFrom = '';
+  dateTo = '';
   sortKey: 'date' | 'patientName' | 'status' = 'date';
   page = 1;
   readonly pageSize = 10;
@@ -123,6 +125,12 @@ export class BookingsComponent implements OnInit {
       });
   }
 
+  clearDateFilter(): void {
+    this.dateFrom = '';
+    this.dateTo = '';
+    this.applyFilters();
+  }
+
   applyFilters(): void {
     const term = this.searchTerm.trim().toLowerCase();
 
@@ -132,6 +140,8 @@ export class BookingsComponent implements OnInit {
           this.statusFilter === 'ALL' || appointment.status === this.statusFilter;
         const matchesBranch =
           this.branchFilter === 'ALL' || appointment.branchName === this.branchFilter;
+        const matchesDateFrom = !this.dateFrom || appointment.date >= this.dateFrom;
+        const matchesDateTo = !this.dateTo || appointment.date <= this.dateTo;
         const haystack = [
           appointment.patientName,
           appointment.idNumber,
@@ -146,7 +156,13 @@ export class BookingsComponent implements OnInit {
           .join(' ')
           .toLowerCase();
 
-        return matchesStatus && matchesBranch && (!term || haystack.includes(term));
+        return (
+          matchesStatus &&
+          matchesBranch &&
+          matchesDateFrom &&
+          matchesDateTo &&
+          (!term || haystack.includes(term))
+        );
       })
       .sort((a, b) => String(a[this.sortKey] || '').localeCompare(String(b[this.sortKey] || '')));
 
