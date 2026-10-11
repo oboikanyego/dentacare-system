@@ -55,11 +55,13 @@ export class BookingsComponent implements OnInit {
   appointments: Appointment[] = [];
   filteredAppointments: Appointment[] = [];
   timeSlots: MasterDataItem[] = [];
+  branches: MasterDataItem[] = [];
   isLoading = false;
   errorMessage = '';
   successMessage = '';
   searchTerm = '';
   statusFilter = 'ALL';
+  branchFilter = 'ALL';
   sortKey: 'date' | 'patientName' | 'status' = 'date';
   page = 1;
   readonly pageSize = 10;
@@ -78,6 +80,18 @@ export class BookingsComponent implements OnInit {
         },
         error: () => {
           this.timeSlots = [];
+        }
+      });
+
+    this.masterDataService
+      .getOne('branches')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.branches = (response.items || []).filter((b) => b.isActive !== false);
+        },
+        error: () => {
+          this.branches = [];
         }
       });
 
@@ -116,6 +130,8 @@ export class BookingsComponent implements OnInit {
       .filter((appointment) => {
         const matchesStatus =
           this.statusFilter === 'ALL' || appointment.status === this.statusFilter;
+        const matchesBranch =
+          this.branchFilter === 'ALL' || appointment.branchName === this.branchFilter;
         const haystack = [
           appointment.patientName,
           appointment.idNumber,
@@ -130,7 +146,7 @@ export class BookingsComponent implements OnInit {
           .join(' ')
           .toLowerCase();
 
-        return matchesStatus && (!term || haystack.includes(term));
+        return matchesStatus && matchesBranch && (!term || haystack.includes(term));
       })
       .sort((a, b) => String(a[this.sortKey] || '').localeCompare(String(b[this.sortKey] || '')));
 
