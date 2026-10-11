@@ -59,6 +59,10 @@ export class HeaderComponent {
     return this.authService.hasRole(['PATIENT']);
   }
 
+  isDentist(): boolean {
+    return this.authService.hasRole(['DENTIST']);
+  }
+
   @HostListener('document:click')
   onDocumentClick(): void {
     if (this.profileOpen()) {

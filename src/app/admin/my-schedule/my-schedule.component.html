@@ -1,0 +1,208 @@
+<section class="page-width">
+  <div class="section-header">
+    <span class="eyebrow">Dentist</span>
+    <div class="header-row">
+      <h1>My Schedule</h1>
+    </div>
+    <p>Your appointments for today and the next two weeks.</p>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert error">{{ errorMessage() }}</div>
+  }
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <span class="kpi-val">{{ kpiTotal() }}</span>
+      <span class="kpi-lbl">Today</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-val blue">{{ kpiUpcomingWeek() }}</span>
+      <span class="kpi-lbl">Next 7 days</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-val green">{{ kpiCompletedMonth() }}</span>
+      <span class="kpi-lbl">Completed this month</span>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="toolbar-label">Filter by status</span>
+    <div class="filter-chips">
+      @for (s of ['ALL', 'PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED']; track s) {
+        <button
+          type="button"
+          class="chip"
+          [class.active]="statusFilter === s"
+          (click)="statusFilter = s"
+        >
+          {{ s === 'ALL' ? 'All' : (s | titlecase) }}
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="skeleton-stack">
+      @for (i of [1, 2, 3]; track i) {
+        <div class="appt-skeleton"></div>
+      }
+    </div>
+  } @else {
+    <div class="day-section">
+      <div class="day-heading today-heading">
+        <span class="day-label">Today · {{ today }}</span>
+        <span class="day-count"
+          >{{ todaySlots().length }} appointment{{ todaySlots().length !== 1 ? 's' : '' }}</span
+        >
+      </div>
+
+      @if (todaySlots().length === 0) {
+        <div class="empty-day">No appointments today.</div>
+      } @else {
+        <div class="appt-list">
+          @for (a of todaySlots(); track a._id) {
+            <div
+              class="appt-card"
+              [class.expanded]="expandedId() === a._id"
+            >
+              <button
+                type="button"
+                class="appt-row"
+                (click)="toggleExpand(a._id!)"
+              >
+                <div class="time-col">
+                  <span class="appt-time">{{ a.time }}</span>
+                  @if (a.durationMinutes) {
+                    <span class="appt-dur">{{ a.durationMinutes }} min</span>
+                  }
+                </div>
+                <div class="appt-main">
+                  <span class="appt-patient">{{ maskName(a.patientName) }}</span>
+                  <span class="appt-service">{{ a.serviceName }}</span>
+                  @if (a.branchName) {
+                    <span class="appt-branch">{{ a.branchName }}</span>
+                  }
+                </div>
+                <div class="appt-right">
+                  <span
+                    class="pill"
+                    [ngClass]="statusClass(a.status)"
+                    >{{ a.status }}</span
+                  >
+                  <span
+                    class="chevron"
+                    aria-hidden="true"
+                    >{{ expandedId() === a._id ? '▲' : '▼' }}</span
+                  >
+                </div>
+              </button>
+
+              @if (expandedId() === a._id) {
+                <div class="appt-detail">
+                  @if (a.reason) {
+                    <div class="detail-row">
+                      <span class="detail-label">Reason</span>
+                      <span class="detail-value">{{ a.reason }}</span>
+                    </div>
+                  }
+                  @if (a.notes) {
+                    <div class="detail-row">
+                      <span class="detail-label">Notes</span>
+                      <span class="detail-value">{{ a.notes }}</span>
+                    </div>
+                  }
+                  @if (a.phone) {
+                    <div class="detail-row">
+                      <span class="detail-label">Phone</span>
+                      <span class="detail-value">{{ a.phone }}</span>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    @if (upcomingDays().length === 0) {
+      <div class="empty-state card">No upcoming appointments in the next 14 days.</div>
+    } @else {
+      @for (day of upcomingDays(); track day.dateIso) {
+        <div class="day-section">
+          <div class="day-heading">
+            <span class="day-label">{{ day.label }}</span>
+            <span class="day-count"
+              >{{ day.slots.length }} appointment{{ day.slots.length !== 1 ? 's' : '' }}</span
+            >
+          </div>
+
+          <div class="appt-list">
+            @for (a of day.slots; track a._id) {
+              <div
+                class="appt-card"
+                [class.expanded]="expandedId() === a._id"
+              >
+                <button
+                  type="button"
+                  class="appt-row"
+                  (click)="toggleExpand(a._id!)"
+                >
+                  <div class="time-col">
+                    <span class="appt-time">{{ a.time }}</span>
+                    @if (a.durationMinutes) {
+                      <span class="appt-dur">{{ a.durationMinutes }} min</span>
+                    }
+                  </div>
+                  <div class="appt-main">
+                    <span class="appt-patient">{{ maskName(a.patientName) }}</span>
+                    <span class="appt-service">{{ a.serviceName }}</span>
+                    @if (a.branchName) {
+                      <span class="appt-branch">{{ a.branchName }}</span>
+                    }
+                  </div>
+                  <div class="appt-right">
+                    <span
+                      class="pill"
+                      [ngClass]="statusClass(a.status)"
+                      >{{ a.status }}</span
+                    >
+                    <span
+                      class="chevron"
+                      aria-hidden="true"
+                      >{{ expandedId() === a._id ? '▲' : '▼' }}</span
+                    >
+                  </div>
+                </button>
+
+                @if (expandedId() === a._id) {
+                  <div class="appt-detail">
+                    @if (a.reason) {
+                      <div class="detail-row">
+                        <span class="detail-label">Reason</span>
+                        <span class="detail-value">{{ a.reason }}</span>
+                      </div>
+                    }
+                    @if (a.notes) {
+                      <div class="detail-row">
+                        <span class="detail-label">Notes</span>
+                        <span class="detail-value">{{ a.notes }}</span>
+                      </div>
+                    }
+                    @if (a.phone) {
+                      <div class="detail-row">
+                        <span class="detail-label">Phone</span>
+                        <span class="detail-value">{{ a.phone }}</span>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  }
+</section>
