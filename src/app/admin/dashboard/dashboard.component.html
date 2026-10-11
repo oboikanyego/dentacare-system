@@ -1,7 +1,7 @@
 <section class="page-width admin-section">
   <span class="eyebrow">Administration / Dashboard</span>
   <h1>Clinic overview</h1>
-  <p class="lead">A live summary of bookings and active users.</p>
+  <p class="lead">A live summary of bookings, revenue, and active users.</p>
 
   @if (errorMessage()) {
     <div class="alert error">{{ errorMessage() }}</div>
@@ -9,7 +9,7 @@
 
   @if (isLoading()) {
     <div class="stats-grid">
-      @for (item of [1, 2, 3, 4, 5]; track item) {
+      @for (item of [1, 2, 3, 4, 5, 6, 7, 8]; track item) {
         <article class="card skeleton-card"></article>
       }
     </div>
@@ -34,6 +34,18 @@
       <article class="card">
         <strong>{{ activeUsers() }}</strong>
         <span>Active users</span>
+      </article>
+      <article class="card revenue-card">
+        <strong>{{ formatCurrency(revenueThisMonth()) }}</strong>
+        <span>Revenue this month</span>
+      </article>
+      <article class="card unpaid-card">
+        <strong>{{ unpaidCount() }}</strong>
+        <span>Unpaid invoices</span>
+      </article>
+      <article class="card unpaid-card">
+        <strong>{{ formatCurrency(unpaidTotal()) }}</strong>
+        <span>Outstanding balance</span>
       </article>
     </div>
 

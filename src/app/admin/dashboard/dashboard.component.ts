@@ -3,8 +3,10 @@ import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angula
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize, forkJoin } from 'rxjs';
 import { Appointment } from '../../core/models/appointment.model';
+import { Invoice } from '../../core/models/invoice.model';
 import { UserListItem } from '../../core/models/user.model';
 import { AppointmentService } from '../../core/services/appointment.service';
+import { InvoiceService } from '../../core/services/invoice.service';
 import { UsersService } from '../../core/services/users.service';
 
 @Component({
@@ -17,11 +19,13 @@ import { UsersService } from '../../core/services/users.service';
 export class DashboardComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly appointmentService = inject(AppointmentService);
+  private readonly invoiceService = inject(InvoiceService);
   private readonly usersService = inject(UsersService);
 
   readonly isLoading = signal(true);
   readonly errorMessage = signal('');
   readonly appointments = signal<Appointment[]>([]);
+  readonly invoices = signal<Invoice[]>([]);
   readonly users = signal<UserListItem[]>([]);
 
   private readonly todayIso = new Date().toISOString().slice(0, 10);
@@ -45,6 +49,24 @@ export class DashboardComponent implements OnInit {
     () => this.appointments().filter((appointment) => appointment.status === 'NO_SHOW').length
   );
   readonly activeUsers = computed(() => this.users().filter((user) => user.isActive).length);
+
+  private readonly currentYearMonth = new Date().toISOString().slice(0, 7);
+
+  readonly revenueThisMonth = computed(() =>
+    this.invoices()
+      .filter((inv) => inv.status === 'PAID' && inv.date.startsWith(this.currentYearMonth))
+      .reduce((sum, inv) => sum + inv.total, 0)
+  );
+
+  readonly unpaidCount = computed(
+    () => this.invoices().filter((inv) => inv.status === 'UNPAID').length
+  );
+
+  readonly unpaidTotal = computed(() =>
+    this.invoices()
+      .filter((inv) => inv.status === 'UNPAID')
+      .reduce((sum, inv) => sum + inv.total, 0)
+  );
 
   readonly totalAppointments = computed(() => this.appointments().length);
 
@@ -139,6 +161,10 @@ export class DashboardComponent implements OnInit {
       }));
   });
 
+  formatCurrency(amount: number): string {
+    return `R ${amount.toFixed(2)}`;
+  }
+
   ngOnInit(): void {
     this.load();
   }
@@ -149,6 +175,7 @@ export class DashboardComponent implements OnInit {
 
     forkJoin({
       appointments: this.appointmentService.listStaffAppointments(),
+      invoices: this.invoiceService.listAll(),
       users: this.usersService.list()
     })
       .pipe(
@@ -156,8 +183,9 @@ export class DashboardComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
-        next: ({ appointments, users }) => {
+        next: ({ appointments, invoices, users }) => {
           this.appointments.set(appointments);
+          this.invoices.set(invoices);
           this.users.set(users);
         },
         error: (error) => {

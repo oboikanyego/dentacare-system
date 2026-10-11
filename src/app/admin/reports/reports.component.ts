@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { finalize } from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
 import { Appointment } from '../../core/models/appointment.model';
+import { Invoice } from '../../core/models/invoice.model';
 import { AppointmentService } from '../../core/services/appointment.service';
+import { InvoiceService } from '../../core/services/invoice.service';
 import { UiFeedbackService } from '../../core/services/ui-feedback.service';
 
 type Preset = 'today' | 'week' | 'month' | 'last-month' | 'quarter' | 'year' | 'custom';
@@ -26,6 +28,20 @@ interface DentistRow {
   noShow: number;
   completionRate: number;
   noShowRate: number;
+}
+
+interface RevenueServiceRow {
+  name: string;
+  invoiced: number;
+  collected: number;
+  outstanding: number;
+}
+
+interface RevenueDentistRow {
+  name: string;
+  invoiced: number;
+  collected: number;
+  outstanding: number;
 }
 
 interface DayBar {
@@ -50,9 +66,11 @@ interface MonthBar {
 export class ReportsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly appointmentService = inject(AppointmentService);
+  private readonly invoiceService = inject(InvoiceService);
   private readonly uiFeedback = inject(UiFeedbackService);
 
   private readonly allAppointments = signal<Appointment[]>([]);
+  private readonly allInvoices = signal<Invoice[]>([]);
   readonly isLoading = signal(false);
   readonly errorMessage = signal('');
 
@@ -153,6 +171,60 @@ export class ReportsComponent implements OnInit {
       }));
   });
 
+  readonly filteredInvoices = computed(() => {
+    const from = this.dateFrom;
+    const to = this.dateTo;
+    return this.allInvoices().filter(
+      (inv) => (!from || inv.date >= from) && (!to || inv.date <= to)
+    );
+  });
+
+  readonly revenueTotal = computed(() =>
+    this.filteredInvoices().reduce((sum, inv) => sum + inv.total, 0)
+  );
+
+  readonly revenueCollected = computed(() =>
+    this.filteredInvoices()
+      .filter((inv) => inv.status === 'PAID')
+      .reduce((sum, inv) => sum + inv.total, 0)
+  );
+
+  readonly revenueOutstanding = computed(() =>
+    this.filteredInvoices()
+      .filter((inv) => inv.status === 'UNPAID')
+      .reduce((sum, inv) => sum + inv.total, 0)
+  );
+
+  readonly invoiceCount = computed(() => this.filteredInvoices().length);
+
+  readonly revenueByService = computed((): RevenueServiceRow[] => {
+    const map = new Map<string, RevenueServiceRow>();
+    for (const inv of this.filteredInvoices()) {
+      if (inv.status === 'CANCELLED') continue;
+      const name = inv.serviceName || 'Unknown';
+      if (!map.has(name)) map.set(name, { name, invoiced: 0, collected: 0, outstanding: 0 });
+      const r = map.get(name)!;
+      r.invoiced += inv.total;
+      if (inv.status === 'PAID') r.collected += inv.total;
+      if (inv.status === 'UNPAID') r.outstanding += inv.total;
+    }
+    return [...map.values()].sort((a, b) => b.invoiced - a.invoiced);
+  });
+
+  readonly revenueByDentist = computed((): RevenueDentistRow[] => {
+    const map = new Map<string, RevenueDentistRow>();
+    for (const inv of this.filteredInvoices()) {
+      if (inv.status === 'CANCELLED') continue;
+      const name = inv.dentistName || 'Unknown';
+      if (!map.has(name)) map.set(name, { name, invoiced: 0, collected: 0, outstanding: 0 });
+      const r = map.get(name)!;
+      r.invoiced += inv.total;
+      if (inv.status === 'PAID') r.collected += inv.total;
+      if (inv.status === 'UNPAID') r.outstanding += inv.total;
+    }
+    return [...map.values()].sort((a, b) => b.invoiced - a.invoiced);
+  });
+
   readonly byDentist = computed((): DentistRow[] => {
     const map = new Map<string, DentistRow>();
     for (const a of this.filtered()) {
@@ -190,20 +262,29 @@ export class ReportsComponent implements OnInit {
   load(): void {
     this.isLoading.set(true);
     this.errorMessage.set('');
-    this.appointmentService
-      .listStaffAppointments()
+    forkJoin({
+      appointments: this.appointmentService.listStaffAppointments(),
+      invoices: this.invoiceService.listAll()
+    })
       .pipe(
         finalize(() => this.isLoading.set(false)),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
-        next: (data) => this.allAppointments.set(data),
+        next: ({ appointments, invoices }) => {
+          this.allAppointments.set(appointments);
+          this.allInvoices.set(invoices);
+        },
         error: (err) => {
-          const msg = err?.error?.message || 'Unable to load appointments';
+          const msg = err?.error?.message || 'Unable to load reports';
           this.errorMessage.set(msg);
           this.uiFeedback.error(msg);
         }
       });
+  }
+
+  formatCurrency(amount: number): string {
+    return `R ${amount.toFixed(2)}`;
   }
 
   applyPreset(p: Preset): void {
@@ -254,9 +335,39 @@ export class ReportsComponent implements OnInit {
       ['No-show', String(this.noShow())],
       ['Completion rate', `${this.completionRate()}%`],
       ['No-show rate', `${this.noShowRate()}%`],
-      ['Cancellation rate', `${this.cancellationRate()}%`]
+      ['Cancellation rate', `${this.cancellationRate()}%`],
+      ['', ''],
+      ['Total invoiced', this.formatCurrency(this.revenueTotal())],
+      ['Revenue collected', this.formatCurrency(this.revenueCollected())],
+      ['Outstanding', this.formatCurrency(this.revenueOutstanding())]
     ];
     this.downloadCsv(rows, `report_summary_${this.dateFrom}_${this.dateTo}`);
+  }
+
+  exportRevenue(): void {
+    const headers = ['Name', 'Invoiced', 'Collected', 'Outstanding'];
+    const serviceRows = [
+      ['--- By Service ---', '', '', ''],
+      ...this.revenueByService().map((r) => [
+        r.name,
+        this.formatCurrency(r.invoiced),
+        this.formatCurrency(r.collected),
+        this.formatCurrency(r.outstanding)
+      ])
+    ];
+    const dentistRows = [
+      ['--- By Dentist ---', '', '', ''],
+      ...this.revenueByDentist().map((r) => [
+        r.name,
+        this.formatCurrency(r.invoiced),
+        this.formatCurrency(r.collected),
+        this.formatCurrency(r.outstanding)
+      ])
+    ];
+    this.downloadCsv(
+      [headers, ...serviceRows, ['', '', '', ''], ...dentistRows],
+      `report_revenue_${this.dateFrom}_${this.dateTo}`
+    );
   }
 
   exportByService(): void {
