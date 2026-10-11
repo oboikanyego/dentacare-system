@@ -42,4 +42,8 @@ export class TreatmentNoteService {
       { days }
     );
   }
+
+  getTodaysNotes(): Observable<TreatmentNote[]> {
+    return this.api.get<TreatmentNote[]>(`${API_ENDPOINTS.treatmentNotes}/today`);
+  }
 }
