@@ -2,7 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { API_ENDPOINTS } from '../constants/api-endpoints';
-import { CreateUserRequest, UpdateUserRequest, UserListItem } from '../models/user.model';
+import {
+  CreateUserRequest,
+  PatientSearchResult,
+  UpdateUserRequest,
+  UserListItem
+} from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {
@@ -26,5 +31,9 @@ export class UsersService {
 
   deactivate(id: string): Observable<unknown> {
     return this.api.delete(`${API_ENDPOINTS.users}/${id}`);
+  }
+
+  searchPatients(q: string): Observable<PatientSearchResult[]> {
+    return this.api.get<PatientSearchResult[]>(`${API_ENDPOINTS.users}/patients/search`, { q });
   }
 }

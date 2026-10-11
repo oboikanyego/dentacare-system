@@ -27,11 +27,13 @@ import {
 } from 'rxjs';
 import { Dentist } from '../../core/models/dentist.model';
 import { MasterDataItem } from '../../core/models/master-data.model';
+import { PatientSearchResult } from '../../core/models/user.model';
 import { AppointmentService, AvailableSlot } from '../../core/services/appointment.service';
 import { AuthService } from '../../core/services/auth.service';
 import { DentistService } from '../../core/services/dentist.service';
 import { MasterDataListResponse, MasterDataService } from '../../core/services/master-data.service';
 import { UiFeedbackService } from '../../core/services/ui-feedback.service';
+import { UsersService } from '../../core/services/users.service';
 import {
   formatLocalDate,
   notPastDateValidator,
@@ -68,6 +70,7 @@ export class AppointmentComponent implements OnInit {
   private readonly dentistService = inject(DentistService);
   private readonly authService = inject(AuthService);
   private readonly uiFeedback = inject(UiFeedbackService);
+  private readonly usersService = inject(UsersService);
 
   readonly loading = signal(false);
   readonly successMessage = signal('');
@@ -94,6 +97,10 @@ export class AppointmentComponent implements OnInit {
   readonly serviceSearch = new FormControl('', { nonNullable: true });
   readonly dentistSearch = new FormControl('', { nonNullable: true });
   readonly timeSearch = new FormControl('', { nonNullable: true });
+  readonly patientSearch = new FormControl('', { nonNullable: true });
+
+  readonly patientResults = signal<PatientSearchResult[]>([]);
+  readonly patientSearchLoading = signal(false);
 
   readonly minDate = startOfLocalDay(new Date());
 
@@ -134,6 +141,9 @@ export class AppointmentComponent implements OnInit {
     this.bindDentistSearch();
     this.watchDentistAndDate();
     this.bindTimeSearch();
+    if (this.isStaff()) {
+      this.bindPatientSearch();
+    }
 
     this.masterDataService
       .getOne('appointmentStatuses')
@@ -409,6 +419,42 @@ export class AppointmentComponent implements OnInit {
     return dentist ? this.getDentistLabel(dentist) : '';
   }
 
+  selectPatient(patient: PatientSearchResult, isUserInput: boolean): void {
+    if (!isUserInput) return;
+    this.bookingForm.patchValue({
+      patientName: patient.name,
+      email: patient.email,
+      phone: patient.phone || '',
+      idNumber: patient.idNumber || ''
+    });
+    this.patientSearch.setValue(patient.name, { emitEvent: false });
+    this.patientResults.set([]);
+  }
+
+  getPatientLabel(p: PatientSearchResult): string {
+    return p.phone ? `${p.name} · ${p.phone}` : p.name;
+  }
+
+  private bindPatientSearch(): void {
+    this.patientSearch.valueChanges
+      .pipe(
+        map((v) => v.trim()),
+        debounceTime(300),
+        distinctUntilChanged(),
+        tap(() => this.patientSearchLoading.set(true)),
+        switchMap((q) =>
+          q.length >= 2
+            ? this.usersService.searchPatients(q).pipe(
+                catchError(() => of<PatientSearchResult[]>([])),
+                finalize(() => this.patientSearchLoading.set(false))
+              )
+            : of<PatientSearchResult[]>([]).pipe(tap(() => this.patientSearchLoading.set(false)))
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((results) => this.patientResults.set(results));
+  }
+
   private resetBookingSelection(isPatient: boolean): void {
     this.bookingForm.patchValue({
       serviceId: '',
@@ -431,5 +477,7 @@ export class AppointmentComponent implements OnInit {
     this.serviceSearch.setValue('');
     this.dentistSearch.setValue('');
     this.timeSearch.setValue('');
+    this.patientSearch.setValue('');
+    this.patientResults.set([]);
   }
 }

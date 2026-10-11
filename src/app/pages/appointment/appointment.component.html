@@ -264,6 +264,51 @@
         </mat-form-field>
       }
 
+      @if (isStaff()) {
+        <div class="patient-lookup-banner">
+          <span class="patient-lookup-label">Patient lookup</span>
+          <mat-form-field
+            appearance="outline"
+            class="patient-lookup-field"
+          >
+            <mat-label>Search existing patients</mat-label>
+            <input
+              matInput
+              type="text"
+              [formControl]="patientSearch"
+              [matAutocomplete]="patientAuto"
+              placeholder="Name, phone or email"
+              autocomplete="off"
+            />
+            @if (patientSearchLoading()) {
+              <mat-spinner
+                matSuffix
+                diameter="18"
+              ></mat-spinner>
+            }
+            <mat-autocomplete #patientAuto="matAutocomplete">
+              @for (p of patientResults(); track p._id) {
+                <mat-option
+                  [value]="p.name"
+                  (onSelectionChange)="selectPatient(p, $event.isUserInput)"
+                >
+                  <span class="patient-option-name">{{ p.name }}</span>
+                  @if (p.phone) {
+                    <small class="option-meta">{{ p.phone }}</small>
+                  }
+                  <small class="option-meta">{{ p.email }}</small>
+                </mat-option>
+              } @empty {
+                @if (patientSearch.value.length >= 2 && !patientSearchLoading()) {
+                  <mat-option disabled>No registered patients found</mat-option>
+                }
+              }
+            </mat-autocomplete>
+            <mat-hint>Select a patient to pre-fill the fields below</mat-hint>
+          </mat-form-field>
+        </div>
+      }
+
       <div class="grid two-up">
         <mat-form-field appearance="outline">
           <mat-label>Full name</mat-label>

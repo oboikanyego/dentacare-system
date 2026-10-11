@@ -21,6 +21,14 @@ export interface CreateUserRequest {
   isActive?: boolean;
 }
 
+export interface PatientSearchResult {
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  idNumber?: string;
+}
+
 export interface UpdateUserRequest {
   name?: string;
   role?: UserRole;
