@@ -70,7 +70,7 @@ export class TreatmentNoteDialogComponent {
       )
       .subscribe({
         next: (note) => {
-          this.uiFeedback.success('Treatment note saved');
+          this.uiFeedback.success('Treatment note saved — summary emailed to patient');
           this.dialogRef.close(note);
         },
         error: (err) => {
