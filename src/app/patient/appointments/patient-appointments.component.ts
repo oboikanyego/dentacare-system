@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EMPTY, finalize, switchMap } from 'rxjs';
 import { Appointment } from '../../core/models/appointment.model';
@@ -24,7 +25,19 @@ export class PatientAppointmentsComponent implements OnInit {
   private readonly appointmentService = inject(AppointmentService);
   private readonly masterDataService = inject(MasterDataService);
   private readonly dialog = inject(MatDialog);
+  private readonly router = inject(Router);
   private readonly uiFeedback = inject(UiFeedbackService);
+
+  private readonly allAppointments = signal<Appointment[]>([]);
+
+  readonly nextAppointment = computed(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    return (
+      this.allAppointments()
+        .filter((a) => a.date >= today && !['CANCELLED', 'NO_SHOW'].includes(a.status))
+        .sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time))[0] ?? null
+    );
+  });
 
   appointments: Appointment[] = [];
   filteredAppointments: Appointment[] = [];
@@ -70,6 +83,7 @@ export class PatientAppointmentsComponent implements OnInit {
       .subscribe({
         next: (appointments) => {
           this.appointments = appointments;
+          this.allAppointments.set(appointments);
           this.applyFilters();
         },
         error: (error) => {
@@ -193,6 +207,10 @@ export class PatientAppointmentsComponent implements OnInit {
           this.uiFeedback.error(this.errorMessage);
         }
       });
+  }
+
+  bookNew(): void {
+    this.router.navigate(['/appointment']);
   }
 
   statusClass(status: Appointment['status']): string {
