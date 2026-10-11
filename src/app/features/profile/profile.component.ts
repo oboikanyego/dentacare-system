@@ -22,12 +22,32 @@ export class ProfileComponent implements OnInit {
   readonly loading = signal(false);
   readonly successMessage = signal('');
   readonly errorMessage = signal('');
+  readonly pwLoading = signal(false);
+  readonly pwSuccess = signal('');
+  readonly pwError = signal('');
   readonly user = this.authService.currentUser;
 
   readonly form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
     phone: ['', [Validators.pattern(/^(?:\+27|0)[6-8][0-9]{8}$/)]]
   });
+
+  readonly pwForm = this.fb.group(
+    {
+      currentPassword: ['', Validators.required],
+      newPassword: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', Validators.required]
+    },
+    { validators: this.passwordsMatchValidator }
+  );
+
+  private passwordsMatchValidator(
+    group: import('@angular/forms').AbstractControl
+  ): Record<string, boolean> | null {
+    const np = group.get('newPassword')?.value;
+    const cp = group.get('confirmPassword')?.value;
+    return np && cp && np !== cp ? { mismatch: true } : null;
+  }
 
   ngOnInit(): void {
     const current = this.user();
@@ -68,6 +88,40 @@ export class ProfileComponent implements OnInit {
           this.uiFeedback.error(msg);
         }
       });
+  }
+
+  changePassword(): void {
+    this.pwSuccess.set('');
+    this.pwError.set('');
+    if (this.pwForm.invalid) {
+      this.pwForm.markAllAsTouched();
+      return;
+    }
+    const { currentPassword, newPassword } = this.pwForm.getRawValue();
+    this.pwLoading.set(true);
+    this.authService
+      .changePassword({ currentPassword: currentPassword!, newPassword: newPassword! })
+      .pipe(
+        finalize(() => this.pwLoading.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: () => {
+          this.pwSuccess.set('Password changed successfully');
+          this.uiFeedback.success('Password changed successfully');
+          this.pwForm.reset();
+        },
+        error: (err) => {
+          const msg = err?.error?.message || 'Unable to change password';
+          this.pwError.set(msg);
+          this.uiFeedback.error(msg);
+        }
+      });
+  }
+
+  isPwFieldInvalid(field: string): boolean {
+    const ctrl = this.pwForm.get(field);
+    return !!ctrl && ctrl.invalid && (ctrl.dirty || ctrl.touched);
   }
 
   isFieldInvalid(field: string): boolean {

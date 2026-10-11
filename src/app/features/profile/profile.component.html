@@ -23,71 +23,155 @@
         </dl>
       </aside>
 
-      <div class="edit-card card">
-        <h2>Edit details</h2>
+      <div class="edit-cards">
+        <div class="edit-card card">
+          <h2>Edit details</h2>
 
-        @if (successMessage()) {
-          <div class="alert success">{{ successMessage() }}</div>
-        }
-        @if (errorMessage()) {
-          <div class="alert error">{{ errorMessage() }}</div>
-        }
+          @if (successMessage()) {
+            <div class="alert success">{{ successMessage() }}</div>
+          }
+          @if (errorMessage()) {
+            <div class="alert error">{{ errorMessage() }}</div>
+          }
 
-        <form
-          [formGroup]="form"
-          (ngSubmit)="save()"
-          novalidate
-        >
-          <div
-            class="form-field"
-            [class.invalid]="isFieldInvalid('name')"
+          <form
+            [formGroup]="form"
+            (ngSubmit)="save()"
+            novalidate
           >
-            <label for="name">Full name <span class="required">*</span></label>
-            <input
-              id="name"
-              type="text"
-              formControlName="name"
-              autocomplete="name"
-            />
-            @if (isFieldInvalid('name')) {
-              <span class="field-error">{{ getFieldError('name') }}</span>
-            }
-          </div>
+            <div
+              class="form-field"
+              [class.invalid]="isFieldInvalid('name')"
+            >
+              <label for="name">Full name <span class="required">*</span></label>
+              <input
+                id="name"
+                type="text"
+                formControlName="name"
+                autocomplete="name"
+              />
+              @if (isFieldInvalid('name')) {
+                <span class="field-error">{{ getFieldError('name') }}</span>
+              }
+            </div>
 
-          <div
-            class="form-field"
-            [class.invalid]="isFieldInvalid('phone')"
+            <div
+              class="form-field"
+              [class.invalid]="isFieldInvalid('phone')"
+            >
+              <label for="phone">Mobile number</label>
+              <input
+                id="phone"
+                type="tel"
+                formControlName="phone"
+                autocomplete="tel"
+                placeholder="e.g. 0712345678"
+              />
+              @if (isFieldInvalid('phone')) {
+                <span class="field-error">{{ getFieldError('phone') }}</span>
+              }
+            </div>
+
+            <p class="readonly-note">
+              Email and ID number cannot be changed here. Contact your administrator if these need
+              updating.
+            </p>
+
+            <button
+              type="submit"
+              class="primary-button"
+              [disabled]="loading()"
+            >
+              @if (loading()) {
+                Saving…
+              } @else {
+                Save changes
+              }
+            </button>
+          </form>
+        </div>
+
+        <div class="edit-card card">
+          <h2>Change password</h2>
+
+          @if (pwSuccess()) {
+            <div class="alert success">{{ pwSuccess() }}</div>
+          }
+          @if (pwError()) {
+            <div class="alert error">{{ pwError() }}</div>
+          }
+
+          <form
+            [formGroup]="pwForm"
+            (ngSubmit)="changePassword()"
+            novalidate
           >
-            <label for="phone">Mobile number</label>
-            <input
-              id="phone"
-              type="tel"
-              formControlName="phone"
-              autocomplete="tel"
-              placeholder="e.g. 0712345678"
-            />
-            @if (isFieldInvalid('phone')) {
-              <span class="field-error">{{ getFieldError('phone') }}</span>
-            }
-          </div>
+            <div
+              class="form-field"
+              [class.invalid]="isPwFieldInvalid('currentPassword')"
+            >
+              <label for="currentPassword">Current password <span class="required">*</span></label>
+              <input
+                id="currentPassword"
+                type="password"
+                formControlName="currentPassword"
+                autocomplete="current-password"
+              />
+              @if (isPwFieldInvalid('currentPassword')) {
+                <span class="field-error">Required.</span>
+              }
+            </div>
 
-          <p class="readonly-note">
-            Email and ID number cannot be changed here. Contact your administrator if these need
-            updating.
-          </p>
+            <div
+              class="form-field"
+              [class.invalid]="isPwFieldInvalid('newPassword')"
+            >
+              <label for="newPassword">New password <span class="required">*</span></label>
+              <input
+                id="newPassword"
+                type="password"
+                formControlName="newPassword"
+                autocomplete="new-password"
+              />
+              @if (isPwFieldInvalid('newPassword')) {
+                <span class="field-error">Must be at least 8 characters.</span>
+              }
+            </div>
 
-          <button
-            type="submit"
-            class="primary-button"
-            [disabled]="loading()"
-          >
-            @if (loading()) {
-              Saving…
-            } @else {
-              Save changes
-            }
-          </button>
-        </form>
+            <div
+              class="form-field"
+              [class.invalid]="
+                isPwFieldInvalid('confirmPassword') ||
+                (pwForm.errors?.['mismatch'] && pwForm.get('confirmPassword')?.touched)
+              "
+            >
+              <label for="confirmPassword"
+                >Confirm new password <span class="required">*</span></label
+              >
+              <input
+                id="confirmPassword"
+                type="password"
+                formControlName="confirmPassword"
+                autocomplete="new-password"
+              />
+              @if (pwForm.errors?.['mismatch'] && pwForm.get('confirmPassword')?.touched) {
+                <span class="field-error">Passwords do not match.</span>
+              }
+            </div>
+
+            <button
+              type="submit"
+              class="primary-button"
+              [disabled]="pwLoading()"
+            >
+              @if (pwLoading()) {
+                Updating…
+              } @else {
+                Change password
+              }
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   }
