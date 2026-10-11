@@ -146,6 +146,31 @@
                   >
                     Edit / Reschedule
                   </button>
+                  @if (appointment.status === 'PENDING') {
+                    <button
+                      type="button"
+                      class="ghost-button confirm"
+                      (click)="quickStatus(appointment, 'CONFIRMED')"
+                    >
+                      Confirm
+                    </button>
+                  }
+                  @if (appointment.status === 'CONFIRMED') {
+                    <button
+                      type="button"
+                      class="ghost-button complete"
+                      (click)="quickStatus(appointment, 'COMPLETED')"
+                    >
+                      Complete
+                    </button>
+                    <button
+                      type="button"
+                      class="ghost-button no-show"
+                      (click)="quickStatus(appointment, 'NO_SHOW')"
+                    >
+                      No show
+                    </button>
+                  }
                   @if (appointment.status === 'COMPLETED') {
                     <button
                       type="button"
