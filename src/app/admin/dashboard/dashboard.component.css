@@ -26,7 +26,7 @@ h1 {
 }
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
 }
 .card {
@@ -46,6 +46,12 @@ h1 {
 }
 .card span {
   color: #52717c;
+}
+.revenue-card strong {
+  color: #1d4ed8;
+}
+.unpaid-card strong {
+  color: #c2410c;
 }
 .skeleton-card {
   background: linear-gradient(90deg, #f8fafc, #eef2f7, #f8fafc);
