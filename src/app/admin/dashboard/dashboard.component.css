@@ -220,8 +220,63 @@ h1 {
   color: #6b21a8;
 }
 
+.trend-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 140px;
+  padding-top: 24px;
+}
+
+.trend-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+}
+
+.trend-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary, #64748b);
+}
+
+.trend-track {
+  flex: 1;
+  width: 100%;
+  background: var(--surface-2, #f1f5f9);
+  border-radius: 4px 4px 0 0;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.trend-fill {
+  width: 100%;
+  background: #0d9488;
+  border-radius: 4px 4px 0 0;
+  min-height: 2px;
+  transition: height 0.3s ease;
+}
+
+.trend-label {
+  font-size: 10px;
+  color: var(--text-secondary, #94a3b8);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
 @media (max-width: 768px) {
   .charts-row {
     grid-template-columns: 1fr;
+  }
+
+  .trend-label {
+    font-size: 9px;
   }
 }

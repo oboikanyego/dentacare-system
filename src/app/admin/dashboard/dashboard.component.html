@@ -20,12 +20,12 @@
         <span>Bookings today</span>
       </article>
       <article class="card">
-        <strong>{{ pendingCount() }}</strong>
-        <span>Pending</span>
+        <strong>{{ upcomingCount() }}</strong>
+        <span>Next 7 days</span>
       </article>
       <article class="card">
-        <strong>{{ confirmedCount() }}</strong>
-        <span>Confirmed</span>
+        <strong>{{ pendingCount() }}</strong>
+        <span>Pending</span>
       </article>
       <article class="card">
         <strong>{{ completedCount() }}</strong>
@@ -38,6 +38,28 @@
     </div>
 
     <div class="charts-row">
+      <div class="card chart-card">
+        <h2 class="chart-title">Bookings — last 7 days</h2>
+        @if (trend7().every((d) => d.count === 0)) {
+          <p class="no-data">No bookings in this period.</p>
+        } @else {
+          <div class="trend-chart">
+            @for (day of trend7(); track day.iso) {
+              <div class="trend-col">
+                <span class="trend-count">{{ day.count }}</span>
+                <div class="trend-track">
+                  <div
+                    class="trend-fill"
+                    [style.height.%]="day.pct"
+                  ></div>
+                </div>
+                <span class="trend-label">{{ day.label }}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
       <div class="card chart-card">
         <h2 class="chart-title">Bookings by status</h2>
         @if (totalAppointments() === 0) {
@@ -56,6 +78,33 @@
                 </div>
                 <span class="bar-value"
                   >{{ bar.count }} <small>({{ bar.pct }}%)</small></span
+                >
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="card chart-card">
+        <h2 class="chart-title">Top services</h2>
+        @if (topServices().length === 0) {
+          <p class="no-data">No bookings yet.</p>
+        } @else {
+          <div class="bar-chart">
+            @for (svc of topServices(); track svc.name) {
+              <div class="bar-row">
+                <span class="bar-label">{{ svc.name }}</span>
+                <div class="bar-track">
+                  <div
+                    class="bar-fill"
+                    [style.width.%]="svc.pct"
+                    style="background: #0d9488"
+                  ></div>
+                </div>
+                <span class="bar-value"
+                  >{{ svc.count }} <small>({{ svc.pct }}%)</small></span
                 >
               </div>
             }

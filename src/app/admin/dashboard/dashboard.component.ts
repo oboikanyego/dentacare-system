@@ -67,6 +67,50 @@ export class DashboardComponent implements OnInit {
       .slice(0, 5)
   );
 
+  readonly upcomingCount = computed(() => {
+    const today = this.todayIso;
+    const in7 = new Date();
+    in7.setDate(in7.getDate() + 7);
+    const in7Iso = in7.toISOString().slice(0, 10);
+    return this.appointments().filter(
+      (a) => a.date >= today && a.date <= in7Iso && !['CANCELLED', 'NO_SHOW'].includes(a.status)
+    ).length;
+  });
+
+  readonly trend7 = computed(() => {
+    const days: { label: string; iso: string; count: number }[] = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const iso = d.toISOString().slice(0, 10);
+      days.push({
+        label: d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+        iso,
+        count: 0
+      });
+    }
+    for (const appt of this.appointments()) {
+      const slot = days.find((d) => d.iso === appt.date);
+      if (slot) slot.count++;
+    }
+    const max = Math.max(1, ...days.map((d) => d.count));
+    return days.map((d) => ({ ...d, pct: Math.round((d.count / max) * 100) }));
+  });
+
+  readonly topServices = computed(() => {
+    const map = new Map<string, number>();
+    for (const appt of this.appointments()) {
+      if (appt.serviceName) {
+        map.set(appt.serviceName, (map.get(appt.serviceName) ?? 0) + 1);
+      }
+    }
+    const total = this.totalAppointments() || 1;
+    return [...map.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([name, count]) => ({ name, count, pct: Math.round((count / total) * 100) }));
+  });
+
   ngOnInit(): void {
     this.load();
   }
