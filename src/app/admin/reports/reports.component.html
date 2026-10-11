@@ -1,0 +1,292 @@
+<section class="page-width">
+  <div class="section-header">
+    <span class="eyebrow">Administration</span>
+    <div class="header-row">
+      <h1>Reports</h1>
+    </div>
+    <p>Analyse booking trends, completion rates, and performance over any date range.</p>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert error">{{ errorMessage() }}</div>
+  }
+
+  <div class="range-bar">
+    <div
+      class="preset-group"
+      role="group"
+      aria-label="Date range preset"
+    >
+      @for (p of presets; track p.value) {
+        <button
+          type="button"
+          class="preset-btn"
+          [class.active]="preset === p.value"
+          (click)="applyPreset(p.value)"
+        >
+          {{ p.label }}
+        </button>
+      }
+    </div>
+    <div class="custom-dates">
+      <label
+        class="date-label"
+        for="rptFrom"
+        >From</label
+      >
+      <input
+        id="rptFrom"
+        type="date"
+        [(ngModel)]="dateFrom"
+        (ngModelChange)="onCustomDate()"
+      />
+      <label
+        class="date-label"
+        for="rptTo"
+        >To</label
+      >
+      <input
+        id="rptTo"
+        type="date"
+        [(ngModel)]="dateTo"
+        (ngModelChange)="onCustomDate()"
+      />
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="skeleton-grid">
+      @for (i of [1, 2, 3, 4, 5]; track i) {
+        <div class="card skeleton-card"></div>
+      }
+    </div>
+  } @else {
+    <div class="kpi-grid">
+      <div class="card kpi-card">
+        <span class="kpi-value">{{ total() }}</span>
+        <span class="kpi-label">Total bookings</span>
+      </div>
+      <div class="card kpi-card completed">
+        <span class="kpi-value">{{ completed() }}</span>
+        <span class="kpi-label">Completed</span>
+      </div>
+      <div class="card kpi-card pending">
+        <span class="kpi-value">{{ pending() }}</span>
+        <span class="kpi-label">Pending / Confirmed</span>
+      </div>
+      <div class="card kpi-card cancelled">
+        <span class="kpi-value">{{ cancelled() }}</span>
+        <span class="kpi-label">Cancelled</span>
+      </div>
+      <div class="card kpi-card no-show">
+        <span class="kpi-value">{{ noShow() }}</span>
+        <span class="kpi-label">No-show</span>
+      </div>
+    </div>
+
+    <div class="rate-row">
+      <div class="card rate-card">
+        <span class="rate-title">Completion rate</span>
+        <div class="rate-bar-wrap">
+          <div
+            class="rate-bar completion"
+            [style.width.%]="completionRate()"
+          ></div>
+        </div>
+        <span class="rate-pct">{{ completionRate() }}%</span>
+      </div>
+      <div class="card rate-card">
+        <span class="rate-title">No-show rate</span>
+        <div class="rate-bar-wrap">
+          <div
+            class="rate-bar no-show"
+            [style.width.%]="noShowRate()"
+          ></div>
+        </div>
+        <span class="rate-pct">{{ noShowRate() }}%</span>
+      </div>
+      <div class="card rate-card">
+        <span class="rate-title">Cancellation rate</span>
+        <div class="rate-bar-wrap">
+          <div
+            class="rate-bar cancellation"
+            [style.width.%]="cancellationRate()"
+          ></div>
+        </div>
+        <span class="rate-pct">{{ cancellationRate() }}%</span>
+      </div>
+      <div class="card rate-card export-card">
+        <span class="rate-title">Summary</span>
+        <button
+          type="button"
+          class="ghost-button export-btn"
+          (click)="exportSummary()"
+          [disabled]="total() === 0"
+        >
+          Export CSV
+        </button>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="card chart-card">
+        <h2 class="chart-title">Bookings by day of week</h2>
+        @if (total() === 0) {
+          <p class="no-data">No bookings in this period.</p>
+        } @else {
+          <div class="bar-chart">
+            @for (day of byDayOfWeek(); track day.label) {
+              <div class="bar-row">
+                <span class="bar-label">{{ day.label }}</span>
+                <div class="bar-track">
+                  <div
+                    class="bar-fill"
+                    [style.width.%]="day.pct"
+                    style="background: #0d9488"
+                  ></div>
+                </div>
+                <span class="bar-value">{{ day.count }}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="card chart-card">
+        <h2 class="chart-title">Bookings by month</h2>
+        @if (byMonth().length === 0) {
+          <p class="no-data">No bookings in this period.</p>
+        } @else {
+          <div class="trend-chart">
+            @for (m of byMonth(); track m.label) {
+              <div class="trend-col">
+                <span class="trend-count">{{ m.count }}</span>
+                <div class="trend-track">
+                  <div
+                    class="trend-fill"
+                    [style.height.%]="m.pct"
+                  ></div>
+                </div>
+                <span class="trend-label">{{ m.label }}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="card table-section">
+      <div class="table-header-row">
+        <h2 class="chart-title">Breakdown by service</h2>
+        <button
+          type="button"
+          class="ghost-button export-btn"
+          (click)="exportByService()"
+          [disabled]="byService().length === 0"
+        >
+          Export CSV
+        </button>
+      </div>
+      @if (byService().length === 0) {
+        <p class="no-data">No bookings in this period.</p>
+      } @else {
+        <div class="table-wrap">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th class="num-col">Total</th>
+                <th class="num-col">Completed</th>
+                <th class="num-col">Cancelled</th>
+                <th class="num-col">No-show</th>
+                <th class="rate-col">Completion rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of byService(); track row.name) {
+                <tr>
+                  <td class="name-col">{{ row.name }}</td>
+                  <td class="num-col">{{ row.total }}</td>
+                  <td class="num-col">{{ row.completed }}</td>
+                  <td class="num-col">{{ row.cancelled }}</td>
+                  <td class="num-col">{{ row.noShow }}</td>
+                  <td class="rate-col">
+                    <div class="rate-bar-wrap mini">
+                      <div
+                        class="rate-bar completion"
+                        [style.width.%]="row.completionRate"
+                      ></div>
+                    </div>
+                    <span class="rate-label">{{ row.completionRate }}%</span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+
+    <div class="card table-section">
+      <div class="table-header-row">
+        <h2 class="chart-title">Breakdown by dentist</h2>
+        <button
+          type="button"
+          class="ghost-button export-btn"
+          (click)="exportByDentist()"
+          [disabled]="byDentist().length === 0"
+        >
+          Export CSV
+        </button>
+      </div>
+      @if (byDentist().length === 0) {
+        <p class="no-data">No bookings in this period.</p>
+      } @else {
+        <div class="table-wrap">
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Dentist</th>
+                <th class="num-col">Total</th>
+                <th class="num-col">Completed</th>
+                <th class="num-col">Cancelled</th>
+                <th class="num-col">No-show</th>
+                <th class="rate-col">Completion rate</th>
+                <th class="rate-col">No-show rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of byDentist(); track row.name) {
+                <tr>
+                  <td class="name-col">{{ row.name }}</td>
+                  <td class="num-col">{{ row.total }}</td>
+                  <td class="num-col">{{ row.completed }}</td>
+                  <td class="num-col">{{ row.cancelled }}</td>
+                  <td class="num-col">{{ row.noShow }}</td>
+                  <td class="rate-col">
+                    <div class="rate-bar-wrap mini">
+                      <div
+                        class="rate-bar completion"
+                        [style.width.%]="row.completionRate"
+                      ></div>
+                    </div>
+                    <span class="rate-label">{{ row.completionRate }}%</span>
+                  </td>
+                  <td class="rate-col">
+                    <div class="rate-bar-wrap mini">
+                      <div
+                        class="rate-bar no-show"
+                        [style.width.%]="row.noShowRate"
+                      ></div>
+                    </div>
+                    <span class="rate-label">{{ row.noShowRate }}%</span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+</section>
