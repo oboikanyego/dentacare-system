@@ -135,5 +135,57 @@
         }
       </div>
     </div>
+
+    <div class="card dentist-table-card">
+      <h2 class="chart-title">Dentist performance</h2>
+      @if (dentistPerformance().length === 0) {
+        <p class="no-data">No bookings yet.</p>
+      } @else {
+        <div class="dentist-table-wrap">
+          <table class="dentist-table">
+            <thead>
+              <tr>
+                <th>Dentist</th>
+                <th class="num-col">Total</th>
+                <th class="num-col">Completed</th>
+                <th class="num-col">No-show</th>
+                <th class="num-col">Cancelled</th>
+                <th class="rate-col">Completion rate</th>
+                <th class="rate-col">No-show rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (d of dentistPerformance(); track d.name) {
+                <tr>
+                  <td class="dentist-name">{{ d.name }}</td>
+                  <td class="num-col">{{ d.total }}</td>
+                  <td class="num-col">{{ d.completed }}</td>
+                  <td class="num-col">{{ d.noShow }}</td>
+                  <td class="num-col">{{ d.cancelled }}</td>
+                  <td class="rate-col">
+                    <div class="rate-bar-wrap">
+                      <div
+                        class="rate-bar completion"
+                        [style.width.%]="d.completionRate"
+                      ></div>
+                    </div>
+                    <span class="rate-label">{{ d.completionRate }}%</span>
+                  </td>
+                  <td class="rate-col">
+                    <div class="rate-bar-wrap">
+                      <div
+                        class="rate-bar no-show"
+                        [style.width.%]="d.noShowRate"
+                      ></div>
+                    </div>
+                    <span class="rate-label">{{ d.noShowRate }}%</span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
   }
 </section>

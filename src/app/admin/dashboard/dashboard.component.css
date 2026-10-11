@@ -280,3 +280,84 @@ h1 {
     font-size: 9px;
   }
 }
+
+.dentist-table-card {
+  margin-top: 24px;
+  min-height: auto;
+  gap: 0;
+}
+
+.dentist-table-wrap {
+  overflow-x: auto;
+}
+
+.dentist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.dentist-table thead th {
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+  padding: 0 12px 10px;
+  white-space: nowrap;
+}
+
+.dentist-table tbody td {
+  padding: 10px 12px;
+  border-top: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+.dentist-table tbody tr:hover td {
+  background: #f9fafb;
+}
+
+.dentist-name {
+  font-weight: 600;
+  color: #12313d;
+  white-space: nowrap;
+}
+
+.num-col {
+  text-align: right;
+  width: 80px;
+}
+
+.rate-col {
+  width: 160px;
+}
+
+.rate-bar-wrap {
+  height: 6px;
+  background: #f3f4f6;
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 3px;
+}
+
+.rate-bar {
+  height: 100%;
+  border-radius: 99px;
+  min-width: 2px;
+  transition: width 0.4s ease;
+}
+
+.rate-bar.completion {
+  background: #0d9488;
+}
+
+.rate-bar.no-show {
+  background: #f59e0b;
+}
+
+.rate-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+}
