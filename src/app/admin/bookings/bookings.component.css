@@ -63,6 +63,39 @@
 .toolbar-4 {
   grid-template-columns: 1.5fr 200px 200px 180px;
 }
+.toolbar-dates {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.date-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.date-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+.date-field input[type='date'] {
+  border: 1px solid #dbe2ea;
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.875rem;
+}
+.clear-dates {
+  font-size: 0.82rem;
+  padding: 0.45rem 0.8rem;
+}
+.results-count {
+  margin-left: auto;
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
 .toolbar input,
 .toolbar select,
 .details-card input,
@@ -303,6 +336,13 @@
   .toolbar-4,
   .details-grid {
     grid-template-columns: 1fr;
+  }
+  .toolbar-dates {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .results-count {
+    margin-left: 0;
   }
   .pagination-row {
     justify-content: center;
