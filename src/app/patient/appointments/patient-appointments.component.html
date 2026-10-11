@@ -1,7 +1,16 @@
 <section class="page-width">
   <div class="section-header">
     <span class="eyebrow">Patient portal</span>
-    <h1>My appointments</h1>
+    <div class="header-row">
+      <h1>My appointments</h1>
+      <button
+        type="button"
+        class="primary-button"
+        (click)="bookNew()"
+      >
+        + Book appointment
+      </button>
+    </div>
     <p>Search, filter, sort, and manage appointments from your sample account.</p>
   </div>
 
@@ -12,10 +21,41 @@
     <div class="alert error">{{ errorMessage }}</div>
   }
 
+  @if (nextAppointment()) {
+    <div class="next-appt-banner">
+      <div class="next-appt-label">Your next appointment</div>
+      <div class="next-appt-row">
+        <div class="next-appt-detail">
+          <span class="next-appt-date">{{
+            nextAppointment()!.date | date: 'EEEE, d MMMM yyyy'
+          }}</span>
+          <span class="next-appt-meta"
+            >{{ nextAppointment()!.time }} · {{ nextAppointment()!.serviceName }} ·
+            {{ nextAppointment()!.dentistName }}</span
+          >
+        </div>
+        <span
+          class="status-badge"
+          [class]="statusClass(nextAppointment()!.status)"
+          >{{ nextAppointment()!.status }}</span
+        >
+      </div>
+    </div>
+  }
+
   @if (loading) {
     <div class="card skeleton-table"></div>
   } @else if (!appointments.length) {
-    <div class="card">No appointments found yet.</div>
+    <div class="empty-state">
+      <p>You have no appointments yet.</p>
+      <button
+        type="button"
+        class="primary-button"
+        (click)="bookNew()"
+      >
+        Book your first appointment
+      </button>
+    </div>
   } @else {
     <div class="toolbar toolbar-3">
       <input
