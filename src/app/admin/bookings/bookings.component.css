@@ -292,3 +292,83 @@
     justify-content: center;
   }
 }
+
+.today-panel {
+  background: linear-gradient(135deg, #e8f4fd 0%, #f0f9ff 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.today-panel-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.today-label {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #1e40af;
+}
+
+.today-date {
+  font-size: 0.82rem;
+  color: #3b82f6;
+}
+
+.today-empty {
+  color: #6b7280;
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+.today-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.today-slot {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #fff;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+
+.today-slot:hover {
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.12);
+}
+
+.today-time {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1e40af;
+  min-width: 44px;
+}
+
+.today-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.today-patient {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.today-service {
+  font-size: 0.78rem;
+  color: #6b7280;
+}
