@@ -161,18 +161,108 @@
           Close
         </button>
       </div>
-      <p><strong>Patient:</strong> {{ maskName(selectedAppointment.patientName) }}</p>
-      <p><strong>Type:</strong> {{ selectedAppointment.serviceName }}</p>
-      <p><strong>Branch:</strong> {{ selectedAppointment.branchName || '—' }}</p>
-      <p><strong>Dentist:</strong> {{ selectedAppointment.dentistName }}</p>
-      <p><strong>Status:</strong> {{ selectedAppointment.status }}</p>
-      <p><strong>Notes:</strong> {{ selectedAppointment.notes || '—' }}</p>
-      <div class="audit-box">
-        <strong>Audit trail:</strong>
-        @for (entry of selectedAppointment.auditTrail || []; track $index) {
-          <p>{{ entry.action }} · {{ entry.byRole }} · {{ entry.note }}</p>
-        }
+
+      <div class="detail-tabs">
+        <button
+          class="tab-btn"
+          [class.active]="detailTab === 'details'"
+          type="button"
+          (click)="switchDetailTab('details')"
+        >
+          Details
+        </button>
+        <button
+          class="tab-btn"
+          [class.active]="detailTab === 'history'"
+          type="button"
+          (click)="switchDetailTab('history')"
+        >
+          Patient history
+        </button>
       </div>
+
+      @if (detailTab === 'details') {
+        <div class="detail-body">
+          <p><strong>Patient:</strong> {{ maskName(selectedAppointment.patientName) }}</p>
+          <p><strong>Type:</strong> {{ selectedAppointment.serviceName }}</p>
+          <p><strong>Branch:</strong> {{ selectedAppointment.branchName || '—' }}</p>
+          <p><strong>Dentist:</strong> {{ selectedAppointment.dentistName }}</p>
+          <p>
+            <strong>Date:</strong> {{ selectedAppointment.date }} · {{ selectedAppointment.time }}
+          </p>
+          <p><strong>Duration:</strong> {{ selectedAppointment.durationMinutes || 30 }} min</p>
+          <p>
+            <strong>Status:</strong>
+            <span
+              class="pill"
+              [ngClass]="statusClass(selectedAppointment.status)"
+              >{{ selectedAppointment.status }}</span
+            >
+          </p>
+          <p><strong>Reason:</strong> {{ selectedAppointment.reason || '—' }}</p>
+          <p><strong>Notes:</strong> {{ selectedAppointment.notes || '—' }}</p>
+          @if (selectedAppointment.internalNotes) {
+            <p><strong>Internal notes:</strong> {{ selectedAppointment.internalNotes }}</p>
+          }
+          @if ((selectedAppointment.auditTrail || []).length) {
+            <div class="audit-box">
+              <strong>Audit trail</strong>
+              @for (entry of selectedAppointment.auditTrail || []; track $index) {
+                <div class="audit-entry">
+                  <span class="audit-dot"></span>
+                  <div class="audit-body">
+                    <span class="audit-action">{{ entry.action }}</span>
+                    <span class="audit-meta"
+                      >{{ entry.byRole
+                      }}{{ entry.byUserName ? ' · ' + entry.byUserName : '' }}</span
+                    >
+                    @if (entry.note) {
+                      <span class="audit-note">{{ entry.note }}</span>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      @if (detailTab === 'history') {
+        <div class="detail-body">
+          @if (patientNotesLoading()) {
+            <p class="loading-text">Loading history…</p>
+          } @else if (!patientNotes().length) {
+            <p class="no-data">No treatment notes on record for this patient.</p>
+          } @else {
+            <div class="history-list">
+              @for (note of patientNotes(); track note._id) {
+                <div class="history-note">
+                  <div class="history-note-header">
+                    <strong>{{ note.date }}</strong>
+                    <span class="history-service">{{ note.serviceName }}</span>
+                    <span class="history-dentist">{{ note.dentistName }}</span>
+                  </div>
+                  @if (note.diagnosis) {
+                    <p><span class="note-label">Diagnosis:</span> {{ note.diagnosis }}</p>
+                  }
+                  @if (note.treatment) {
+                    <p><span class="note-label">Treatment:</span> {{ note.treatment }}</p>
+                  }
+                  @if (note.prescription) {
+                    <p><span class="note-label">Prescription:</span> {{ note.prescription }}</p>
+                  }
+                  @if (note.followUpDate) {
+                    <p><span class="note-label">Follow-up:</span> {{ note.followUpDate }}</p>
+                  }
+                  @if (note.notes) {
+                    <p><span class="note-label">Notes:</span> {{ note.notes }}</p>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
     </div>
   }
 </section>
