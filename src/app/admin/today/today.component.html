@@ -1,0 +1,142 @@
+<section class="page-width">
+  <div class="section-header">
+    <span class="eyebrow">Front Desk</span>
+    <div class="header-row">
+      <h1>Today</h1>
+      <button
+        type="button"
+        class="refresh-btn"
+        (click)="load()"
+        [disabled]="isLoading()"
+      >
+        ↻ Refresh
+      </button>
+    </div>
+    <p class="today-date">{{ todayLabel }}</p>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert error">{{ errorMessage() }}</div>
+  }
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <span class="kpi-val">{{ kpiTotal() }}</span>
+      <span class="kpi-lbl">Total</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-val pending">{{ kpiPending() }}</span>
+      <span class="kpi-lbl">Pending</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-val confirmed">{{ kpiConfirmed() }}</span>
+      <span class="kpi-lbl">Confirmed</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-val completed">{{ kpiCompleted() }}</span>
+      <span class="kpi-lbl">Completed</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-val no-show">{{ kpiNoShow() }}</span>
+      <span class="kpi-lbl">No-show / Cancelled</span>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="skeleton-stack">
+      @for (i of [1, 2, 3, 4, 5]; track i) {
+        <div class="row-skeleton"></div>
+      }
+    </div>
+  } @else if (groups().length === 0) {
+    <div class="empty-state card">No appointments scheduled for today.</div>
+  } @else {
+    @for (group of groups(); track group.dentistName) {
+      <div class="dentist-group">
+        <div class="dentist-heading">
+          <span class="dentist-avatar">{{ group.dentistName.charAt(0).toUpperCase() }}</span>
+          <span class="dentist-name">{{ group.dentistName }}</span>
+          <span class="dentist-count"
+            >{{ group.slots.length }} appointment{{ group.slots.length !== 1 ? 's' : '' }}</span
+          >
+        </div>
+
+        <div class="appt-table">
+          @for (a of group.slots; track a._id) {
+            <div
+              class="appt-row"
+              [class.done]="a.status === 'COMPLETED'"
+              [class.missed]="a.status === 'NO_SHOW' || a.status === 'CANCELLED'"
+            >
+              <div class="time-cell">
+                <span class="appt-time">{{ a.time }}</span>
+                @if (a.durationMinutes) {
+                  <span class="appt-dur">{{ a.durationMinutes }}m</span>
+                }
+              </div>
+
+              <div class="patient-cell">
+                <span class="patient-name">{{ maskName(a.patientName) }}</span>
+                @if (a.phone) {
+                  <span class="patient-phone">{{ a.phone }}</span>
+                }
+              </div>
+
+              <div class="service-cell">
+                <span class="service-name">{{ a.serviceName }}</span>
+                @if (a.branchName) {
+                  <span class="branch-name">{{ a.branchName }}</span>
+                }
+              </div>
+
+              <div class="status-cell">
+                <span
+                  class="pill"
+                  [ngClass]="statusClass(a.status)"
+                  >{{ a.status }}</span
+                >
+              </div>
+
+              <div class="actions-cell">
+                @if (updatingId() === a._id) {
+                  <span class="updating-indicator">updating…</span>
+                } @else {
+                  @if (canConfirm(a.status)) {
+                    <button
+                      type="button"
+                      class="action-btn confirm"
+                      (click)="quickUpdate(a, 'CONFIRMED')"
+                      title="Confirm"
+                    >
+                      Confirm
+                    </button>
+                  }
+                  @if (canComplete(a.status)) {
+                    <button
+                      type="button"
+                      class="action-btn complete"
+                      (click)="quickUpdate(a, 'COMPLETED')"
+                      title="Mark completed"
+                    >
+                      Done
+                    </button>
+                  }
+                  @if (canNoShow(a.status)) {
+                    <button
+                      type="button"
+                      class="action-btn no-show"
+                      (click)="quickUpdate(a, 'NO_SHOW')"
+                      title="Mark no-show"
+                    >
+                      No-show
+                    </button>
+                  }
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+</section>

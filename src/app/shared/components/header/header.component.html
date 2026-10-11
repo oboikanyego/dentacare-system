@@ -56,6 +56,11 @@
 
     @if (isStaff()) {
       <a
+        routerLink="/staff/today"
+        routerLinkActive="active"
+        >Today</a
+      >
+      <a
         routerLink="/staff/bookings"
         routerLinkActive="active"
         >Staff Bookings</a
@@ -214,6 +219,11 @@
     }
 
     @if (isStaff()) {
+      <a
+        routerLink="/staff/today"
+        (click)="closeMenu()"
+        >Today</a
+      >
       <a
         routerLink="/staff/bookings"
         (click)="closeMenu()"
