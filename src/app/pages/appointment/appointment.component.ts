@@ -14,8 +14,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   catchError,
+  combineLatest,
   debounceTime,
   distinctUntilChanged,
+  filter,
   finalize,
   map,
   of,
@@ -25,7 +27,7 @@ import {
 } from 'rxjs';
 import { Dentist } from '../../core/models/dentist.model';
 import { MasterDataItem } from '../../core/models/master-data.model';
-import { AppointmentService } from '../../core/services/appointment.service';
+import { AppointmentService, AvailableSlot } from '../../core/services/appointment.service';
 import { AuthService } from '../../core/services/auth.service';
 import { DentistService } from '../../core/services/dentist.service';
 import { MasterDataListResponse, MasterDataService } from '../../core/services/master-data.service';
@@ -79,6 +81,7 @@ export class AppointmentComponent implements OnInit {
   readonly branchOptions = signal<MasterDataItem[]>([]);
   readonly serviceOptions = signal<MasterDataItem[]>([]);
   readonly timeOptions = signal<MasterDataItem[]>([]);
+  private readonly allAvailableSlots = signal<AvailableSlot[]>([]);
   readonly dentistOptions = signal<Dentist[]>([]);
   readonly statuses = signal<MasterDataItem[]>([]);
 
@@ -128,15 +131,9 @@ export class AppointmentComponent implements OnInit {
       this.selectedService,
       'serviceId'
     );
-    this.bindMasterDataSearch(
-      this.timeSearch,
-      'timeSlots',
-      this.timeOptions,
-      this.timeLoading,
-      this.selectedTime,
-      'slotId'
-    );
     this.bindDentistSearch();
+    this.watchDentistAndDate();
+    this.bindTimeSearch();
 
     this.masterDataService
       .getOne('appointmentStatuses')
@@ -288,6 +285,66 @@ export class AppointmentComponent implements OnInit {
 
   isStaff(): boolean {
     return this.authService.hasRole(['RECEPTIONIST', 'DENTIST', 'ADMIN']);
+  }
+
+  private watchDentistAndDate(): void {
+    combineLatest([
+      this.bookingForm.controls.dentistId.valueChanges.pipe(
+        startWith(this.bookingForm.controls.dentistId.value)
+      ),
+      this.bookingForm.controls.date.valueChanges.pipe(
+        startWith(this.bookingForm.controls.date.value)
+      ),
+      this.bookingForm.controls.durationMinutes.valueChanges.pipe(
+        startWith(this.bookingForm.controls.durationMinutes.value)
+      )
+    ])
+      .pipe(
+        debounceTime(200),
+        tap(([dentistId, date]) => {
+          if (!dentistId || !date) {
+            this.allAvailableSlots.set([]);
+            this.timeOptions.set([]);
+          }
+          this.selectedTime.set(null);
+          this.bookingForm.controls.slotId.setValue('', { emitEvent: false });
+          this.timeSearch.setValue('', { emitEvent: false });
+        }),
+        filter(([dentistId, date]) => !!dentistId && !!date),
+        tap(() => this.timeLoading.set(true)),
+        switchMap(([dentistId, date, duration]) => {
+          const dateStr = formatLocalDate(date as Date);
+          return this.appointmentService
+            .getAvailableSlots(dentistId!, dateStr, duration || 30)
+            .pipe(
+              catchError(() => of({ slots: [] as AvailableSlot[] })),
+              finalize(() => this.timeLoading.set(false))
+            );
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(({ slots }) => {
+        this.allAvailableSlots.set(slots);
+        this.timeOptions.set(this.slotsToItems(slots));
+      });
+  }
+
+  private bindTimeSearch(): void {
+    this.timeSearch.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
+      if (this.selectedTime()?.label !== value) {
+        this.selectedTime.set(null);
+        this.bookingForm.controls.slotId.setValue('', { emitEvent: false });
+      }
+      const term = (value || '').trim().toLowerCase();
+      const filtered = term
+        ? this.allAvailableSlots().filter((s) => s.time.toLowerCase().includes(term))
+        : this.allAvailableSlots();
+      this.timeOptions.set(this.slotsToItems(filtered));
+    });
+  }
+
+  private slotsToItems(slots: AvailableSlot[]): MasterDataItem[] {
+    return slots.map((s) => ({ value: s.slotId, label: s.time }));
   }
 
   private bindMasterDataSearch(
