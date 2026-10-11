@@ -3,13 +3,24 @@
     <span class="eyebrow">Staff</span>
     <div class="header-row">
       <h1>Bookings</h1>
-      <button
-        type="button"
-        class="primary-button"
-        (click)="newBooking()"
-      >
-        + New booking
-      </button>
+      <div class="header-actions">
+        @if (filteredAppointments.length) {
+          <button
+            type="button"
+            class="ghost-button export-btn"
+            (click)="exportCsv()"
+          >
+            Export CSV
+          </button>
+        }
+        <button
+          type="button"
+          class="primary-button"
+          (click)="newBooking()"
+        >
+          + New booking
+        </button>
+      </div>
     </div>
     <p>Search, filter, sort, and review appointments from the sample clinic dataset.</p>
   </div>

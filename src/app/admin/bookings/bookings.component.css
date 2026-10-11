@@ -10,6 +10,16 @@
   justify-content: space-between;
   align-items: center;
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.export-btn {
+  font-size: 0.875rem;
+  color: #0f766e;
+  border-color: #99f6e4;
+}
 .primary-button {
   padding: 0.55rem 1.25rem;
   background: var(--color-primary, #1e6be6);

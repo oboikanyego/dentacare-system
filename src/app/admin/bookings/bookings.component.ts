@@ -377,6 +377,45 @@ export class BookingsComponent implements OnInit {
     return clean.length > 4 ? `${clean.slice(0, 3)}•••••${clean.slice(-2)}` : '••••';
   }
 
+  exportCsv(): void {
+    const headers = [
+      'Patient',
+      'Service',
+      'Branch',
+      'Dentist',
+      'Date',
+      'Time',
+      'Status',
+      'Duration (min)',
+      'Reason',
+      'Notes'
+    ];
+    const rows = this.filteredAppointments.map((a) => [
+      a.patientName ?? '',
+      a.serviceName ?? '',
+      a.branchName ?? '',
+      a.dentistName ?? '',
+      a.date ?? '',
+      a.time ?? '',
+      a.status ?? '',
+      String(a.durationMinutes ?? 30),
+      a.reason ?? '',
+      a.notes ?? ''
+    ]);
+
+    const escape = (v: string) => `"${v.replace(/"/g, '""')}"`;
+    const csv = [headers, ...rows].map((row) => row.map(escape).join(',')).join('\r\n');
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    const datePart = this.dateFrom && this.dateTo ? `_${this.dateFrom}_to_${this.dateTo}` : '';
+    anchor.download = `bookings${datePart}_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
+
   previousPage(): void {
     this.page = Math.max(1, this.page - 1);
   }
