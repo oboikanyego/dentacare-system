@@ -21,6 +21,7 @@ import { PatientAppointmentsComponent } from './patient/appointments/patient-app
 import { PatientTreatmentHistoryComponent } from './patient/treatment-history/patient-treatment-history.component';
 import { PatientInvoicesComponent } from './patient/invoices/patient-invoices.component';
 import { BillingComponent } from './admin/billing/billing.component';
+import { RecallComponent } from './admin/recall/recall.component';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 
@@ -88,6 +89,13 @@ export const routes: Routes = [
     path: 'staff/patients',
     component: PatientsComponent,
     title: 'DentaCare | Patients',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['RECEPTIONIST', 'DENTIST', 'ADMIN'] }
+  },
+  {
+    path: 'staff/recall',
+    component: RecallComponent,
+    title: 'DentaCare | Follow-up Recall',
     canActivate: [authGuard, roleGuard],
     data: { roles: ['RECEPTIONIST', 'DENTIST', 'ADMIN'] }
   },

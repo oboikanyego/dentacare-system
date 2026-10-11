@@ -1,0 +1,258 @@
+.section-header {
+  margin-bottom: 2rem;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.window-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.toolbar-label {
+  font-size: 0.875rem;
+  color: var(--color-muted, #6b7280);
+}
+
+.window-btn {
+  padding: 0.375rem 0.875rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.window-btn.active,
+.window-btn:hover {
+  background: var(--color-primary, #1a56db);
+  color: #fff;
+  border-color: var(--color-primary, #1a56db);
+}
+
+.reload-btn {
+  padding: 0.375rem 1rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 6px;
+  background: transparent;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.reload-btn:hover:not(:disabled) {
+  background: var(--color-surface-hover, #f3f4f6);
+}
+
+.reload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.group-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+}
+
+.overdue-badge {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.upcoming-badge {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.group-count {
+  font-size: 0.875rem;
+  color: var(--color-muted, #6b7280);
+}
+
+.recall-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.recall-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  border: 1px solid var(--color-border, #e5e7eb);
+  background: var(--color-surface, #fff);
+  transition: box-shadow 0.15s;
+}
+
+.recall-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+.recall-card.overdue {
+  border-left: 4px solid #ef4444;
+  background: #fff8f8;
+}
+
+.recall-card.upcoming {
+  border-left: 4px solid #3b82f6;
+}
+
+.recall-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.recall-patient {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+}
+
+.patient-name {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.service-tag {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  background: var(--color-surface-alt, #f3f4f6);
+  border-radius: 999px;
+  color: var(--color-muted, #6b7280);
+}
+
+.recall-detail {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8125rem;
+  color: var(--color-muted, #6b7280);
+  margin-bottom: 0.25rem;
+}
+
+.recall-diagnosis {
+  font-size: 0.8125rem;
+  color: var(--color-text, #374151);
+  margin: 0.25rem 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 480px;
+}
+
+.recall-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.375rem;
+  flex-shrink: 0;
+}
+
+.followup-date {
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.overdue-date {
+  color: #b91c1c;
+}
+
+.days-chip {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.overdue-chip {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.upcoming-chip {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.empty-state {
+  padding: 2.5rem;
+  text-align: center;
+  color: var(--color-muted, #6b7280);
+}
+
+.empty-state strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: var(--color-text, #374151);
+}
+
+.skeleton-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeleton-card {
+  height: 80px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .recall-card {
+    flex-direction: column;
+  }
+
+  .recall-meta {
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+}

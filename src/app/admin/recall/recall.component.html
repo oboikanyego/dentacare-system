@@ -1,0 +1,117 @@
+<section class="page-width">
+  <div class="section-header">
+    <span class="eyebrow">Staff</span>
+    <div class="header-row">
+      <h1>Follow-up Recall</h1>
+    </div>
+    <p>Patients whose treatment notes include a follow-up date that is upcoming or overdue.</p>
+  </div>
+
+  <div class="toolbar">
+    <div class="window-buttons">
+      <span class="toolbar-label">Show next:</span>
+      @for (opt of [7, 14, 30]; track opt) {
+        <button
+          type="button"
+          class="window-btn"
+          [class.active]="windowDays() === opt"
+          (click)="setWindow(opt)"
+        >
+          {{ opt }} days
+        </button>
+      }
+    </div>
+    <button
+      type="button"
+      class="reload-btn"
+      (click)="load()"
+      [disabled]="isLoading()"
+    >
+      Refresh
+    </button>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert error">{{ errorMessage() }}</div>
+  }
+
+  @if (isLoading()) {
+    <div class="skeleton-list">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <div class="recall-card skeleton-card"></div>
+      }
+    </div>
+  } @else if (notes().length === 0) {
+    <div class="empty-state card">
+      <strong>No follow-ups due</strong>
+      <p>
+        No patients have a follow-up date within the next {{ windowDays() }} days or overdue in the
+        last 30 days.
+      </p>
+    </div>
+  } @else {
+    @if (overdue().length > 0) {
+      <div class="group-header overdue-header">
+        <span class="group-badge overdue-badge">Overdue</span>
+        <span class="group-count"
+          >{{ overdue().length }} patient{{ overdue().length !== 1 ? 's' : '' }}</span
+        >
+      </div>
+      <div class="recall-list">
+        @for (note of overdue(); track note._id) {
+          <div class="recall-card overdue">
+            <div class="recall-main">
+              <div class="recall-patient">
+                <span class="patient-name">{{ note.patientEmail }}</span>
+                <span class="service-tag">{{ note.serviceName }}</span>
+              </div>
+              <div class="recall-detail">
+                <span class="dentist">{{ note.dentistName }}</span>
+                <span class="visit-date">Visit: {{ note.date }}</span>
+              </div>
+              @if (note.diagnosis) {
+                <p class="recall-diagnosis">{{ note.diagnosis }}</p>
+              }
+            </div>
+            <div class="recall-meta">
+              <span class="followup-date overdue-date">{{ note.followUpDate }}</span>
+              <span class="days-chip overdue-chip">{{ daysDiff(note.followUpDate!) }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    @if (upcoming().length > 0) {
+      <div class="group-header upcoming-header">
+        <span class="group-badge upcoming-badge">Upcoming</span>
+        <span class="group-count"
+          >{{ upcoming().length }} patient{{ upcoming().length !== 1 ? 's' : '' }}</span
+        >
+      </div>
+      <div class="recall-list">
+        @for (note of upcoming(); track note._id) {
+          <div class="recall-card upcoming">
+            <div class="recall-main">
+              <div class="recall-patient">
+                <span class="patient-name">{{ note.patientEmail }}</span>
+                <span class="service-tag">{{ note.serviceName }}</span>
+              </div>
+              <div class="recall-detail">
+                <span class="dentist">{{ note.dentistName }}</span>
+                <span class="visit-date">Visit: {{ note.date }}</span>
+              </div>
+              @if (note.diagnosis) {
+                <p class="recall-diagnosis">{{ note.diagnosis }}</p>
+              }
+            </div>
+            <div class="recall-meta">
+              <span class="followup-date">{{ note.followUpDate }}</span>
+              <span class="days-chip upcoming-chip">{{ daysDiff(note.followUpDate!) }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</section>

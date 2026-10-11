@@ -35,4 +35,11 @@ export class TreatmentNoteService {
   ): Observable<TreatmentNote> {
     return this.api.patch<TreatmentNote>(`${API_ENDPOINTS.treatmentNotes}/${id}`, payload);
   }
+
+  getFollowUps(days = 7): Observable<(TreatmentNote & { overdue: boolean })[]> {
+    return this.api.get<(TreatmentNote & { overdue: boolean })[]>(
+      `${API_ENDPOINTS.treatmentNotes}/follow-ups`,
+      { days }
+    );
+  }
 }
