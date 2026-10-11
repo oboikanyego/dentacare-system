@@ -81,6 +81,15 @@
                     />
                   </div>
                 }
+                @if (isServices) {
+                  <div class="form-field">
+                    <label>Price</label>
+                    <input
+                      formControlName="price"
+                      placeholder="e.g. R750 or From R1 250"
+                    />
+                  </div>
+                }
               </div>
               @if (isDentists) {
                 <div class="form-field">
@@ -171,6 +180,15 @@
                               <div class="form-field">
                                 <label>Specialization</label>
                                 <input formControlName="specialization" />
+                              </div>
+                            }
+                            @if (isServices) {
+                              <div class="form-field">
+                                <label>Price</label>
+                                <input
+                                  formControlName="price"
+                                  placeholder="e.g. R750"
+                                />
                               </div>
                             }
                           </div>

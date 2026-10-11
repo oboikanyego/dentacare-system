@@ -51,6 +51,7 @@ export class AdminMasterDataComponent implements OnInit {
     label: ['', Validators.required],
     sortOrder: [0],
     specialization: [''],
+    price: [''],
     workingDays: [this.fb.array([])]
   });
 
@@ -59,6 +60,7 @@ export class AdminMasterDataComponent implements OnInit {
     isActive: [true],
     sortOrder: [0],
     specialization: [''],
+    price: [''],
     workingDays: [this.fb.array([])]
   });
 
@@ -67,6 +69,10 @@ export class AdminMasterDataComponent implements OnInit {
 
   get isDentists(): boolean {
     return this.activeKey() === 'dentists';
+  }
+
+  get isServices(): boolean {
+    return this.activeKey() === 'services';
   }
 
   toggleAddDay(day: number): void {
@@ -163,11 +169,14 @@ export class AdminMasterDataComponent implements OnInit {
       return;
     }
 
-    const { value, label, sortOrder, specialization } = this.addForm.getRawValue();
+    const { value, label, sortOrder, specialization, price } = this.addForm.getRawValue();
     const metadata: Record<string, unknown> = {};
     if (this.isDentists) {
       if (specialization) metadata['specialization'] = specialization;
       metadata['schedule'] = { workingDays: this.addWorkingDays };
+    }
+    if (this.isServices && price) {
+      metadata['price'] = price;
     }
     this.isSaving.set(true);
 
@@ -204,7 +213,8 @@ export class AdminMasterDataComponent implements OnInit {
       label: item.label,
       isActive: item.isActive !== false,
       sortOrder: item.sortOrder ?? 0,
-      specialization: (item.metadata?.['specialization'] as string) ?? ''
+      specialization: (item.metadata?.['specialization'] as string) ?? '',
+      price: (item.metadata?.['price'] as string) ?? ''
     });
   }
 
@@ -216,16 +226,21 @@ export class AdminMasterDataComponent implements OnInit {
     const item = this.editingItem();
     if (!item || this.editForm.invalid) return;
 
-    const { label, isActive, sortOrder, specialization } = this.editForm.getRawValue();
+    const { label, isActive, sortOrder, specialization, price } = this.editForm.getRawValue();
     const updates: Parameters<typeof this.masterDataService.updateItem>[2] = {
       label: label!,
       isActive: isActive!,
       sortOrder: sortOrder ?? 0
     };
-    if (this.isDentists) {
+    if (this.isDentists || this.isServices) {
       const metadata: Record<string, unknown> = { ...(item.metadata as Record<string, unknown>) };
-      if (specialization) metadata['specialization'] = specialization;
-      metadata['schedule'] = { workingDays: this.editWorkingDays };
+      if (this.isDentists) {
+        if (specialization) metadata['specialization'] = specialization;
+        metadata['schedule'] = { workingDays: this.editWorkingDays };
+      }
+      if (this.isServices && price) {
+        metadata['price'] = price;
+      }
       updates.metadata = metadata;
     }
     this.isSaving.set(true);
