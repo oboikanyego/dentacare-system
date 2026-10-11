@@ -4,6 +4,7 @@ import { BookingsComponent } from './admin/bookings/bookings.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { UsersComponent } from './admin/users/users.component';
 import { AdminMasterDataComponent } from './admin/master-data/master-data.component';
+import { ReportsComponent } from './admin/reports/reports.component';
 import { AppointmentComponent } from './pages/appointment/appointment.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -75,6 +76,13 @@ export const routes: Routes = [
     path: 'admin/master-data',
     component: AdminMasterDataComponent,
     title: 'DentaCare | Clinic Data',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMIN'] }
+  },
+  {
+    path: 'admin/reports',
+    component: ReportsComponent,
+    title: 'DentaCare | Reports',
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ADMIN'] }
   },
