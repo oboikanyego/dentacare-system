@@ -127,44 +127,144 @@
         </div>
       </div>
 
-      <div class="appt-sort-row">
-        <span class="appt-section-title">Appointment history</span>
-        <select
-          class="sort-select"
-          [(ngModel)]="apptSortKey"
+      <div class="detail-tabs">
+        <button
+          type="button"
+          class="tab-btn"
+          [class.active]="activeTab() === 'appointments'"
+          (click)="switchTab('appointments')"
         >
-          <option value="date">Newest first</option>
-          <option value="status">Sort by status</option>
-        </select>
+          Appointments
+          <span class="tab-count">{{ selectedPatient()!.total }}</span>
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          [class.active]="activeTab() === 'notes'"
+          (click)="switchTab('notes')"
+        >
+          Clinical Notes
+        </button>
       </div>
 
-      <div class="appt-list">
-        @for (a of sortedPatientAppointments(); track a._id) {
-          <div class="appt-row">
-            <div class="appt-date-col">
-              <span class="appt-date">{{ a.date }}</span>
-              <span class="appt-time">{{ a.time }}</span>
+      @if (activeTab() === 'appointments') {
+        <div class="appt-sort-row">
+          <span class="appt-section-title">Appointment history</span>
+          <select
+            class="sort-select"
+            [(ngModel)]="apptSortKey"
+          >
+            <option value="date">Newest first</option>
+            <option value="status">Sort by status</option>
+          </select>
+        </div>
+
+        <div class="appt-list">
+          @for (a of sortedPatientAppointments(); track a._id) {
+            <div class="appt-row">
+              <div class="appt-date-col">
+                <span class="appt-date">{{ a.date }}</span>
+                <span class="appt-time">{{ a.time }}</span>
+              </div>
+              <div class="appt-main">
+                <span class="appt-service">{{ a.serviceName }}</span>
+                <span class="appt-dentist">{{ a.dentistName }}</span>
+                @if (a.branchName) {
+                  <span class="appt-branch">{{ a.branchName }}</span>
+                }
+              </div>
+              <div class="appt-right">
+                <span
+                  class="pill"
+                  [ngClass]="statusClass(a.status)"
+                  >{{ a.status }}</span
+                >
+                @if (a.durationMinutes) {
+                  <span class="appt-dur">{{ a.durationMinutes }} min</span>
+                }
+              </div>
             </div>
-            <div class="appt-main">
-              <span class="appt-service">{{ a.serviceName }}</span>
-              <span class="appt-dentist">{{ a.dentistName }}</span>
-              @if (a.branchName) {
-                <span class="appt-branch">{{ a.branchName }}</span>
-              }
-            </div>
-            <div class="appt-right">
-              <span
-                class="pill"
-                [ngClass]="statusClass(a.status)"
-                >{{ a.status }}</span
+          }
+        </div>
+      }
+
+      @if (activeTab() === 'notes') {
+        @if (notesLoading()) {
+          <div class="notes-loading">
+            @for (i of [1, 2, 3]; track i) {
+              <div class="note-skeleton"></div>
+            }
+          </div>
+        } @else if (notesError()) {
+          <div class="alert error">{{ notesError() }}</div>
+        } @else if (notes().length === 0) {
+          <div class="empty-state">No clinical notes on record for this patient.</div>
+        } @else {
+          <div class="notes-list">
+            @for (n of notes(); track n._id) {
+              <div
+                class="note-card"
+                [class.expanded]="expandedNoteId() === n._id"
               >
-              @if (a.durationMinutes) {
-                <span class="appt-dur">{{ a.durationMinutes }} min</span>
-              }
-            </div>
+                <button
+                  type="button"
+                  class="note-summary"
+                  (click)="toggleNote(n._id!)"
+                >
+                  <div class="note-meta-row">
+                    <span class="note-date">{{ n.date }}</span>
+                    <span class="note-service">{{ n.serviceName }}</span>
+                    <span class="note-dentist">{{ n.dentistName }}</span>
+                  </div>
+                  @if (n.diagnosis) {
+                    <p class="note-preview">{{ n.diagnosis }}</p>
+                  }
+                  <span
+                    class="note-chevron"
+                    aria-hidden="true"
+                    >{{ expandedNoteId() === n._id ? '▲' : '▼' }}</span
+                  >
+                </button>
+
+                @if (expandedNoteId() === n._id) {
+                  <div class="note-detail">
+                    @if (n.diagnosis) {
+                      <div class="note-field">
+                        <span class="note-field-label">Diagnosis</span>
+                        <p class="note-field-value">{{ n.diagnosis }}</p>
+                      </div>
+                    }
+                    @if (n.treatment) {
+                      <div class="note-field">
+                        <span class="note-field-label">Treatment</span>
+                        <p class="note-field-value">{{ n.treatment }}</p>
+                      </div>
+                    }
+                    @if (n.prescription) {
+                      <div class="note-field">
+                        <span class="note-field-label">Prescription</span>
+                        <p class="note-field-value">{{ n.prescription }}</p>
+                      </div>
+                    }
+                    @if (n.followUpDate) {
+                      <div class="note-field">
+                        <span class="note-field-label">Follow-up date</span>
+                        <p class="note-field-value">{{ n.followUpDate }}</p>
+                      </div>
+                    }
+                    @if (n.notes) {
+                      <div class="note-field">
+                        <span class="note-field-label">Additional notes</span>
+                        <p class="note-field-value">{{ n.notes }}</p>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
           </div>
         }
-      </div>
+      }
     </div>
   }
 </section>
