@@ -111,6 +111,34 @@ export class DashboardComponent implements OnInit {
       .map(([name, count]) => ({ name, count, pct: Math.round((count / total) * 100) }));
   });
 
+  readonly dentistPerformance = computed(() => {
+    const map = new Map<
+      string,
+      { total: number; completed: number; noShow: number; cancelled: number }
+    >();
+    for (const appt of this.appointments()) {
+      const name = appt.dentistName ?? 'Unknown';
+      if (!map.has(name)) map.set(name, { total: 0, completed: 0, noShow: 0, cancelled: 0 });
+      const entry = map.get(name)!;
+      entry.total++;
+      if (appt.status === 'COMPLETED') entry.completed++;
+      if (appt.status === 'NO_SHOW') entry.noShow++;
+      if (appt.status === 'CANCELLED') entry.cancelled++;
+    }
+    return [...map.entries()]
+      .sort((a, b) => b[1].total - a[1].total)
+      .slice(0, 8)
+      .map(([name, s]) => ({
+        name,
+        total: s.total,
+        completed: s.completed,
+        noShow: s.noShow,
+        cancelled: s.cancelled,
+        completionRate: s.total > 0 ? Math.round((s.completed / s.total) * 100) : 0,
+        noShowRate: s.total > 0 ? Math.round((s.noShow / s.total) * 100) : 0
+      }));
+  });
+
   ngOnInit(): void {
     this.load();
   }
