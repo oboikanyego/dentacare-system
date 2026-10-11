@@ -126,6 +126,18 @@
   color: #0f766e;
   border-color: #99f6e4;
 }
+.ghost-button.confirm {
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+.ghost-button.complete {
+  color: #065f46;
+  border-color: #6ee7b7;
+}
+.ghost-button.no-show {
+  color: #92400e;
+  border-color: #fde68a;
+}
 .pagination-row {
   display: flex;
   justify-content: flex-end;

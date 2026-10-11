@@ -310,6 +310,28 @@ export class BookingsComponent implements OnInit {
       });
   }
 
+  quickStatus(appointment: Appointment, status: Appointment['status']): void {
+    if (!appointment._id) return;
+    const labels: Partial<Record<Appointment['status'], string>> = {
+      CONFIRMED: 'Confirm',
+      COMPLETED: 'Mark as completed',
+      NO_SHOW: 'Mark as no-show'
+    };
+    if (!confirm(`${labels[status] ?? status} this appointment?`)) return;
+    this.appointmentService
+      .updateAppointment(appointment._id, { status })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.uiFeedback.success(
+            `Appointment marked as ${status.toLowerCase().replace('_', ' ')}`
+          );
+          this.load();
+        },
+        error: (err) => this.uiFeedback.error(err?.error?.message || 'Status update failed')
+      });
+  }
+
   statusClass(status: Appointment['status']): string {
     return status.toLowerCase().replace('_', '-');
   }
