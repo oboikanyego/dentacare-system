@@ -81,6 +81,50 @@ export class BookingsComponent implements OnInit {
   readonly patientNotes = signal<TreatmentNote[]>([]);
   readonly patientNotesLoading = signal(false);
 
+  viewMode: 'table' | 'week' = 'table';
+  weekOffset = 0;
+
+  get weekDays(): { iso: string; label: string; short: string; isToday: boolean }[] {
+    const today = new Date();
+    const monday = new Date(today);
+    const day = today.getDay();
+    monday.setDate(today.getDate() - (day === 0 ? 6 : day - 1) + this.weekOffset * 7);
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      const iso = d.toISOString().slice(0, 10);
+      return {
+        iso,
+        label: d.toLocaleDateString('en-ZA', { weekday: 'short', day: 'numeric', month: 'short' }),
+        short: d.toLocaleDateString('en-ZA', { weekday: 'short' }),
+        isToday: iso === new Date().toISOString().slice(0, 10)
+      };
+    });
+  }
+
+  weekAppointments(iso: string): Appointment[] {
+    return this.appointments
+      .filter((a) => a.date === iso && !['CANCELLED', 'NO_SHOW'].includes(a.status))
+      .sort((a, b) => a.time.localeCompare(b.time));
+  }
+
+  get weekRangeLabel(): string {
+    const days = this.weekDays;
+    return `${days[0].label} – ${days[6].label}`;
+  }
+
+  prevWeek(): void {
+    this.weekOffset--;
+  }
+
+  nextWeek(): void {
+    this.weekOffset++;
+  }
+
+  resetWeek(): void {
+    this.weekOffset = 0;
+  }
+
   ngOnInit(): void {
     this.masterDataService
       .getOne('timeSlots')

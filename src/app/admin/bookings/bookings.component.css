@@ -442,3 +442,197 @@
   font-size: 0.78rem;
   color: #6b7280;
 }
+
+.view-toggle {
+  display: flex;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.toggle-btn {
+  padding: 0.5rem 0.9rem;
+  background: white;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.toggle-btn:not(:last-child) {
+  border-right: 1px solid #cbd5e1;
+}
+
+.toggle-btn.active {
+  background: var(--color-primary, #1e6be6);
+  color: #fff;
+}
+
+.week-view {
+  margin-bottom: 24px;
+}
+
+.week-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.week-range {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1e293b;
+  flex: 1;
+  text-align: center;
+}
+
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.week-col {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 160px;
+}
+
+.week-col.today {
+  border-color: var(--color-primary, #1e6be6);
+  box-shadow: 0 0 0 2px rgba(30, 107, 230, 0.12);
+}
+
+.week-col-header {
+  padding: 8px 10px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.week-col.today .week-col-header {
+  background: rgba(30, 107, 230, 0.06);
+}
+
+.week-day-name {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+}
+
+.week-col.today .week-day-name {
+  color: var(--color-primary, #1e6be6);
+}
+
+.week-day-date {
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.week-col-body {
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.week-empty {
+  display: block;
+  text-align: center;
+  color: #cbd5e1;
+  font-size: 1rem;
+  padding: 16px 0;
+}
+
+.week-appt {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  font-size: 0.75rem;
+  transition: opacity 0.15s;
+}
+
+.week-appt:hover {
+  opacity: 0.85;
+}
+
+.week-appt.pending {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #c2410c;
+}
+
+.week-appt.confirmed {
+  background: #ecfeff;
+  border-color: #a5f3fc;
+  color: #0e7490;
+}
+
+.week-appt.completed {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+.week-appt.cancelled {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.week-appt.no-show {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.week-appt-time {
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+.week-appt-patient {
+  font-weight: 600;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.week-appt-service {
+  font-size: 0.7rem;
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 900px) {
+  .week-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .week-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
